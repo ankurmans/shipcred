@@ -21,7 +21,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen bg-surface-primary">
       <nav className="border-b border-surface-border relative">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
-          <Link href="/"><Logo size={20} /></Link>
+          <Link href="/dashboard"><Logo size={20} /></Link>
           <AppNavLinks username={username} />
         </div>
       </nav>

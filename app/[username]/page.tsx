@@ -90,7 +90,7 @@ export default async function ProfilePage({ params }: PageProps) {
 
   return (
     <>
-      <Navbar />
+      <Navbar isLoggedIn={isAuthenticated} />
       <main className="min-h-screen relative">
         {/* Tier-based background gradient — fades to white */}
         <div className={`absolute inset-x-0 top-0 h-80 bg-gradient-to-b ${gradient} pointer-events-none`} aria-hidden="true" />

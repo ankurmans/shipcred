@@ -11,7 +11,7 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
   return (
     <nav className="w-full border-b border-surface-border relative">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
-        <Link href="/">
+        <Link href={isLoggedIn ? '/dashboard' : '/'}>
           <Logo size={20} />
         </Link>
 
