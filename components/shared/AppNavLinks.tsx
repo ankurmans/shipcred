@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { LuMenu, LuX } from 'react-icons/lu';
 
 const NAV_ITEMS = [
-  { href: '/dashboard', label: 'Dashboard' },
   { href: '/portfolio', label: 'Portfolio' },
   { href: '/proofs', label: 'Proofs' },
   { href: '/profile/edit', label: 'Profile' },
