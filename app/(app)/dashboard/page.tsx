@@ -210,9 +210,9 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="bg-surface-secondary rounded-card p-6">
-            <h2 className="font-display text-lg font-bold">Proof of Work</h2>
+            <h2 className="font-display text-lg font-bold">Showcase</h2>
             <div className="flex items-center justify-between mt-3">
-              <a href="/proofs" className="text-sm text-brand hover:text-brand-dark">Manage Proofs</a>
+              <a href="/showcase" className="text-sm text-brand hover:text-brand-dark">Manage Showcase</a>
             </div>
             <div className="grid grid-cols-3 gap-4 mt-3">
               <div className="text-center">

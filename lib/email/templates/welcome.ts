@@ -17,7 +17,7 @@ export function welcomeEmail(displayName: string, username: string): { subject: 
       <p style="color:#666;text-align:center;margin:0 0 24px;font-size:15px">Your profile is live. Here's what to do next:</p>
       <div style="background:#f7f8fa;border-radius:12px;padding:20px;margin-bottom:24px">
         <div style="margin-bottom:12px"><strong style="color:#1a1a1a">1. Connect GitHub</strong><br><span style="color:#666;font-size:14px">We'll auto-detect your AI-assisted commits</span></div>
-        <div style="margin-bottom:12px"><strong style="color:#1a1a1a">2. Add Proof of Work</strong><br><span style="color:#666;font-size:14px">Videos, content, certifications, deployed projects</span></div>
+        <div style="margin-bottom:12px"><strong style="color:#1a1a1a">2. Build Your Showcase</strong><br><span style="color:#666;font-size:14px">Videos, content, certifications, deployed projects</span></div>
         <div><strong style="color:#1a1a1a">3. Share Your Profile</strong><br><span style="color:#666;font-size:14px">Drop <code style="background:#fff7ed;color:#FF5C00;padding:2px 6px;border-radius:4px;font-size:13px">gtmcommit.com/${username}</code> on LinkedIn</span></div>
       </div>
       <div style="text-align:center">
