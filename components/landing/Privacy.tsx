@@ -4,7 +4,7 @@ const items = [
   { Icon: LuLock, text: 'We never store source code — only commit metadata (timestamp, diff stats, AI tool detection)' },
   { Icon: LuEyeOff, text: 'Private repo names are never displayed — we show "47 commits across 3 private repos," not repo names' },
   { Icon: LuTrash2, text: 'Disconnect anytime — all your commit data is deleted immediately' },
-  { Icon: LuSearch, text: 'Fully open source — audit exactly what we collect on GitHub' },
+  { Icon: LuSearch, text: 'Transparent by design — read our privacy policy to see exactly what we collect' },
 ];
 
 export default function Privacy() {

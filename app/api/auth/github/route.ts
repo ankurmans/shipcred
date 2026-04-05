@@ -5,8 +5,11 @@ export async function GET(request: NextRequest) {
   const state = crypto.randomUUID();
   const url = getGitHubAuthURL(state);
 
-  // Pass through desired username if provided
+  // Pass through desired username and referral if provided
   const desiredUsername = request.nextUrl.searchParams.get('username');
+  const refFromParam = request.nextUrl.searchParams.get('ref');
+  const refFromCookie = request.cookies.get('ref')?.value;
+  const referrer = refFromParam || refFromCookie;
 
   const response = NextResponse.redirect(url);
   response.cookies.set('github_oauth_state', state, {
@@ -19,6 +22,16 @@ export async function GET(request: NextRequest) {
 
   if (desiredUsername) {
     response.cookies.set('desired_username', desiredUsername, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 600,
+      path: '/',
+    });
+  }
+
+  if (referrer) {
+    response.cookies.set('referrer_username', referrer, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',

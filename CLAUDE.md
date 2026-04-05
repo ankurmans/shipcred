@@ -25,7 +25,7 @@ The profile at shipcred.io/username becomes the user's public credential — sha
 
 The GTM Engineer role grew 205% from 2024-2025. Companies like Ramp, Intercom, and Apollo are hiring marketers who commit code. But there's no way to verify who's actually AI-native vs who just lists "AI tools" on their LinkedIn. ShipCred solves this with GitHub-verified proof-of-work scoring.
 
-### Revenue Model (Future — open source community first)
+### Revenue Model (Freemium)
 
 - **Free tier:** Public profile, GitHub integration, basic ShipCred Score, "Powered by ShipCred" badge
 - **Pro (future):** Remove badge, custom domain, enhanced analytics, priority in directory
@@ -1207,7 +1207,7 @@ Your code stays yours. We just count the commits.
 🔒 We never store source code — only commit metadata (timestamp, diff stats, AI tool detection)
 🙈 Private repo names are never displayed — we show "47 commits across 3 private repos," not repo names
 🗑️ Disconnect anytime — all your commit data is deleted immediately
-🔍 Fully open source — audit exactly what we collect at github.com/[org]/shipcred
+🔍 Transparent by design — read our privacy policy to see exactly what we collect
 ```
 
 ---
@@ -1223,7 +1223,7 @@ What's your ShipCred?
 
 **Subhead:**
 ```
-Free. Open source. Takes 2 minutes.
+Free to start. Takes 2 minutes.
 Stop telling people you're AI-native. Show them.
 ```
 
@@ -1246,7 +1246,7 @@ Connect GitHub & Get Scored →
 
 **Bottom line (very small):**
 ```
-© 2026 ShipCred. Open source under AGPL-3.0.
+© 2026 ShipCred. All rights reserved.
 ```
 
 ---
@@ -1389,7 +1389,7 @@ The OG image (for social sharing) should match the profile card design but optim
 - [ ] Implement share functionality (copy URL, share to Twitter/LinkedIn)
 - [ ] Add PostHog analytics
 - [ ] Deploy to Vercel
-- [ ] Create GitHub repo (open source)
+- [ ] Set up private GitHub repo
 - [ ] Seed 3-5 beta profiles (your own + friends)
 - [ ] Write launch tweet / LinkedIn post
 
@@ -1412,7 +1412,7 @@ This is critical for adoption — users are giving us access to private repos:
 2. **Private repo names are NEVER displayed publicly.** We show aggregate stats ("47 AI commits across 3 private repos") but never the repo name or commit message.
 3. **Users can disconnect GitHub at any time.** This deletes all stored commit data immediately.
 4. **GitHub tokens are encrypted at rest** and never exposed via any API endpoint.
-5. **The entire platform is open source.** Users can audit exactly what data we collect and how.
+5. **Transparent by design.** Our privacy policy details exactly what data we collect and how.
 
 ---
 
@@ -1436,7 +1436,7 @@ This is critical for adoption — users are giving us access to private repos:
 1. **Light mode by default.** Clean, professional, shareable. Dark mode available as toggle. Light profiles pop on LinkedIn and Twitter feeds.
 2. **Profile cards designed for screenshots.** Every profile generates a visual worth posting. White background, bold score, clean layout — looks premium in any social feed.
 3. **Score is prominent.** The number IS the product. Large, bold, emerald green. Like a credit score for AI-native builders.
-4. **Open source from day one.** Builds trust (we show exactly what data we collect), creates contributor community, and aligns with builder culture. Licensed AGPL-3.0.
+4. **Proprietary, closed-source.** Builds a defensible moat. Trust is established through a clear privacy policy and transparent data practices, not source code access.
 5. **No email signup.** GitHub OAuth only. This IS the filter — if you don't have GitHub, the core value prop doesn't apply to you. (Future: add Google OAuth for portfolio-only profiles.)
 6. **Professional, not developer-y.** No monospace fonts, no terminal aesthetics. The user is a marketer who uses Claude Code, not a developer who does marketing. The design should make non-technical people look impressive.
 

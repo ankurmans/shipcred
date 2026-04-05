@@ -24,7 +24,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="text-center py-3 sm:py-4 text-[10px] text-white/20">
-        © 2026 GTM Commit. Open source under AGPL-3.0.
+        © 2026 GTM Commit. All rights reserved.
       </div>
     </footer>
   );

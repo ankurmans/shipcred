@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { createAdminClient } from '@/lib/supabase/admin';
+import { createClient } from '@/lib/supabase/server';
 import Avatar from '@/components/shared/Avatar';
 import GtmCommitScore from '@/components/profile/GtmCommitScore';
 import ToolBadges from '@/components/profile/ToolBadges';
@@ -12,6 +13,8 @@ import CertificationsDisplay from '@/components/profile/Certifications';
 import VouchSection from '@/components/profile/VouchSection';
 import PoweredByBadge from '@/components/profile/PoweredByBadge';
 import ShareButton from '@/components/shared/ShareButton';
+import VisitorCTA from '@/components/profile/VisitorCTA';
+import ProfileViewTracker from '@/components/profile/ProfileViewTracker';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
 
@@ -71,6 +74,14 @@ export default async function ProfilePage({ params }: PageProps) {
   const { profile, portfolioItems, tools, vouches, videoProofs, contentProofs, certifications, githubStats } = data;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
+  // Check if visitor is authenticated
+  let isAuthenticated = false;
+  try {
+    const supabase = await createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    isAuthenticated = !!user;
+  } catch { /* not authenticated */ }
+
   return (
     <>
       <Navbar />
@@ -86,7 +97,10 @@ export default async function ProfilePage({ params }: PageProps) {
                 {profile.website_url && <a href={profile.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">Website</a>}
                 {profile.twitter_handle && <a href={`https://twitter.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">@{profile.twitter_handle}</a>}
               </div>
-              <div className="mt-3"><ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} /></div>
+              <div className="mt-3 flex items-center gap-3 flex-wrap">
+                <ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
+                <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare with me</a>
+              </div>
             </div>
           </div>
           <div className="mt-8"><GtmCommitScore score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} breakdown={profile.score_breakdown} size="lg" /></div>
@@ -101,6 +115,8 @@ export default async function ProfilePage({ params }: PageProps) {
         </div>
       </main>
       <Footer />
+      {!isAuthenticated && <VisitorCTA />}
+      <ProfileViewTracker profileId={profile.id} />
     </>
   );
 }

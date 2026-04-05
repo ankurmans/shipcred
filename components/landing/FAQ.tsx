@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     q: 'Is this free?',
-    a: 'Free forever. Open source under AGPL-3.0. You can audit exactly what we collect on GitHub.',
+    a: 'Free to get started. Pro features coming soon for power users.',
   },
   {
     q: 'What AI tools do you detect?',

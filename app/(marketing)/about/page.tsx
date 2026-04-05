@@ -19,10 +19,8 @@ export default function AboutPage() {
               <li>We never store source code — only commit metadata</li>
               <li>Private repo names are never displayed publicly</li>
               <li>Disconnect GitHub anytime — all data deleted immediately</li>
-              <li>Fully open source — audit what we collect</li>
+              <li>Transparent by design — read our <a href="/privacy" className="text-brand underline">privacy policy</a> to see exactly what we collect</li>
             </ul>
-            <h2 className="font-display text-2xl font-bold text-fg-primary pt-4">Open source</h2>
-            <p>GTM Commit is open source under AGPL-3.0.</p>
           </div>
         </div>
       </main>

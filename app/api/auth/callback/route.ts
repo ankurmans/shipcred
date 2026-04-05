@@ -64,6 +64,9 @@ export async function GET(request: NextRequest) {
       const desiredUsername = request.cookies.get('desired_username')?.value;
       const finalUsername = (desiredUsername || githubUser.login).toLowerCase().replace(/[^a-z0-9_-]/g, '');
 
+      // Capture referrer
+      const referrerUsername = request.cookies.get('referrer_username')?.value || null;
+
       // Create profile
       await supabase.from('profiles').insert({
         user_id: userId,
@@ -78,6 +81,7 @@ export async function GET(request: NextRequest) {
         github_access_token: githubToken,
         github_connected_at: new Date().toISOString(),
         github_scopes: ['repo', 'read:user'],
+        referred_by: referrerUsername,
       });
     }
 
@@ -104,6 +108,8 @@ export async function GET(request: NextRequest) {
     const response = NextResponse.redirect(redirectUrl.toString());
     response.cookies.delete('github_oauth_state');
     response.cookies.delete('desired_username');
+    response.cookies.delete('referrer_username');
+    response.cookies.delete('ref');
     return response;
   } catch (error) {
     console.error('Auth callback error:', error);

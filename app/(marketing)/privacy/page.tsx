@@ -81,8 +81,8 @@ export default function PrivacyPage() {
             <h2 className="font-display text-2xl font-bold text-fg-primary pt-4">8. Children&apos;s Privacy</h2>
             <p>The Service is not directed to individuals under the age of 13. We do not knowingly collect personal information from children.</p>
 
-            <h2 className="font-display text-2xl font-bold text-fg-primary pt-4">9. Open Source</h2>
-            <p>GTM Commit is open source under AGPL-3.0. You can audit exactly what data we collect and how it is processed by reviewing our source code.</p>
+            <h2 className="font-display text-2xl font-bold text-fg-primary pt-4">9. Transparency</h2>
+            <p>We are committed to transparency about what data we collect and how it is processed. This privacy policy describes our practices in full. If you have questions, contact us at the email below.</p>
 
             <h2 className="font-display text-2xl font-bold text-fg-primary pt-4">10. Changes to This Policy</h2>
             <p>We may update this Privacy Policy from time to time. We will notify you of material changes by updating the &ldquo;Last updated&rdquo; date at the top of this page.</p>

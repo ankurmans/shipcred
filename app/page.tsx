@@ -5,6 +5,7 @@ import HowItWorks from '@/components/landing/HowItWorks';
 import ScoreBreakdown from '@/components/landing/ScoreBreakdown';
 import Audience from '@/components/landing/Audience';
 import FAQ from '@/components/landing/FAQ';
+import RecentBuilders from '@/components/landing/RecentBuilders';
 import LeaderboardPreview from '@/components/landing/LeaderboardPreview';
 import Privacy from '@/components/landing/Privacy';
 import CTA from '@/components/landing/CTA';
@@ -18,6 +19,7 @@ export default function Home() {
       <FeaturedProfiles />
       <HowItWorks />
       <ScoreBreakdown />
+      <RecentBuilders />
       <Audience />
       <FAQ />
       <LeaderboardPreview />

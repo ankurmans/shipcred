@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LuTrendingUp, LuArrowRight, LuStar } from 'react-icons/lu';
 import RotatingPhone from './RotatingPhone';
 
@@ -14,6 +14,16 @@ const EARLY_BUILDERS = [
 
 export default function Hero() {
   const [username, setUsername] = useState('');
+
+  // Capture referral param
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref) {
+      document.cookie = `ref=${encodeURIComponent(ref)};path=/;max-age=604800;samesite=lax`;
+    }
+  }, []);
+
   return (
     <section className="w-full">
       {/* Announcement bar */}
@@ -105,10 +115,10 @@ export default function Hero() {
             <div className="mt-5 flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-xs text-fg-muted">
               <span className="flex items-center gap-1">
                 <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0110 0v4" /></svg>
-                Open source
+                Privacy-first
               </span>
               <span>·</span>
-              <span>Free forever</span>
+              <span>Free to start</span>
               <span>·</span>
               <span>2 min setup</span>
               <span>·</span>

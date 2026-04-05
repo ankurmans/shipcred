@@ -4,7 +4,7 @@
 
 The proof-of-work network for AI-native GTM professionals. Connect GitHub. Show what you've shipped. Get your ShipCred.
 
-→ [shipcred.io](https://shipcred.io)
+→ [gtmcommit.com](https://gtmcommit.com)
 
 ---
 
@@ -12,7 +12,7 @@ The proof-of-work network for AI-native GTM professionals. Connect GitHub. Show 
 
 Everyone says they're "AI-native" on LinkedIn. ShipCred proves it.
 
-Connect your GitHub and we automatically detect your AI-assisted commits — Claude Code, Cursor, Copilot, Aider, and more. Your profile at `shipcred.io/username` becomes your verifiable credential showing you actually ship, not just talk.
+Connect your GitHub and we automatically detect your AI-assisted commits — Claude Code, Cursor, Copilot, Aider, and more. Your profile at `gtmcommit.com/username` becomes your verifiable credential showing you actually ship, not just talk.
 
 **Built for:** Marketers, SDRs, Account Executives, Growth Operators, and Founders who use AI coding tools for go-to-market work.
 
@@ -41,7 +41,6 @@ Your score (0-1000) is calculated from four proof tiers:
 - Private repo names are **never** displayed publicly
 - GitHub tokens are encrypted at rest
 - Disconnect GitHub anytime — all commit data is deleted immediately
-- This project is fully open source — audit exactly what we collect
 
 ## Tech Stack
 
@@ -53,39 +52,11 @@ Your score (0-1000) is calculated from four proof tiers:
 - **Email:** Resend
 - **Analytics:** PostHog
 
-## Getting Started
-
-```bash
-# Clone the repo
-git clone https://github.com/your-org/shipcred.git
-cd shipcred
-
-# Install dependencies
-pnpm install
-
-# Copy environment variables
-cp .env.local.example .env.local
-# Fill in your Supabase, GitHub OAuth, and other keys
-
-# Run database migrations
-pnpm supabase db push
-
-# Start dev server
-pnpm dev
-```
-
-## Contributing
-
-ShipCred is open source. Contributions welcome.
-
-1. Fork the repo
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes
-4. Push and open a PR
-
 ## License
 
-AGPL-3.0 — You can fork, modify, and self-host. But if you run a modified version as a hosted service, you must open source your changes. This protects the community while keeping the project fully open.
+Copyright © 2026 KMF Ventures LLC. All rights reserved.
+
+This software is proprietary and confidential. Unauthorized copying, distribution, or modification is strictly prohibited.
 
 ---
 

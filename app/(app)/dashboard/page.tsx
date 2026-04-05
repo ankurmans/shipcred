@@ -2,6 +2,10 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import SyncButton from './sync-button';
+import EmbedCodeGenerator from '@/components/dashboard/EmbedCodeGenerator';
+import MilestoneCard from '@/components/dashboard/MilestoneCard';
+import ReferralSection from '@/components/dashboard/ReferralSection';
+import ProfileViews from '@/components/dashboard/ProfileViews';
 
 export const metadata = { title: 'Dashboard' };
 
@@ -19,12 +23,16 @@ export default async function DashboardPage() {
   if (!profile) redirect('/login');
 
   const admin = createAdminClient();
-  const [toolsRes, syncJobRes, videosRes, contentRes, certsRes] = await Promise.all([
+  const [toolsRes, syncJobRes, videosRes, contentRes, certsRes, milestonesRes, viewsWeekRes, viewsTotalRes, referralCountRes] = await Promise.all([
     admin.from('tool_declarations').select('*').eq('profile_id', profile.id),
     admin.from('github_sync_jobs').select('*').eq('profile_id', profile.id).order('created_at', { ascending: false }).limit(1),
     admin.from('video_proofs').select('id, url_verified').eq('profile_id', profile.id),
     admin.from('content_proofs').select('id, url_verified').eq('profile_id', profile.id),
     admin.from('certifications').select('id, verification_status').eq('profile_id', profile.id),
+    admin.from('profile_milestones').select('*').eq('profile_id', profile.id).order('achieved_at', { ascending: false }).limit(20),
+    admin.from('profile_views').select('*', { count: 'exact', head: true }).eq('profile_id', profile.id).gte('viewed_at', new Date(Date.now() - 7 * 86400 * 1000).toISOString().split('T')[0]),
+    admin.from('profile_views').select('*', { count: 'exact', head: true }).eq('profile_id', profile.id),
+    admin.from('profiles').select('*', { count: 'exact', head: true }).eq('referred_by', profile.username),
   ]);
 
   const tools = toolsRes.data || [];
@@ -32,7 +40,17 @@ export default async function DashboardPage() {
   const videoCount = videosRes.data?.length || 0;
   const contentCount = contentRes.data?.length || 0;
   const certCount = certsRes.data?.length || 0;
+  const milestones = milestonesRes.data || [];
+  const viewsThisWeek = viewsWeekRes.count || 0;
+  const viewsTotal = viewsTotalRes.count || 0;
+  const referralCount = referralCountRes.count || 0;
   const breakdown = profile.score_breakdown as { tier1?: number; tier2?: number; tier3?: number } || {};
+
+  // Mark milestones as seen
+  const unseenIds = milestones.filter((m: any) => !m.seen_at).map((m: any) => m.id);
+  if (unseenIds.length > 0) {
+    admin.from('profile_milestones').update({ seen_at: new Date().toISOString() }).in('id', unseenIds).then(() => {});
+  }
 
   return (
     <div className="space-y-8">
@@ -69,6 +87,12 @@ export default async function DashboardPage() {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Milestones + Views row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <MilestoneCard milestones={milestones} username={profile.username} score={profile.gtmcommit_score} />
+        <ProfileViews viewsThisWeek={viewsThisWeek} viewsTotal={viewsTotal} />
       </div>
 
       {/* GitHub Sync */}
@@ -145,6 +169,12 @@ export default async function DashboardPage() {
             Add video walkthroughs, blog posts, or certifications to boost your score.
           </p>
         )}
+      </div>
+
+      {/* Embed + Referral row */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <EmbedCodeGenerator username={profile.username} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
+        <ReferralSection username={profile.username} referralCount={referralCount} />
       </div>
     </div>
   );
