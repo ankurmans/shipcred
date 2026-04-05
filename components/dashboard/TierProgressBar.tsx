@@ -36,7 +36,7 @@ export default function TierProgressBar({ score, tier }: { score: number; tier: 
           <span className="text-xs font-bold text-amber-600">MAX TIER</span>
         )}
       </div>
-      <div className="w-full h-2.5 bg-surface-border rounded-full overflow-hidden">
+      <div className="w-full h-2.5 bg-surface-border rounded-full overflow-hidden" role="progressbar" aria-valuenow={score} aria-valuemin={currentMin} aria-valuemax={nextMin} aria-label={`Tier progress: ${score} of ${nextMin}`}>
         <div
           className="h-full rounded-full gradient-brand transition-all duration-500"
           style={{ width: `${progress}%` }}

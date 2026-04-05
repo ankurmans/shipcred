@@ -83,7 +83,8 @@ export default function ScoreBreakdownDrawer({ breakdown }: { breakdown: ScoreBr
         </div>
       </button>
 
-      {open && (
+      <div className={`grid transition-all duration-300 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+        <div className="overflow-hidden">
         <div className="px-5 pb-5 space-y-4">
           {tiers.map((tier, tierIdx) => {
             const tierEntries = entries.filter(([, meta]) => meta.tier === tier);
@@ -109,7 +110,7 @@ export default function ScoreBreakdownDrawer({ breakdown }: { breakdown: ScoreBr
                 </div>
 
                 {/* Tier overall bar */}
-                <div className={`w-full h-2 ${TIER_BAR_BG[tier]} rounded-full overflow-hidden mb-3`}>
+                <div className={`w-full h-2 ${TIER_BAR_BG[tier]} rounded-full overflow-hidden mb-3`} role="progressbar" aria-valuenow={sum} aria-valuemin={0} aria-valuemax={max} aria-label={`${tierLabel.label}: ${sum} of ${max}`}>
                   <div
                     className={`h-full rounded-full transition-all duration-500 ${TIER_BAR_FILL[tier]}`}
                     style={{ width: `${tierPct}%` }}
@@ -135,7 +136,7 @@ export default function ScoreBreakdownDrawer({ breakdown }: { breakdown: ScoreBr
                               {value}<span className="text-fg-muted/50">/{meta.maxValue}</span>
                             </span>
                           </div>
-                          <div className={`w-full h-1.5 ${TIER_BAR_BG[tier]} rounded-full overflow-hidden`}>
+                          <div className={`w-full h-1.5 ${TIER_BAR_BG[tier]} rounded-full overflow-hidden`} role="progressbar" aria-valuenow={value} aria-valuemin={0} aria-valuemax={meta.maxValue}>
                             <div
                               className={`h-full rounded-full transition-all duration-500 ${
                                 isMaxed ? 'bg-green-500' : TIER_BAR_FILL[tier]
@@ -165,7 +166,8 @@ export default function ScoreBreakdownDrawer({ breakdown }: { breakdown: ScoreBr
             );
           })}
         </div>
-      )}
+        </div>
+      </div>
     </div>
   );
 }

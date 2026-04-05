@@ -99,141 +99,159 @@ export default async function DashboardPage() {
     admin.from('profile_milestones').update({ seen_at: new Date().toISOString() }).in('id', unseenIds).then(() => {});
   }
 
+  const hasMilestones = milestones.length > 0;
+  const hasChallenges = challenges.length > 0;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-10">
+      {/* ═══ HERO: Score Card ═══ */}
       <div>
         <h1 className="font-display text-3xl font-bold">Dashboard</h1>
         <p className="text-fg-secondary mt-1">Your GTM Commit at a glance.</p>
-      </div>
 
-      {/* 1. Score Card with Tier Progress */}
-      <div className="bg-surface-secondary rounded-card p-6">
-        <div className="flex items-center gap-6">
-          <div className="px-6 py-3 rounded-2xl gradient-brand">
-            <span className="font-display text-5xl font-bold text-white">{profile.gtmcommit_score}</span>
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-3">
-              <div className="text-lg font-semibold">GTM Commit Score</div>
-              <StreakBadge current={profile.current_streak || 0} longest={profile.longest_streak || 0} />
+        <div className="bg-surface-secondary rounded-card p-8 mt-6">
+          <div className="flex items-center gap-6">
+            <div
+              className="px-7 py-4 rounded-2xl gradient-brand shadow-cta"
+              role="status"
+              aria-label={`GTM Commit Score: ${profile.gtmcommit_score}`}
+            >
+              <span className="font-display text-5xl font-bold text-white">{profile.gtmcommit_score}</span>
             </div>
-            <div className="text-sm text-fg-muted capitalize">{profile.gtmcommit_tier} Tier</div>
-          </div>
-        </div>
-        <TierProgressBar score={profile.gtmcommit_score} tier={profile.gtmcommit_tier as GtmCommitTier} />
-        <div className="grid grid-cols-3 gap-4 mt-5">
-          {[
-            { label: 'Auto-Verified', value: breakdown.tier1 || 0, max: 600, color: 'bg-green-500' },
-            { label: 'Community Verified', value: breakdown.tier2 || 0, max: 250, color: 'bg-blue-500' },
-            { label: 'Self-Reported', value: breakdown.tier3 || 0, max: 150, color: 'bg-amber-500' },
-          ].map((b) => (
-            <div key={b.label}>
-              <div className="flex justify-between text-xs text-fg-muted mb-1">
-                <span>{b.label}</span>
-                <span>{b.value}/{b.max}</span>
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <div className="text-xl font-bold">GTM Commit Score</div>
+                <StreakBadge current={profile.current_streak || 0} longest={profile.longest_streak || 0} />
               </div>
-              <div className="w-full h-1.5 bg-surface-border rounded-full overflow-hidden">
-                <div className={`h-full ${b.color} rounded-full`} style={{ width: `${Math.min(100, (b.value / b.max) * 100)}%` }} />
-              </div>
+              <div className="text-sm text-fg-muted capitalize mt-0.5">{profile.gtmcommit_tier} Tier</div>
             </div>
-          ))}
+          </div>
+          <TierProgressBar score={profile.gtmcommit_score} tier={profile.gtmcommit_tier as GtmCommitTier} />
         </div>
       </div>
 
-      {/* 2. Next Actions */}
-      <NextActionsCard actions={nextActions} />
+      {/* ═══ ACTIONS: What to do next ═══ */}
+      {(nextActions.length > 0 || hasChallenges) && (
+        <div className="space-y-4">
+          <h2 className="text-xs font-bold text-fg-muted uppercase tracking-wider">Actions</h2>
+          <NextActionsCard actions={nextActions} />
+          <ChallengesCard challenges={challenges} />
+        </div>
+      )}
 
-      {/* 3. Challenges */}
-      <ChallengesCard challenges={challenges} />
+      {/* ═══ SCORE: Detailed breakdown ═══ */}
+      {breakdown.detail && (
+        <div className="space-y-4">
+          <h2 className="text-xs font-bold text-fg-muted uppercase tracking-wider">Score Details</h2>
+          <ScoreBreakdownDrawer breakdown={breakdown} />
+        </div>
+      )}
 
-      {/* 4. Score Breakdown Drill-Down */}
-      {breakdown.detail && <ScoreBreakdownDrawer breakdown={breakdown} />}
+      {/* ═══ STATS: Leaderboard, Views, Milestones ═══ */}
+      <div className="space-y-4">
+        <h2 className="text-xs font-bold text-fg-muted uppercase tracking-wider">Stats & Milestones</h2>
 
-      {/* 4. Milestones + Leaderboard Rank */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <MilestoneCard milestones={milestones} username={profile.username} score={profile.gtmcommit_score} />
-        <LeaderboardRankCard rank={rank} totalBuilders={totalBuilders} />
-      </div>
-
-      {/* 5. Profile Views + Referral */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ProfileViews viewsThisWeek={viewsThisWeek} viewsTotal={viewsTotal} dailyViews={dailyViews} />
-        <ReferralSection username={profile.username} referralCount={referralCount} />
-      </div>
-
-      {/* 6. GitHub Sync + Tools */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-surface-secondary rounded-card p-6">
-          <h2 className="font-display text-lg font-bold">GitHub Sync</h2>
-          {profile.github_username ? (
-            <div className="mt-3 space-y-3">
-              <p className="text-sm text-fg-secondary">
-                Connected as <strong>@{profile.github_username}</strong>
-              </p>
-              {lastSync && (
-                <div className="text-sm flex items-center gap-2">
-                  <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                    lastSync.status === 'completed' ? 'bg-green-100 text-green-700' :
-                    lastSync.status === 'failed' ? 'bg-red-100 text-red-700' :
-                    lastSync.status === 'running' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    {lastSync.status}
-                  </span>
-                  {lastSync.status === 'completed' && (
-                    <span className="text-fg-muted">
-                      {lastSync.repos_scanned} repos, {lastSync.ai_commits_found} AI commits
-                    </span>
-                  )}
-                </div>
-              )}
-              <SyncButton />
-            </div>
-          ) : (
-            <div className="mt-3">
-              <p className="text-sm text-fg-secondary mb-3">Connect GitHub to detect your AI-assisted commits.</p>
-              <a href="/api/auth/github" className="btn-brand btn-sm">Connect GitHub</a>
-            </div>
-          )}
+        {/* Row 1: Leaderboard + Profile Views — always both present */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <LeaderboardRankCard rank={rank} totalBuilders={totalBuilders} />
+          <ProfileViews viewsThisWeek={viewsThisWeek} viewsTotal={viewsTotal} dailyViews={dailyViews} />
         </div>
 
-        {tools.length > 0 ? (
-          <div className="bg-surface-secondary rounded-card p-6">
-            <h2 className="font-display text-lg font-bold mb-3">Detected Tools</h2>
-            <div className="flex flex-wrap gap-2">
-              {tools.map((t: { id: string; tool_name: string; is_verified: boolean; verified_commit_count: number }) => (
-                <span key={t.id} className="badge bg-brand-50 text-brand">
-                  {t.is_verified && '✓ '}{t.tool_name.replace('_', ' ')}
-                  {t.verified_commit_count > 0 && ` (${t.verified_commit_count})`}
-                </span>
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="bg-surface-secondary rounded-card p-6">
-            <h2 className="font-display text-lg font-bold">Showcase</h2>
-            <div className="flex items-center justify-between mt-3">
-              <a href="/showcase" className="text-sm text-brand hover:text-brand-dark">Manage Showcase</a>
-            </div>
-            <div className="grid grid-cols-3 gap-4 mt-3">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{videoCount}</div>
-                <div className="text-xs text-fg-muted">Videos</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">{contentCount}</div>
-                <div className="text-xs text-fg-muted">Content</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold">{certCount}</div>
-                <div className="text-xs text-fg-muted">Certs</div>
-              </div>
-            </div>
-          </div>
+        {/* Row 2: Milestones — full width when present, nothing when absent */}
+        {hasMilestones && (
+          <MilestoneCard milestones={milestones} username={profile.username} score={profile.gtmcommit_score} />
         )}
       </div>
 
-      {/* 7. Embed Code */}
-      <EmbedCodeGenerator username={profile.username} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
+      {/* ═══ TOOLS & SYNC: GitHub connection + detected tools ═══ */}
+      <div className="space-y-4">
+        <h2 className="text-xs font-bold text-fg-muted uppercase tracking-wider">Connections</h2>
+
+        <div className="bg-surface-secondary rounded-card p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* GitHub Sync */}
+            <div>
+              <h3 className="font-display text-base font-bold mb-3">GitHub Sync</h3>
+              {profile.github_username ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-fg-secondary">
+                    Connected as <strong>@{profile.github_username}</strong>
+                  </p>
+                  {lastSync && (
+                    <div className="text-sm flex items-center gap-2">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                        lastSync.status === 'completed' ? 'bg-green-100 text-green-700' :
+                        lastSync.status === 'failed' ? 'bg-red-100 text-red-700' :
+                        lastSync.status === 'running' ? 'bg-yellow-100 text-yellow-700' : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {lastSync.status}
+                      </span>
+                      {lastSync.status === 'completed' && (
+                        <span className="text-fg-muted">
+                          {lastSync.repos_scanned} repos, {lastSync.ai_commits_found} AI commits
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <SyncButton />
+                </div>
+              ) : (
+                <div>
+                  <p className="text-sm text-fg-secondary mb-3">Connect GitHub to detect your AI-assisted commits.</p>
+                  <a href="/api/auth/github" className="btn-brand btn-sm">Connect GitHub</a>
+                </div>
+              )}
+            </div>
+
+            {/* Detected Tools or Showcase stats */}
+            <div className="md:border-l md:border-surface-border md:pl-6">
+              {tools.length > 0 ? (
+                <>
+                  <h3 className="font-display text-base font-bold mb-3">Detected Tools</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {tools.map((t: { id: string; tool_name: string; is_verified: boolean; verified_commit_count: number }) => (
+                      <span key={t.id} className="badge bg-brand-50 text-brand">
+                        {t.is_verified && '✓ '}{t.tool_name.replace('_', ' ')}
+                        {t.verified_commit_count > 0 && ` (${t.verified_commit_count})`}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-display text-base font-bold">Showcase</h3>
+                    <a href="/showcase" className="text-xs text-brand hover:text-brand-dark font-medium">Manage</a>
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{videoCount}</div>
+                      <div className="text-xs text-fg-muted">Videos</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{contentCount}</div>
+                      <div className="text-xs text-fg-muted">Content</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{certCount}</div>
+                      <div className="text-xs text-fg-muted">Certs</div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ═══ GROWTH: Referral + Embed ═══ */}
+      <div className="space-y-4">
+        <h2 className="text-xs font-bold text-fg-muted uppercase tracking-wider">Growth Tools</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <ReferralSection username={profile.username} referralCount={referralCount} />
+          <EmbedCodeGenerator username={profile.username} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
+        </div>
+      </div>
     </div>
   );
 }
