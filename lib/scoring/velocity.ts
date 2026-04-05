@@ -24,8 +24,11 @@ export async function applyVelocityLimit(
   const baseline = recentHistory?.[0]?.score ?? previousScore;
   const dailyGain = newScore - baseline;
 
+  // Skip velocity limit on first-ever score (new profile, not gaming)
   let finalScore = newScore;
-  if (dailyGain > MAX_DAILY_GAIN) {
+  if (previousScore === 0 && !recentHistory?.length) {
+    // First sync — allow full score
+  } else if (dailyGain > MAX_DAILY_GAIN) {
     finalScore = baseline + MAX_DAILY_GAIN;
   }
 
