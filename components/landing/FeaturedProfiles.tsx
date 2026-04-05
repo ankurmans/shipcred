@@ -6,7 +6,7 @@ export default function FeaturedProfiles() {
     <section className="py-12 sm:py-20 px-4 sm:px-6">
       <div className="max-w-5xl mx-auto">
         <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-          Builders who prove they ship
+          Already shipping. Already scored.
         </h2>
 
         {/* Horizontal scroll on mobile, row on desktop */}
@@ -41,22 +41,34 @@ export default function FeaturedProfiles() {
                 url="gtmcommit.com/priya"
               />
             </div>
-            {/* CTA card */}
-            <div className="snap-center shrink-0 sm:shrink w-[300px] sm:w-full sm:max-w-[340px] p-6 rounded-card bg-surface-inverse border border-surface-border-dark flex flex-col items-center justify-center gap-4 min-h-[280px]">
-              <span className="text-4xl font-display font-bold text-brand">?</span>
-              <span className="text-lg font-semibold text-white">This could be you</span>
-              <span className="text-sm text-white/50 text-center">Claim your profile in 2 minutes</span>
-              <a href="/api/auth/github" className="btn-brand btn-sm">
-                Get started →
-              </a>
+            <div className="snap-center shrink-0 sm:shrink">
+              <ProofCard
+                name="Alex Kim"
+                role="Growth @ Ramp"
+                score={387}
+                tier="Builder"
+                proofs={[
+                  { platform: 'github', title: '19 Cursor commits', subtitle: 'Internal tools · 4 repos', badgeLabel: 'GitHub', badgeBg: '#ECFDF5', badgeColor: '#059669' },
+                  { platform: 'vercel', title: '2 live deployments', subtitle: 'Lead gen pages on Vercel', badgeLabel: 'Vercel', badgeBg: '#F5F5F5', badgeColor: '#1A1A1A' },
+                  { platform: 'lovable', title: 'CRM dashboard', subtitle: 'Built with Lovable · 8 iterations', badgeLabel: 'Lovable', badgeBg: '#FDF2F8', badgeColor: '#EC4899' },
+                ]}
+                vouchCount={4}
+                url="gtmcommit.com/alex"
+              />
             </div>
           </div>
         </div>
 
-        <div className="text-center mt-6 sm:mt-8">
-          <Link href="/leaderboard" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
-            View Full Leaderboard →
-          </Link>
+        {/* Inline CTA + leaderboard link */}
+        <div className="text-center mt-8 sm:mt-10 space-y-3">
+          <a href="/login" className="btn-brand btn-sm inline-flex">
+            Get your score →
+          </a>
+          <div>
+            <Link href="/leaderboard" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
+              View Full Leaderboard →
+            </Link>
+          </div>
         </div>
       </div>
     </section>

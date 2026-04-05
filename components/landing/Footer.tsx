@@ -12,6 +12,8 @@ export default function Footer() {
         <div className="flex items-center gap-6">
           <Link href="/about" className="text-xs text-white/40 hover:text-white/70 transition-colors">About</Link>
           <Link href="/leaderboard" className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>
+          <Link href="/privacy" className="text-xs text-white/40 hover:text-white/70 transition-colors">Privacy</Link>
+          <Link href="/updates" className="text-xs text-white/40 hover:text-white/70 transition-colors">Updates</Link>
         </div>
         <div className="text-xs text-white/30">
           Built with Claude Code by{' '}

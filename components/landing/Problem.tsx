@@ -4,6 +4,9 @@ export default function Problem() {
   return (
     <section className="py-12 sm:py-20 px-4 sm:px-6 bg-surface-secondary">
       <div className="max-w-5xl mx-auto">
+        <p className="text-center font-mono text-sm text-brand font-semibold tracking-wide mb-3">
+          GTM ENGINEER ROLES: +205% YoY
+        </p>
         <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center">
           Everyone claims they&apos;re AI-native.{' '}
           <span className="text-brand">Who&apos;s actually shipping?</span>
@@ -24,10 +27,10 @@ export default function Problem() {
           <div className="p-5 sm:p-6 rounded-card border-2 border-green-200 bg-white">
             <h3 className="font-display text-lg sm:text-xl font-bold text-green-600 mb-3 sm:mb-4">The Doer</h3>
             <ul className="space-y-2 text-sm text-fg-secondary">
-              <li>47 Claude Code commits this quarter</li>
-              <li>Shipped 3 landing pages from terminal</li>
-              <li>Built outbound automation in Cursor</li>
-              <li>Clay workflows generating pipeline</li>
+              <li>Built 3 outbound landing pages with Claude Code</li>
+              <li>Automated lead enrichment with Clay + Cursor</li>
+              <li>Shipped AI-powered email sequences</li>
+              <li>47 verified AI commits this quarter</li>
             </ul>
             <div className="mt-3 sm:mt-4 text-sm font-semibold text-green-600 flex items-center gap-1.5">
               <LuCircleCheck size={16} /> Proof: Verified on GitHub

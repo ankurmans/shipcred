@@ -1,8 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { LuFlame, LuArrowRight, LuStar } from 'react-icons/lu';
+import { LuTrendingUp, LuArrowRight, LuStar } from 'react-icons/lu';
 import RotatingPhone from './RotatingPhone';
+
+const EARLY_BUILDERS = [
+  { name: 'Sarah C.', color: '#FF5C00' },
+  { name: 'Marc R.', color: '#6366F1' },
+  { name: 'Priya P.', color: '#06B6D4' },
+  { name: 'Alex K.', color: '#EC4899' },
+  { name: 'Jordan L.', color: '#F59E0B' },
+];
 
 export default function Hero() {
   const [username, setUsername] = useState('');
@@ -11,9 +19,9 @@ export default function Hero() {
       {/* Announcement bar */}
       <div className="w-full bg-brand-50 py-2 text-center px-4">
         <span className="text-xs sm:text-sm font-medium text-brand inline-flex items-center gap-1">
-          <LuFlame size={14} />
-          <span className="hidden sm:inline">Join the first builders proving they ship — claim your profile</span>
-          <span className="sm:hidden">Prove you ship — claim your profile</span>
+          <LuTrendingUp size={14} />
+          <span className="hidden sm:inline">GTM Engineer roles grew 205% in 2024–2025. Are you verified?</span>
+          <span className="sm:hidden">GTM Engineer roles grew 205%. Are you verified?</span>
           <LuArrowRight size={14} className="ml-1" />
         </span>
       </div>
@@ -45,8 +53,8 @@ export default function Hero() {
 
             {/* Subhead */}
             <p className="mt-4 sm:mt-6 text-base sm:text-lg text-fg-secondary leading-relaxed max-w-md mx-auto lg:mx-0">
-              The proof-of-work profile for AI-native GTM professionals.
-              Connect GitHub. Get scored. Share your credential everywhere.
+              Everyone says they&apos;re AI-native. GTM Commit is the score that proves it.
+              Connect GitHub, get auto-verified, and share your credential anywhere.
             </p>
 
             {/* URL input CTA */}
@@ -65,19 +73,22 @@ export default function Hero() {
                 href={`/login${username ? `?username=${encodeURIComponent(username)}` : ''}`}
                 className="btn-brand whitespace-nowrap text-center justify-center"
               >
-                CLAIM MY PAGE <LuArrowRight size={16} />
+                CLAIM YOUR SCORE <LuArrowRight size={16} />
               </a>
             </div>
 
             {/* Social proof */}
             <div className="mt-6 flex flex-col sm:flex-row items-center lg:items-start gap-3 sm:gap-4">
               <div className="flex -space-x-2 shrink-0">
-                {['#FF5C00', '#6366F1', '#06B6D4', '#EC4899', '#F59E0B'].map((color, i) => (
+                {EARLY_BUILDERS.map((builder, i) => (
                   <div
                     key={i}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white"
-                    style={{ backgroundColor: color }}
-                  />
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold text-white"
+                    style={{ backgroundColor: builder.color }}
+                    title={builder.name}
+                  >
+                    {builder.name.charAt(0)}
+                  </div>
                 ))}
               </div>
               <div className="text-center sm:text-left">
@@ -85,10 +96,7 @@ export default function Hero() {
                   {[...Array(5)].map((_, i) => <LuStar key={i} size={13} fill="currentColor" />)}
                 </div>
                 <p className="text-sm text-fg-secondary mt-0.5">
-                  <span className="font-semibold text-fg-primary">&ldquo;Finally a way to prove I actually ship.&rdquo;</span>
-                </p>
-                <p className="text-xs text-fg-muted mt-0.5">
-                  — Early builders who connected their GitHub
+                  Join <span className="font-semibold text-fg-primary">100+ builders</span> who prove they ship — not just talk.
                 </p>
               </div>
             </div>
