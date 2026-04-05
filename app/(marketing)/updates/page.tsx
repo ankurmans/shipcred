@@ -10,6 +10,36 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Embeddable profile badges',
+        description: 'Grab an embed code from your dashboard to display your GTM Commit score on your personal site or README.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Profile comparisons',
+        description: 'Compare two profiles side-by-side at /compare — with shareable OG images for social.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Milestone achievements & shareable cards',
+        description: 'Hit score milestones and get auto-generated OG images you can share on LinkedIn and Twitter.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Programmatic SEO pages for tools & roles',
+        description: 'Browse builders by tool (/tools/claude-code) or role (/roles/growth-engineer) — public, no login required.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Profile view tracking',
+        description: 'See who\'s checking out your profile with view counts on your dashboard.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Weekly digest emails',
+        description: 'Get a weekly summary of your score changes, new vouches, and profile views.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Public feedback page',
         description: 'Anyone can request features or report bugs at /feedback — no account needed. Submissions become GitHub issues for community voting.',
       },
