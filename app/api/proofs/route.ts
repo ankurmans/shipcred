@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { detectPlatform } from '@/lib/proofs/verify';
+import { generateVerificationCode } from '@/lib/proofs/meta-verify';
 
 export async function GET() {
   const supabase = await createClient();
@@ -55,6 +56,7 @@ export async function POST(request: NextRequest) {
   }
 
   const source_type = detectPlatform(project_url);
+  const verification_code = generateVerificationCode();
 
   const { data: proof, error } = await supabase
     .from('external_proofs')
@@ -63,6 +65,7 @@ export async function POST(request: NextRequest) {
       source_type,
       project_url,
       project_name: project_name || null,
+      verification_code,
     })
     .select()
     .single();

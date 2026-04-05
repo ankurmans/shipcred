@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-surface-primary text-fg-primary antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand/20 text-fg-primary;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-surface-inverse text-fg-inverse font-semibold text-base transition-all hover:opacity-90 active:scale-[0.98];
+  }
+
+  .btn-brand {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-brand text-white font-semibold text-base transition-all hover:bg-brand-dark active:scale-[0.98] shadow-cta;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full border border-surface-border text-fg-secondary font-medium text-base transition-all hover:border-fg-faint hover:text-fg-primary;
+  }
+
+  .btn-sm {
+    @apply px-5 py-2.5 text-sm;
+  }
+
+  .card-light {
+    @apply bg-white border border-surface-border rounded-card shadow-card;
+  }
+
+  .card-dark {
+    @apply bg-surface-inverse border border-surface-border-dark rounded-card shadow-card-dark;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold font-mono;
+  }
+
+  .gradient-brand {
+    background: linear-gradient(135deg, #FF5C00, #FF8533);
+  }
+}

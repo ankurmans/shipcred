@@ -19,8 +19,8 @@ export interface Profile {
   github_connected_at: string | null;
   github_scopes: string[] | null;
   last_github_sync_at: string | null;
-  shipcred_score: number;
-  shipcred_tier: ShipCredTier;
+  gtmcommit_score: number;
+  gtmcommit_tier: GtmCommitTier;
   score_breakdown: ScoreBreakdown;
   is_featured: boolean;
   is_verified: boolean;
@@ -37,7 +37,7 @@ export type ProfileRole =
   | 'founder'
   | 'other';
 
-export type ShipCredTier =
+export type GtmCommitTier =
   | 'unranked'
   | 'shipper'
   | 'builder'
@@ -45,6 +45,33 @@ export type ShipCredTier =
   | 'legend';
 
 export interface ScoreBreakdown {
+  tier1: number;
+  tier2: number;
+  tier3: number;
+  total: number;
+  detail: {
+    githubCommits: number;
+    platformDeploys: number;
+    certsTier1: number;
+    toolDiversity: number;
+    consistency: number;
+    vouchedPortfolio: number;
+    vouchedUploads: number;
+    vouchedVideos: number;
+    vouchedContent: number;
+    certsTier2: number;
+    unvouchedPortfolio: number;
+    unvouchedUploads: number;
+    unvouchedVideos: number;
+    unvouchedContent: number;
+    unrecognizedCerts: number;
+    toolDeclarations: number;
+    profileCompleteness: number;
+  };
+}
+
+// Legacy 4-bucket format for backward compat in DB storage
+export interface LegacyScoreBreakdown {
   github: number;
   portfolio: number;
   vouches: number;
@@ -227,6 +254,9 @@ export interface PublicProfile extends Omit<Profile, 'user_id' | 'github_connect
   tool_declarations: ToolDeclaration[];
   vouches_received: Vouch[];
   external_proofs: ExternalProof[];
+  video_proofs: VideoProof[];
+  content_proofs: ContentProof[];
+  certifications: Certification[];
   github_stats: {
     total_commits: number;
     ai_commits: number;
@@ -241,8 +271,8 @@ export interface LeaderboardEntry {
   avatar_url: string | null;
   role: ProfileRole | null;
   company: string | null;
-  shipcred_score: number;
-  shipcred_tier: ShipCredTier;
+  gtmcommit_score: number;
+  gtmcommit_tier: GtmCommitTier;
   top_tools: string[];
 }
 
@@ -275,8 +305,172 @@ export interface GitHubAPICommit {
 export interface GitHubAPIRepo {
   full_name: string;
   private: boolean;
+  fork?: boolean;
+  created_at?: string;
+  size?: number;
   owner: {
     login: string;
   };
   pushed_at: string;
 }
+
+// ============================================================
+// UPLOADED FILES
+// ============================================================
+
+export interface UploadedFile {
+  id: string;
+  profile_id: string;
+  file_type: UploadFileType;
+  file_name: string;
+  content_hash: string;
+  file_size: number;
+  line_count: number;
+  is_parsed_valid: boolean;
+  structural_markers_found: string[];
+  parsing_notes: string | null;
+  storage_url: string;
+  loom_url: string | null;
+  vouch_count: number;
+  created_at: string;
+}
+
+export type UploadFileType = 'claude_md' | 'cursorrules' | 'mcp_config' | 'skill_file';
+
+// ============================================================
+// IMPACT METRICS
+// ============================================================
+
+export interface ImpactMetric {
+  id: string;
+  profile_id: string;
+  portfolio_item_id: string | null;
+  metric_text: string;
+  endorsement_count: number;
+  created_at: string;
+}
+
+// ============================================================
+// COMMUNITY FLAGS
+// ============================================================
+
+export interface Flag {
+  id: string;
+  reporter_id: string;
+  flag_type: FlagType;
+  target_id: string;
+  target_profile_id: string;
+  reason: FlagReason;
+  description: string | null;
+  status: FlagStatus;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+}
+
+export type FlagType =
+  | 'profile'
+  | 'portfolio_item'
+  | 'upload'
+  | 'vouch'
+  | 'video_proof'
+  | 'content_proof'
+  | 'certification';
+
+export type FlagReason =
+  | 'fake_commits'
+  | 'copied_file'
+  | 'fake_vouch'
+  | 'spam'
+  | 'other';
+
+export type FlagStatus = 'pending' | 'reviewed_clear' | 'reviewed_removed';
+
+// ============================================================
+// ANTI-GAMING TYPES
+// ============================================================
+
+export interface SpoofingSignal {
+  isSuspicious: boolean;
+  signals: {
+    lowVariety: boolean;
+    hasBurst: boolean;
+    singleToolHighVolume: boolean;
+    unrealisticRatio: boolean;
+  };
+}
+
+// ============================================================
+// VIDEO PROOFS
+// ============================================================
+
+export interface VideoProof {
+  id: string;
+  profile_id: string;
+  url: string;
+  platform: VideoPlatform;
+  title: string | null;
+  thumbnail_url: string | null;
+  duration_seconds: number | null;
+  category: VideoCategory | null;
+  tools_mentioned: string[];
+  description: string | null;
+  url_verified: boolean;
+  vouch_count: number;
+  created_at: string;
+}
+
+export type VideoPlatform = 'loom' | 'youtube' | 'vimeo';
+
+export type VideoCategory = 'workflow_walkthrough' | 'tool_demo' | 'build_session';
+
+// ============================================================
+// CONTENT PROOFS
+// ============================================================
+
+export interface ContentProof {
+  id: string;
+  profile_id: string;
+  url: string;
+  platform: ContentPlatform;
+  title: string | null;
+  published_at: string | null;
+  estimated_word_count: number | null;
+  tools_mentioned: string[];
+  description: string | null;
+  url_verified: boolean;
+  vouch_count: number;
+  created_at: string;
+}
+
+export type ContentPlatform =
+  | 'blog'
+  | 'twitter'
+  | 'linkedin'
+  | 'substack'
+  | 'beehiiv'
+  | 'medium'
+  | 'github'
+  | 'other';
+
+// ============================================================
+// CERTIFICATIONS
+// ============================================================
+
+export interface Certification {
+  id: string;
+  profile_id: string;
+  cert_name: string;
+  issuer: string;
+  cert_url: string;
+  cert_id: string | null;
+  issued_at: string | null;
+  verification_status: CertVerificationStatus;
+  verification_method: string | null;
+  verified_at: string | null;
+  vouch_count: number;
+  created_at: string;
+}
+
+export type CertVerificationStatus = 'auto_verified' | 'vouch_verified' | 'pending';
+

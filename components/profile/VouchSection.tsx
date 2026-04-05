@@ -1,5 +1,4 @@
 import type { Vouch, Profile } from '@/types';
-import Avatar from '@/components/shared/Avatar';
 
 interface VouchSectionProps {
   vouches: (Vouch & { voucher?: Pick<Profile, 'username' | 'display_name' | 'avatar_url'> })[];
@@ -10,26 +9,16 @@ export default function VouchSection({ vouches }: VouchSectionProps) {
 
   return (
     <div>
-      <h3 className="text-lg font-semibold mb-3">
-        Vouches ({vouches.length})
-      </h3>
+      <h3 className="font-display text-lg font-semibold mb-3">Vouches ({vouches.length})</h3>
       <div className="space-y-3">
-        {vouches.map((vouch) => (
-          <div key={vouch.id} className="flex gap-3 items-start">
-            <Avatar
-              src={vouch.voucher?.avatar_url || null}
-              alt={vouch.voucher?.display_name || 'User'}
-              size="sm"
-            />
+        {vouches.map((v) => (
+          <div key={v.id} className="flex gap-3 items-start">
+            <div className="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-xs font-bold shrink-0">
+              {(v.voucher?.display_name || 'U').charAt(0)}
+            </div>
             <div>
-              <div className="text-sm font-medium">
-                {vouch.voucher?.display_name || 'Anonymous'}
-              </div>
-              {vouch.message && (
-                <p className="text-xs text-base-content/60 mt-0.5">
-                  &ldquo;{vouch.message}&rdquo;
-                </p>
-              )}
+              <div className="text-sm font-medium">{v.voucher?.display_name || 'Anonymous'}</div>
+              {v.message && <p className="text-xs text-fg-muted mt-0.5">&ldquo;{v.message}&rdquo;</p>}
             </div>
           </div>
         ))}

@@ -16,49 +16,30 @@ export default async function SettingsPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold font-[family-name:var(--font-dm-sans)]">Settings</h1>
-      <p className="text-base-content/60 mt-1">Manage your account.</p>
-
+      <h1 className="font-display text-3xl font-bold">Settings</h1>
+      <p className="text-fg-secondary mt-1">Manage your account.</p>
       <div className="space-y-6 mt-8">
-        {/* Account Info */}
-        <div className="card bg-base-200">
-          <div className="card-body">
-            <h2 className="card-title">Account</h2>
-            <div className="text-sm space-y-2">
-              <p><span className="text-base-content/50">Username:</span> {profile?.username}</p>
-              <p><span className="text-base-content/50">GitHub:</span> {profile?.github_username || 'Not connected'}</p>
-              <p><span className="text-base-content/50">Member since:</span> {profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : 'Unknown'}</p>
-              <p><span className="text-base-content/50">Profile URL:</span> shipcred.io/{profile?.username}</p>
-            </div>
+        <div className="bg-surface-secondary rounded-card p-6">
+          <h2 className="font-display text-lg font-bold">Account</h2>
+          <div className="text-sm space-y-2 mt-3">
+            <p><span className="text-fg-muted">Username:</span> {profile?.username}</p>
+            <p><span className="text-fg-muted">GitHub:</span> {profile?.github_username || 'Not connected'}</p>
+            <p><span className="text-fg-muted">Member since:</span> {profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : 'Unknown'}</p>
+            <p><span className="text-fg-muted">Profile URL:</span> gtmcommit.com/{profile?.username}</p>
           </div>
         </div>
-
-        {/* Sign Out */}
-        <div className="card bg-base-200">
-          <div className="card-body">
-            <h2 className="card-title">Session</h2>
-            <form action="/api/auth/signout" method="POST">
-              <button type="submit" className="btn btn-ghost btn-sm">
-                Sign Out
-              </button>
-            </form>
-          </div>
+        <div className="bg-surface-secondary rounded-card p-6">
+          <h2 className="font-display text-lg font-bold">Session</h2>
+          <form action="/api/auth/signout" method="POST" className="mt-3">
+            <button type="submit" className="btn-ghost btn-sm">Sign Out</button>
+          </form>
         </div>
-
-        {/* Danger Zone */}
-        <div className="card bg-base-200 border border-error/20">
-          <div className="card-body">
-            <h2 className="card-title text-error">Danger Zone</h2>
-            <p className="text-sm text-base-content/60">
-              Deleting your account removes all your data including commit history,
-              portfolio, and vouches. This action cannot be undone.
-            </p>
-            <div className="card-actions">
-              <button className="btn btn-error btn-sm btn-outline" disabled>
-                Delete Account (Coming Soon)
-              </button>
-            </div>
-          </div>
+        <div className="bg-surface-secondary rounded-card p-6 border border-red-200">
+          <h2 className="font-display text-lg font-bold text-red-600">Danger Zone</h2>
+          <p className="text-sm text-fg-secondary mt-2">Deleting your account removes all data. This cannot be undone.</p>
+          <button className="mt-3 px-4 py-2 rounded-full border border-red-300 text-red-500 text-sm font-medium opacity-50 cursor-not-allowed" disabled>
+            Delete Account (Coming Soon)
+          </button>
         </div>
       </div>
     </div>

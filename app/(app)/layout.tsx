@@ -1,18 +1,12 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import Logo from '@/components/shared/Logo';
 
-export default async function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect('/login');
-  }
+  if (!user) redirect('/login');
 
   const { data: profile } = await supabase
     .from('profiles')
@@ -21,39 +15,23 @@ export default async function AppLayout({
     .single();
 
   return (
-    <div className="min-h-screen bg-base-100">
-      {/* Top nav */}
-      <div className="navbar bg-base-100 border-b border-base-300 px-4 lg:px-8">
-        <div className="flex-1">
-          <Link href="/" className="text-xl font-bold font-[family-name:var(--font-dm-sans)] text-primary">
-            ShipCred
-          </Link>
+    <div className="min-h-screen bg-surface-primary">
+      <nav className="border-b border-surface-border">
+        <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-14">
+          <Link href="/"><Logo size={20} /></Link>
+          <div className="flex items-center gap-5">
+            <Link href="/dashboard" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Dashboard</Link>
+            <Link href="/portfolio" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Portfolio</Link>
+            <Link href="/proofs" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Proofs</Link>
+            <Link href="/profile/edit" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Profile</Link>
+            {profile && (
+              <Link href={`/${profile.username}`} className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">View Public</Link>
+            )}
+            <Link href="/settings" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Settings</Link>
+          </div>
         </div>
-        <div className="flex-none gap-2">
-          <Link href="/dashboard" className="btn btn-ghost btn-sm">
-            Dashboard
-          </Link>
-          <Link href="/portfolio" className="btn btn-ghost btn-sm">
-            Portfolio
-          </Link>
-          <Link href="/profile/edit" className="btn btn-ghost btn-sm">
-            Profile
-          </Link>
-          {profile && (
-            <Link href={`/${profile.username}`} className="btn btn-ghost btn-sm">
-              View Public
-            </Link>
-          )}
-          <Link href="/settings" className="btn btn-ghost btn-sm">
-            Settings
-          </Link>
-        </div>
-      </div>
-
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {children}
-      </div>
+      </nav>
+      <div className="max-w-4xl mx-auto px-6 py-8">{children}</div>
     </div>
   );
 }

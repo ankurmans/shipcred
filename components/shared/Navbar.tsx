@@ -1,30 +1,57 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
+import Logo from './Logo';
+import { LuMenu, LuX } from 'react-icons/lu';
 
 export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="navbar bg-base-100 border-b border-base-300 px-4 lg:px-8">
-      <div className="flex-1">
-        <Link href="/" className="text-xl font-bold font-[family-name:var(--font-dm-sans)] text-primary">
-          ShipCred
+    <nav className="w-full border-b border-surface-border relative">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 sm:h-16">
+        <Link href="/">
+          <Logo size={20} />
         </Link>
-      </div>
-      <div className="flex-none gap-2">
-        <Link href="/leaderboard" className="btn btn-ghost btn-sm">
-          Leaderboard
-        </Link>
-        <Link href="/about" className="btn btn-ghost btn-sm">
-          About
-        </Link>
-        {isLoggedIn ? (
-          <Link href="/dashboard" className="btn btn-primary btn-sm">
-            Dashboard
+
+        {/* Desktop nav */}
+        <div className="hidden sm:flex items-center gap-6">
+          <Link href="/leaderboard" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
+            Explore
           </Link>
-        ) : (
-          <a href="/api/auth/github" className="btn btn-primary btn-sm">
-            Get Your ShipCred
-          </a>
-        )}
+          <Link href="/about" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
+            About
+          </Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard" className="btn-primary btn-sm">Dashboard</Link>
+          ) : (
+            <a href="/api/auth/github" className="btn-primary btn-sm">Claim yours</a>
+          )}
+        </div>
+
+        {/* Mobile hamburger */}
+        <button onClick={() => setOpen(!open)} className="sm:hidden p-2 -mr-2 text-fg-secondary">
+          {open ? <LuX size={22} /> : <LuMenu size={22} />}
+        </button>
       </div>
-    </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="sm:hidden absolute top-full left-0 right-0 bg-white border-b border-surface-border z-50 px-4 py-4 space-y-3">
+          <Link href="/leaderboard" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">
+            Explore
+          </Link>
+          <Link href="/about" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">
+            About
+          </Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard" className="btn-primary btn-sm w-full text-center">Dashboard</Link>
+          ) : (
+            <a href="/api/auth/github" className="btn-primary btn-sm w-full text-center">Claim yours</a>
+          )}
+        </div>
+      )}
+    </nav>
   );
 }

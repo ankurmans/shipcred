@@ -26,23 +26,17 @@ export default function SyncButton() {
 
   return (
     <div>
-      <button
-        onClick={handleSync}
-        disabled={syncing}
-        className="btn btn-primary btn-sm"
-      >
+      <button onClick={handleSync} disabled={syncing} className="btn-brand btn-sm">
         {syncing ? (
           <>
-            <span className="loading loading-spinner loading-xs" />
+            <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
             Syncing...
           </>
         ) : (
           'Sync Now'
         )}
       </button>
-      {result && (
-        <p className="text-sm mt-2 text-base-content/60">{result}</p>
-      )}
+      {result && <p className="text-sm mt-2 text-fg-secondary">{result}</p>}
     </div>
   );
 }

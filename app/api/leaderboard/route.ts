@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
 
   let query = supabase
     .from('profiles')
-    .select('username, display_name, avatar_url, role, company, shipcred_score, shipcred_tier')
-    .gt('shipcred_score', 0)
-    .order('shipcred_score', { ascending: false })
+    .select('username, display_name, avatar_url, role, company, gtmcommit_score, gtmcommit_tier')
+    .gt('gtmcommit_score', 0)
+    .order('gtmcommit_score', { ascending: false })
     .limit(limit);
 
   if (role) {

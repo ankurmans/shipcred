@@ -1,33 +1,31 @@
 import type { Metadata } from 'next';
-import { DM_Sans } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
-const dmSans = DM_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-dm-sans',
+  variable: '--font-inter',
   display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: {
-    default: 'ShipCred — Talk is cheap. Commits aren\'t.',
-    template: '%s | ShipCred',
+    default: 'GTM Commit — Talk is cheap. Commits aren\'t.',
+    template: '%s | GTM Commit',
   },
   description:
-    'The proof-of-work network for AI-native GTM professionals. Connect GitHub. Show what you\'ve shipped. Get your ShipCred.',
+    'The proof-of-work profile for AI-native GTM professionals. Connect GitHub. Show what you\'ve shipped. Get your GTM Commit.',
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
-    title: 'ShipCred — Talk is cheap. Commits aren\'t.',
-    description:
-      'The proof-of-work network for AI-native GTM professionals.',
-    siteName: 'ShipCred',
+    title: 'GTM Commit — Talk is cheap. Commits aren\'t.',
+    description: 'The proof-of-work profile for AI-native GTM professionals.',
+    siteName: 'GTM Commit',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ShipCred — Talk is cheap. Commits aren\'t.',
-    description:
-      'The proof-of-work network for AI-native GTM professionals.',
+    title: 'GTM Commit — Talk is cheap. Commits aren\'t.',
+    description: 'The proof-of-work profile for AI-native GTM professionals.',
   },
 };
 
@@ -37,8 +35,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="shipcred">
-      <body className={`${dmSans.variable} min-h-screen bg-base-100 text-base-content`}>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Funnel+Sans:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      </head>
+      <body className={`${inter.variable} font-body min-h-screen`}>
         {children}
       </body>
     </html>

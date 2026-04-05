@@ -1,39 +1,27 @@
 import Link from 'next/link';
+import { LuPackageCheck } from 'react-icons/lu';
 
 export default function Footer() {
   return (
-    <footer className="footer footer-center p-10 bg-neutral text-neutral-content">
-      <div className="grid grid-flow-col gap-6">
-        <Link href="/about" className="link link-hover">About</Link>
-        <Link href="/leaderboard" className="link link-hover">Leaderboard</Link>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="link link-hover">GitHub</a>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="link link-hover">Twitter</a>
-      </div>
-      <div>
-        <p className="font-bold text-lg font-[family-name:var(--font-dm-sans)]">
-          ShipCred
-        </p>
-        <p className="text-sm text-neutral-content/60">
-          Talk is cheap. Commits aren&apos;t.
-        </p>
-      </div>
-      <div>
-        <p className="text-sm text-neutral-content/60">
+    <footer className="border-t border-surface-border-dark bg-surface-inverse text-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <span className="font-display text-sm font-bold text-brand inline-flex items-center gap-1.5"><LuPackageCheck size={16} /> gtmcommit</span>
+          <span className="text-xs text-white/40 hidden sm:inline">Talk is cheap. Commits aren&apos;t.</span>
+        </div>
+        <div className="flex items-center gap-6">
+          <Link href="/about" className="text-xs text-white/40 hover:text-white/70 transition-colors">About</Link>
+          <Link href="/leaderboard" className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>
+        </div>
+        <div className="text-xs text-white/30">
           Built with Claude Code by{' '}
-          <a
-            href="https://twitter.com/AnkurShrestha"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link"
-          >
+          <a href="https://twitter.com/AnkurShrestha" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">
             @AnkurShrestha
           </a>
-        </p>
+        </div>
       </div>
-      <div>
-        <p className="text-xs text-neutral-content/40">
-          © 2026 ShipCred. Open source under AGPL-3.0.
-        </p>
+      <div className="text-center py-3 sm:py-4 text-[10px] text-white/20">
+        © 2026 GTM Commit. Open source under AGPL-3.0.
       </div>
     </footer>
   );

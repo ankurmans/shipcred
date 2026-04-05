@@ -13,7 +13,7 @@ export async function GET(
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('display_name, username, role, company, avatar_url, shipcred_score, shipcred_tier')
+    .select('display_name, username, role, company, avatar_url, gtmcommit_score, gtmcommit_tier')
     .eq('username', username)
     .single();
 
@@ -21,7 +21,7 @@ export async function GET(
     return new Response('Not found', { status: 404 });
   }
 
-  const tierInfo = getTierInfo(profile.shipcred_tier);
+  const tierInfo = getTierInfo(profile.gtmcommit_tier);
 
   return new ImageResponse(
     (
@@ -51,7 +51,7 @@ export async function GET(
                 width: '80px',
                 height: '80px',
                 borderRadius: '50%',
-                background: '#10b981',
+                background: '#FF5C00',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -86,7 +86,7 @@ export async function GET(
         >
           <div
             style={{
-              background: '#10b981',
+              background: '#FF5C00',
               color: '#ffffff',
               fontSize: '72px',
               fontWeight: 800,
@@ -94,7 +94,7 @@ export async function GET(
               borderRadius: '20px',
             }}
           >
-            {profile.shipcred_score}
+            {profile.gtmcommit_score}
           </div>
           <div
             style={{
@@ -104,9 +104,9 @@ export async function GET(
               fontSize: '24px',
             }}
           >
-            <span>ShipCred Score</span>
+            <span>GTM Commit Score</span>
             <span style={{ fontSize: '20px', color: '#6b7280' }}>
-              {tierInfo.emoji} {tierInfo.label}
+              {tierInfo.label} Tier
             </span>
           </div>
         </div>
@@ -121,7 +121,7 @@ export async function GET(
           }}
         >
           <div style={{ color: '#9ca3af', fontSize: '18px' }}>
-            shipcred.io/{profile.username}
+            gtmcommit.com/{profile.username}
           </div>
           <div style={{ color: '#9ca3af', fontSize: '18px' }}>
             Talk is cheap. Commits aren&apos;t.

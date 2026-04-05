@@ -1,15 +1,13 @@
 interface BadgeProps {
   label: string;
-  variant?: 'primary' | 'secondary' | 'accent' | 'ghost' | 'info' | 'success' | 'warning' | 'error';
-  size?: 'sm' | 'md' | 'lg';
+  bg?: string;
+  color?: string;
   icon?: React.ReactNode;
 }
 
-const sizeClass = { sm: 'badge-sm', md: '', lg: 'badge-lg' };
-
-export default function Badge({ label, variant = 'ghost', size = 'md', icon }: BadgeProps) {
+export default function Badge({ label, bg = '#F5F5F5', color = '#666', icon }: BadgeProps) {
   return (
-    <span className={`badge badge-${variant} ${sizeClass[size]} gap-1`}>
+    <span className="badge" style={{ backgroundColor: bg, color }}>
       {icon}
       {label}
     </span>

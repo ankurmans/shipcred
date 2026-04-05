@@ -2,32 +2,51 @@
 module.exports = {
   content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
   theme: {
-    extend: {},
-  },
-  plugins: [require('daisyui')],
-  daisyui: {
-    themes: [
-      {
-        shipcred: {
-          'primary': '#10b981',
-          'primary-content': '#ffffff',
-          'secondary': '#6366f1',
-          'secondary-content': '#ffffff',
-          'accent': '#f59e0b',
-          'accent-content': '#ffffff',
-          'neutral': '#1f2937',
-          'neutral-content': '#f9fafb',
-          'base-100': '#ffffff',
-          'base-200': '#f9fafb',
-          'base-300': '#e5e7eb',
-          'base-content': '#1f2937',
-          'info': '#3b82f6',
-          'success': '#10b981',
-          'warning': '#f59e0b',
-          'error': '#ef4444',
+    extend: {
+      colors: {
+        brand: {
+          DEFAULT: '#FF5C00',
+          light: '#FF8533',
+          dark: '#E54D00',
+          50: '#FFF7ED',
+          100: '#FFEDD5',
+          500: '#FF5C00',
+          600: '#E54D00',
+        },
+        surface: {
+          primary: '#FFFFFF',
+          secondary: '#F7F8FA',
+          muted: '#F3F4F6',
+          inverse: '#1A1A1A',
+          'inverse-subtle': '#111111',
+          border: '#F3F4F6',
+          'border-dark': '#2A2A2A',
+        },
+        fg: {
+          primary: '#1A1A1A',
+          secondary: '#666666',
+          muted: '#888888',
+          faint: '#CCCCCC',
+          inverse: '#FFFFFF',
         },
       },
-      'night',
-    ],
+      fontFamily: {
+        display: ['"Funnel Sans"', 'system-ui', 'sans-serif'],
+        body: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        mono: ['"Geist Mono"', 'monospace'],
+      },
+      borderRadius: {
+        'card': '20px',
+        'proof': '10px',
+        'icon': '6px',
+      },
+      boxShadow: {
+        'card': '0 4px 16px rgba(0, 0, 0, 0.04)',
+        'card-hover': '0 8px 32px rgba(0, 0, 0, 0.08)',
+        'card-dark': '0 8px 32px rgba(255, 92, 0, 0.08)',
+        'cta': '0 4px 16px rgba(255, 92, 0, 0.25)',
+      },
+    },
   },
+  plugins: [],
 };

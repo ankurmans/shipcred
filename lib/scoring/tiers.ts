@@ -1,21 +1,20 @@
-import type { ShipCredTier } from '@/types';
+import type { GtmCommitTier } from '@/types';
 
 interface TierInfo {
   name: string;
-  emoji: string;
   label: string;
   minScore: number;
-  color: string;
+  iconName: 'square' | 'package' | 'hammer' | 'rocket' | 'trophy';
 }
 
-export const TIERS: Record<ShipCredTier, TierInfo> = {
-  unranked: { name: 'unranked', emoji: '⬜', label: 'Unranked', minScore: 0, color: 'badge-ghost' },
-  shipper: { name: 'shipper', emoji: '📦', label: 'Shipper', minScore: 50, color: 'badge-info' },
-  builder: { name: 'builder', emoji: '🔨', label: 'Builder', minScore: 250, color: 'badge-warning' },
-  captain: { name: 'captain', emoji: '🚀', label: 'Captain', minScore: 500, color: 'badge-secondary' },
-  legend: { name: 'legend', emoji: '🏆', label: 'Legend', minScore: 750, color: 'badge-accent' },
+export const TIERS: Record<GtmCommitTier, TierInfo> = {
+  unranked: { name: 'unranked', label: 'Unranked', minScore: 0, iconName: 'square' },
+  shipper: { name: 'shipper', label: 'Shipper', minScore: 50, iconName: 'package' },
+  builder: { name: 'builder', label: 'Builder', minScore: 250, iconName: 'hammer' },
+  captain: { name: 'captain', label: 'Captain', minScore: 500, iconName: 'rocket' },
+  legend: { name: 'legend', label: 'Legend', minScore: 750, iconName: 'trophy' },
 };
 
-export function getTierInfo(tier: ShipCredTier): TierInfo {
+export function getTierInfo(tier: GtmCommitTier): TierInfo {
   return TIERS[tier] || TIERS.unranked;
 }

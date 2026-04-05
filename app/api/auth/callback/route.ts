@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         .eq('user_id', userId);
     } else {
       // Create Supabase auth user
-      const email = `${githubUser.login}@github.shipcred.io`;
+      const email = `${githubUser.login}@github.gtmcommit.com`;
       const { data: authData, error: authError } = await supabase.auth.admin.createUser({
         email,
         email_confirm: true,
@@ -60,10 +60,14 @@ export async function GET(request: NextRequest) {
       }
       userId = authData.user.id;
 
+      // Use desired username from cookie if available, fallback to GitHub login
+      const desiredUsername = request.cookies.get('desired_username')?.value;
+      const finalUsername = (desiredUsername || githubUser.login).toLowerCase().replace(/[^a-z0-9_-]/g, '');
+
       // Create profile
       await supabase.from('profiles').insert({
         user_id: userId,
-        username: githubUser.login.toLowerCase(),
+        username: finalUsername,
         display_name: githubUser.name || githubUser.login,
         bio: githubUser.bio,
         avatar_url: githubUser.avatar_url,
@@ -81,7 +85,7 @@ export async function GET(request: NextRequest) {
     const { data: linkData, error: linkError } =
       await supabase.auth.admin.generateLink({
         type: 'magiclink',
-        email: `${githubUser.login}@github.shipcred.io`,
+        email: `${githubUser.login}@github.gtmcommit.com`,
       });
 
     if (linkError || !linkData) {
@@ -99,6 +103,7 @@ export async function GET(request: NextRequest) {
 
     const response = NextResponse.redirect(redirectUrl.toString());
     response.cookies.delete('github_oauth_state');
+    response.cookies.delete('desired_username');
     return response;
   } catch (error) {
     console.error('Auth callback error:', error);

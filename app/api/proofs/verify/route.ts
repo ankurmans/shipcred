@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { verifyProof } from '@/lib/proofs/verify';
+import { verifyDeploymentContent, isOldEnoughToVerify } from '@/lib/proofs/anti-gaming';
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -16,7 +17,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'proof_id is required' }, { status: 400 });
   }
 
-  // Verify ownership
   const { data: profile } = await supabase
     .from('profiles')
     .select('id')
@@ -35,16 +35,47 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Proof not found' }, { status: 404 });
   }
 
+  // Anti-gaming: 24hr minimum age check
+  if (!isOldEnoughToVerify(proof.created_at)) {
+    return NextResponse.json(
+      { error: 'Deployments must be at least 24 hours old before verification.' },
+      { status: 400 }
+    );
+  }
+
+  // Run platform verification
   const result = await verifyProof(proof.project_url);
+
+  // Anti-gaming: blank template detection for verified URLs
+  if (result.verification_status === 'verified') {
+    const contentCheck = await verifyDeploymentContent(proof.project_url);
+    if (!contentCheck.valid) {
+      await admin.from('external_proofs').update({
+        verification_status: 'failed',
+        verification_method: result.verification_method,
+        platform_data: { ...result.platform_data, anti_gaming: contentCheck.reason },
+        proof_score: 0,
+      }).eq('id', proof_id);
+
+      return NextResponse.json({
+        ...result,
+        verification_status: 'failed',
+        anti_gaming_reason: contentCheck.reason,
+      });
+    }
+  }
+
+  // URL-only verification = lower score. Ownership verification (meta tag) gives higher score.
+  const proofScore = result.verification_status === 'verified'
+    ? (proof.ownership_verified ? 30 : (result.source_type !== 'custom_url' ? 15 : 10))
+    : 5;
 
   await admin.from('external_proofs').update({
     verification_status: result.verification_status,
     verification_method: result.verification_method,
     platform_data: result.platform_data,
     verified_at: result.verification_status === 'verified' ? new Date().toISOString() : null,
-    proof_score: result.verification_status === 'verified'
-      ? (result.source_type !== 'custom_url' ? 25 : 15)
-      : 5,
+    proof_score: proofScore,
   }).eq('id', proof_id);
 
   return NextResponse.json(result);

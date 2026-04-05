@@ -1,7 +1,9 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { fetchAllRepos, fetchCommits } from './api';
 import { detectAITool } from './detect-ai';
-import { calculateShipCredScore, scoreToTier } from '@/lib/scoring/calculate';
+import { applyGitHubAntiGaming, isSubstantiveCommit } from './anti-gaming';
+import { calculateGtmCommitScore, scoreToTier } from '@/lib/scoring/calculate';
+import { applyVelocityLimit } from '@/lib/scoring/velocity';
 
 function sixMonthsAgo(): string {
   const d = new Date();
@@ -34,15 +36,32 @@ export async function syncGitHubData(profileId: string, accessToken: string) {
       .eq('id', profileId)
       .single();
 
+    // Get user emails for authorship validation
+    const userEmails = [profile?.github_username || ''].filter(Boolean);
+
     for (const repo of repos) {
       reposScanned++;
 
-      const commits = await fetchCommits(accessToken, repo.full_name, {
+      const rawCommits = await fetchCommits(accessToken, repo.full_name, {
         since: sixMonthsAgo(),
         author: profile?.github_username || repo.owner.login,
       });
 
-      for (const commit of commits) {
+      // Count AI commits before filtering for spoofing detection
+      let repoAiCount = 0;
+      for (const c of rawCommits) {
+        if (detectAITool(c)) repoAiCount++;
+      }
+
+      // Apply anti-gaming filters
+      const { filteredCommits } = applyGitHubAntiGaming(
+        rawCommits,
+        repo,
+        userEmails,
+        repoAiCount
+      );
+
+      for (const commit of filteredCommits) {
         commitsAnalyzed++;
         const detection = detectAITool(commit);
         if (detection) aiCommitsFound++;
@@ -145,33 +164,52 @@ async function recalculateScore(profileId: string) {
   const supabase = createAdminClient();
 
   // Fetch all data needed for scoring
-  const [commitsRes, portfolioRes, vouchesRes, toolsRes, proofsRes] = await Promise.all([
-    supabase.from('github_commits').select('*').eq('profile_id', profileId),
-    supabase.from('portfolio_items').select('*').eq('profile_id', profileId),
-    supabase.from('vouches').select('*').eq('vouchee_id', profileId),
-    supabase.from('tool_declarations').select('*').eq('profile_id', profileId),
-    supabase.from('external_proofs').select('*').eq('profile_id', profileId),
+  const [commitsRes, portfolioRes, vouchesRes, toolsRes, proofsRes, videosRes, contentRes, certsRes, uploadsRes, profileRes] = await Promise.all([
+    supabase.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name').eq('profile_id', profileId),
+    supabase.from('portfolio_items').select('vouch_count').eq('profile_id', profileId),
+    supabase.from('vouches').select('id').eq('vouchee_id', profileId),
+    supabase.from('tool_declarations').select('is_verified, tool_name').eq('profile_id', profileId),
+    supabase.from('external_proofs').select('verification_status, source_type').eq('profile_id', profileId),
+    supabase.from('video_proofs').select('url_verified, duration_seconds, category, vouch_count').eq('profile_id', profileId),
+    supabase.from('content_proofs').select('url_verified, platform, vouch_count').eq('profile_id', profileId),
+    supabase.from('certifications').select('verification_status, issuer, vouch_count').eq('profile_id', profileId),
+    supabase.from('uploaded_files').select('is_parsed_valid, vouch_count, file_type').eq('profile_id', profileId),
+    supabase.from('profiles').select('gtmcommit_score, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role').eq('id', profileId).single(),
   ]);
 
-  const score = calculateShipCredScore({
+  const currentProfile = profileRes.data;
+
+  const score = calculateGtmCommitScore({
     commits: commitsRes.data || [],
     portfolioItems: portfolioRes.data || [],
     vouchCount: vouchesRes.data?.length || 0,
     toolDeclarations: toolsRes.data || [],
     externalProofs: proofsRes.data || [],
+    videoProofs: videosRes.data || [],
+    contentProofs: contentRes.data || [],
+    certifications: certsRes.data || [],
+    uploadedFiles: uploadsRes.data || [],
+    profile: currentProfile ? {
+      bio: currentProfile.bio,
+      avatar_url: currentProfile.avatar_url,
+      display_name: currentProfile.display_name,
+      website_url: currentProfile.website_url,
+      linkedin_url: currentProfile.linkedin_url,
+      twitter_handle: currentProfile.twitter_handle,
+      role: currentProfile.role,
+    } : undefined,
   });
 
-  const tier = scoreToTier(score.total);
+  const previousScore = currentProfile?.gtmcommit_score || 0;
+
+  // Apply velocity limit: max +200 pts per 24 hours
+  const finalScore = await applyVelocityLimit(profileId, score.total, previousScore);
+  const tier = scoreToTier(finalScore);
 
   await supabase.from('profiles').update({
-    shipcred_score: score.total,
-    shipcred_tier: tier,
-    score_breakdown: {
-      github: score.github,
-      portfolio: score.portfolio,
-      vouches: score.vouches,
-      tools: score.tools,
-    },
+    gtmcommit_score: finalScore,
+    gtmcommit_tier: tier,
+    score_breakdown: score,
     is_verified: (commitsRes.data || []).some(c => c.ai_tool_detected !== null),
   }).eq('id', profileId);
 }
