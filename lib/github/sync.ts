@@ -36,8 +36,7 @@ export async function syncGitHubData(profileId: string, accessToken: string) {
       .eq('id', profileId)
       .single();
 
-    // Get user emails for authorship validation
-    const userEmails = [profile?.github_username || ''].filter(Boolean);
+    const githubLogin = profile?.github_username || '';
 
     for (const repo of repos) {
       reposScanned++;
@@ -57,7 +56,7 @@ export async function syncGitHubData(profileId: string, accessToken: string) {
       const { filteredCommits } = applyGitHubAntiGaming(
         rawCommits,
         repo,
-        userEmails,
+        githubLogin,
         repoAiCount
       );
 

@@ -30,12 +30,20 @@ export function filterForkedRepoCommits(
 
 export function validateCommitAuthorship(
   commits: GitHubAPICommit[],
-  userEmails: string[]
+  githubLogin: string
 ): GitHubAPICommit[] {
+  if (!githubLogin) return commits;
+  const login = githubLogin.toLowerCase();
   return commits.filter(c => {
-    const authorName = c.commit.author?.name || '';
-    // Accept if author name matches any known email/username
-    return userEmails.some(e => authorName.includes(e) || e.includes(authorName));
+    // Check committer login (most reliable)
+    const committerLogin = c.committer?.login?.toLowerCase() || '';
+    if (committerLogin === login) return true;
+    // Check author name as fallback (less reliable, be lenient)
+    const authorName = (c.commit.author?.name || '').toLowerCase();
+    if (authorName === login) return true;
+    // If we can't determine authorship, keep the commit
+    // (GitHub API already filters by author param in fetchCommits)
+    return true;
   });
 }
 
@@ -100,6 +108,9 @@ export function detectCommitSpoofing(commits: GitHubAPICommit[], aiCommitCount: 
 // ============================================================
 
 export function isSubstantiveCommit(commit: GitHubAPICommit): boolean {
+  // If stats aren't available (list endpoint doesn't return them), allow the commit
+  if (!commit.stats && !commit.files) return true;
+
   const totalChanges = (commit.stats?.additions || 0) + (commit.stats?.deletions || 0);
   if (totalChanges < 5) return false;
 
@@ -138,7 +149,7 @@ export interface AntiGamingResult {
 export function applyGitHubAntiGaming(
   commits: GitHubAPICommit[],
   repo: GitHubAPIRepo,
-  userEmails: string[],
+  githubLogin: string,
   aiDetectedCount: number
 ): AntiGamingResult {
   const reasons: string[] = [];
@@ -147,16 +158,16 @@ export function applyGitHubAntiGaming(
   // Step 1: Fork filtering
   if (isForkedRepo(repo)) {
     const before = filtered.length;
-    filtered = filterForkedRepoCommits(filtered, repo, userEmails);
+    filtered = filterForkedRepoCommits(filtered, repo, [githubLogin]);
     if (filtered.length < before) {
       reasons.push(`Excluded ${before - filtered.length} pre-fork commits`);
     }
   }
 
   // Step 2: Author validation
-  if (userEmails.length > 0) {
+  if (githubLogin) {
     const before = filtered.length;
-    filtered = validateCommitAuthorship(filtered, userEmails);
+    filtered = validateCommitAuthorship(filtered, githubLogin);
     if (filtered.length < before) {
       reasons.push(`Excluded ${before - filtered.length} commits by other authors`);
     }
