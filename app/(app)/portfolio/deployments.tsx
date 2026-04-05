@@ -127,13 +127,13 @@ export default function DeploymentsSection() {
         <form onSubmit={handleAdd} className="bg-surface-secondary rounded-card p-5 mt-4 space-y-4">
           <div>
             <label className="block text-sm font-medium mb-1.5">Deployment URL</label>
-            <input type="url" required placeholder="https://my-app.vercel.app" value={url} onChange={e => setUrl(e.target.value)}
+            <input type="url" required placeholder="https://my-app.lovable.app" value={url} onChange={e => setUrl(e.target.value)}
               className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand" />
             <p className="text-xs text-fg-muted mt-1">Vercel, Lovable, Bolt, v0, Replit, Netlify, Railway, Clay, n8n, Make.com, or any URL</p>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">Project Name (optional)</label>
-            <input type="text" placeholder="My Landing Page" value={name} onChange={e => setName(e.target.value)}
+            <input type="text" placeholder="My Vibe Coded App/Website" value={name} onChange={e => setName(e.target.value)}
               className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30" />
           </div>
           <button type="submit" className="btn-brand btn-sm" disabled={saving}>{saving ? 'Adding...' : 'Add Deployment'}</button>
