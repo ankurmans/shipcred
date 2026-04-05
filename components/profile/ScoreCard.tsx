@@ -21,6 +21,7 @@ interface ScoreCardProps {
   };
   tools: ToolDeclaration[];
   appUrl: string;
+  showHeader?: boolean;
 }
 
 // Tier thresholds for "next tier" nudge
@@ -32,9 +33,13 @@ const TIER_THRESHOLDS: { tier: GtmCommitTier; label: string; min: number }[] = [
 ];
 
 function getNextTier(score: number): { label: string; pointsNeeded: number; progress: number } | null {
-  for (const t of TIER_THRESHOLDS) {
+  // Find the lowest threshold the score hasn't reached yet
+  // Iterate from lowest (Shipper 50) to highest (Legend 750)
+  const sorted = [...TIER_THRESHOLDS].reverse();
+  for (const t of sorted) {
     if (score < t.min) {
-      const prevMin = TIER_THRESHOLDS[TIER_THRESHOLDS.indexOf(t) + 1]?.min || 0;
+      const idx = sorted.indexOf(t);
+      const prevMin = idx > 0 ? sorted[idx - 1].min : 0;
       return {
         label: t.label,
         pointsNeeded: t.min - score,
@@ -133,7 +138,7 @@ function getTierAccent(tier: GtmCommitTier): string {
   }
 }
 
-export default function ScoreCard({ profile, tools, appUrl }: ScoreCardProps) {
+export default function ScoreCard({ profile, tools, appUrl, showHeader = true }: ScoreCardProps) {
   const animatedScore = useCountUp(profile.gtmcommit_score);
   const parsed = parseTierBreakdown(profile.score_breakdown);
   const nextTier = getNextTier(profile.gtmcommit_score);
@@ -152,23 +157,25 @@ export default function ScoreCard({ profile, tools, appUrl }: ScoreCardProps) {
       <div className={`h-1 w-full bg-gradient-to-r ${accentGradient}`} aria-hidden="true" />
 
       <div className="p-5 sm:p-6">
-      {/* Header: Avatar + Name + Streak */}
-      <div className="flex items-center gap-3">
-        <Avatar src={profile.avatar_url} alt={profile.display_name} size="lg" isVerified={profile.is_verified} />
-        <div className="flex-1 min-w-0">
-          <h2 className="font-display text-lg font-bold truncate">{profile.display_name}</h2>
-          <p className="text-xs text-fg-muted truncate">
-            @{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}
-          </p>
+      {/* Header: Avatar + Name + Streak (optional — hidden on profile page to avoid duplication) */}
+      {showHeader && (
+        <div className="flex items-center gap-3 mb-5">
+          <Avatar src={profile.avatar_url} alt={profile.display_name} size="lg" isVerified={profile.is_verified} />
+          <div className="flex-1 min-w-0">
+            <h2 className="font-display text-lg font-bold truncate">{profile.display_name}</h2>
+            <p className="text-xs text-fg-muted truncate">
+              @{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}
+            </p>
+          </div>
+          {Number(profile.current_streak) > 0 && (
+            <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${
+              Number(profile.current_streak) >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
+            }`}>
+              🔥 {profile.current_streak}w
+            </span>
+          )}
         </div>
-        {profile.current_streak && profile.current_streak > 0 && (
-          <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${
-            profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
-          }`}>
-            🔥 {profile.current_streak}w
-          </span>
-        )}
-      </div>
+      )}
 
       {/* Score — the hero */}
       <div className="mt-5 flex items-center gap-4">

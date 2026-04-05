@@ -14,6 +14,7 @@ import PoweredByBadge from '@/components/profile/PoweredByBadge';
 import ShareButton from '@/components/shared/ShareButton';
 import VisitorCTA from '@/components/profile/VisitorCTA';
 import ProfileViewTracker from '@/components/profile/ProfileViewTracker';
+import PlatformLinks from '@/components/profile/PlatformLinks';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
 
@@ -130,9 +131,12 @@ export default async function ProfilePage({ params }: PageProps) {
             </div>
           )}
 
+          {/* Platform links */}
+          <PlatformLinks platformUrls={profile.platform_urls} />
+
           {/* Score Card — the hero screenshot unit */}
           <div className="mt-5 sm:mt-6">
-            <ScoreCard profile={profile} tools={tools} appUrl={appUrl} />
+            <ScoreCard profile={profile} tools={tools} appUrl={appUrl} showHeader={false} />
           </div>
 
           {/* Share & compare — below the wow moment */}

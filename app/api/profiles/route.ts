@@ -30,6 +30,7 @@ export async function PATCH(request: NextRequest) {
   const allowedFields = [
     'display_name', 'bio', 'website_url', 'linkedin_url',
     'twitter_handle', 'role', 'company', 'looking_for_work',
+    'platform_urls',
   ];
 
   const updates: Record<string, unknown> = {};
