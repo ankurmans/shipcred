@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
 import Logo from '@/components/shared/Logo';
+import AppNavLinks from '@/components/shared/AppNavLinks';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -14,24 +15,17 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     .eq('user_id', user.id)
     .single();
 
+  const username = profile?.username || null;
+
   return (
     <div className="min-h-screen bg-surface-primary">
-      <nav className="border-b border-surface-border">
-        <div className="max-w-5xl mx-auto px-6 flex items-center justify-between h-14">
+      <nav className="border-b border-surface-border relative">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
           <Link href="/"><Logo size={20} /></Link>
-          <div className="flex items-center gap-5">
-            <Link href="/dashboard" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Dashboard</Link>
-            <Link href="/portfolio" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Portfolio</Link>
-            <Link href="/proofs" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Proofs</Link>
-            <Link href="/profile/edit" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Profile</Link>
-            {profile && (
-              <Link href={`/${profile.username}`} className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">View Public</Link>
-            )}
-            <Link href="/settings" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Settings</Link>
-          </div>
+          <AppNavLinks username={username} />
         </div>
       </nav>
-      <div className="max-w-4xl mx-auto px-6 py-8">{children}</div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">{children}</div>
     </div>
   );
 }
