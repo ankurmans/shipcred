@@ -29,12 +29,12 @@ export default function ReferralSection({
       <p className="text-sm text-fg-secondary mb-3">
         Invite others to join. Referred users who complete a profile earn you bonus score points (5 pts each, max 50).
       </p>
-      <div className="flex items-center gap-2">
-        <div className="flex-1 bg-white border border-surface-border rounded-lg px-3 py-2 font-mono text-sm text-fg-secondary truncate">
+      <div className="space-y-2">
+        <div className="bg-white border border-surface-border rounded-lg px-3 py-2 font-mono text-sm text-fg-secondary break-all">
           {referralLink}
         </div>
-        <button onClick={handleCopy} className="btn-brand btn-sm shrink-0">
-          {copied ? <><LuCheck size={14} /> Copied</> : <><LuCopy size={14} /> Copy</>}
+        <button onClick={handleCopy} className="btn-brand btn-sm w-full">
+          {copied ? <><LuCheck size={14} /> Copied</> : <><LuCopy size={14} /> Copy Link</>}
         </button>
       </div>
       {referralCount > 0 && (
