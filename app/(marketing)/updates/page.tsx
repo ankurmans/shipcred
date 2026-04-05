@@ -10,6 +10,11 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Public feedback page',
+        description: 'Anyone can request features or report bugs at /feedback — no account needed. Submissions become GitHub issues for community voting.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Login page with GitHub, Google & LinkedIn',
         description: 'Multiple sign-in options so you can get started with whatever account you prefer.',
       },
