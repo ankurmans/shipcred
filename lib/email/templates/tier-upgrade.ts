@@ -1,10 +1,10 @@
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://gtmcommit.com';
 
-const TIER_EMOJI: Record<string, string> = {
-  shipper: '📦',
-  builder: '🔨',
-  captain: '🚀',
-  legend: '🏆',
+const TIER_SYMBOL: Record<string, string> = {
+  shipper: '[Shipper]',
+  builder: '[Builder]',
+  captain: '[Captain]',
+  legend: '[Legend]',
 };
 
 export function tierUpgradeEmail(
@@ -14,10 +14,8 @@ export function tierUpgradeEmail(
   score: number,
 ): { subject: string; html: string } {
   const tierLabel = newTier.charAt(0).toUpperCase() + newTier.slice(1);
-  const emoji = TIER_EMOJI[newTier] || '🎉';
-
   return {
-    subject: `${emoji} You're now a ${tierLabel} on GTM Commit!`,
+    subject: `You're now a ${tierLabel} on GTM Commit!`,
     html: `
 <!DOCTYPE html>
 <html>
@@ -28,7 +26,7 @@ export function tierUpgradeEmail(
       <div style="text-align:center;margin-bottom:24px">
         <div style="display:inline-block;background:linear-gradient(135deg,#FF5C00,#FF8533);color:#fff;font-weight:800;font-size:18px;padding:8px 20px;border-radius:20px">GTM Commit</div>
       </div>
-      <div style="text-align:center;font-size:64px;margin-bottom:16px">${emoji}</div>
+      <div style="text-align:center;font-size:32px;font-weight:800;color:#FF5C00;margin-bottom:16px">${TIER_SYMBOL[newTier] || tierLabel}</div>
       <h1 style="font-size:24px;font-weight:700;color:#1a1a1a;text-align:center;margin:0 0 8px">${tierLabel} Tier Unlocked!</h1>
       <p style="color:#666;text-align:center;margin:0 0 24px;font-size:15px">${displayName}, your GTM Commit Score is now <strong style="color:#FF5C00">${score}</strong>.</p>
       <div style="background:#f7f8fa;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center">

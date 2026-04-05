@@ -1,7 +1,12 @@
 'use client';
 
-import { LuTarget, LuClock, LuCheck } from 'react-icons/lu';
+import {
+  LuTarget, LuClock, LuCheck, LuUser, LuGitBranch,
+  LuClipboardCheck, LuHandshake, LuWrench, LuPenTool,
+  LuUsers, LuVideo,
+} from 'react-icons/lu';
 import { getChallengeDefinition } from '@/lib/gamification/challenges';
+import type { IconType } from 'react-icons';
 
 interface Challenge {
   id: string;
@@ -12,6 +17,17 @@ interface Challenge {
   expires_at: string | null;
   completed_at: string | null;
 }
+
+const ICON_MAP: Record<string, IconType> = {
+  user: LuUser,
+  gitBranch: LuGitBranch,
+  clipboardCheck: LuClipboardCheck,
+  handshake: LuHandshake,
+  wrench: LuWrench,
+  penTool: LuPenTool,
+  users: LuUsers,
+  video: LuVideo,
+};
 
 export default function ChallengesCard({ challenges }: { challenges: Challenge[] }) {
   if (challenges.length === 0) return null;
@@ -38,12 +54,15 @@ export default function ChallengesCard({ challenges }: { challenges: Challenge[]
 
           const pct = c.target > 0 ? Math.min(100, (c.progress / c.target) * 100) : 0;
           const timeLeft = c.expires_at ? getTimeLeft(c.expires_at) : null;
+          const Icon = ICON_MAP[def.iconName] || LuTarget;
 
           return (
             <div key={c.id} className="bg-white border border-surface-border rounded-xl p-4">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-start gap-3">
-                  <span className="text-xl">{def.icon}</span>
+                  <div className="w-8 h-8 rounded-lg bg-brand-50 flex items-center justify-center shrink-0">
+                    <Icon size={16} className="text-brand" />
+                  </div>
                   <div>
                     <div className="text-sm font-semibold">{def.title}</div>
                     <div className="text-xs text-fg-muted mt-0.5">{def.description}</div>
@@ -83,9 +102,10 @@ export default function ChallengesCard({ challenges }: { challenges: Challenge[]
               {completed.map((c) => {
                 const def = getChallengeDefinition(c.challenge_id);
                 if (!def) return null;
+                const Icon = ICON_MAP[def.iconName] || LuTarget;
                 return (
                   <span key={c.id} className="inline-flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                    <LuCheck size={12} /> {def.icon} {def.title}
+                    <LuCheck size={12} /> <Icon size={12} /> {def.title}
                   </span>
                 );
               })}

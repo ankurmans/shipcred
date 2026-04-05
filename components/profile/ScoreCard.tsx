@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { LuFlame } from 'react-icons/lu';
 import type { GtmCommitTier, ScoreBreakdown, ToolDeclaration } from '@/types';
 import { TierBadge } from '@/components/shared/TierIcon';
 import Avatar from '@/components/shared/Avatar';
@@ -171,7 +172,7 @@ export default function ScoreCard({ profile, tools, appUrl, showHeader = true }:
             <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full shrink-0 ${
               Number(profile.current_streak) >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
             }`}>
-              🔥 {profile.current_streak}w
+              <LuFlame size={12} /> {profile.current_streak}w
             </span>
           )}
         </div>

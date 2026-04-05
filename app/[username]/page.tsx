@@ -15,6 +15,7 @@ import ShareButton from '@/components/shared/ShareButton';
 import VisitorCTA from '@/components/profile/VisitorCTA';
 import ProfileViewTracker from '@/components/profile/ProfileViewTracker';
 import PlatformLinks from '@/components/profile/PlatformLinks';
+import { LuFlame } from 'react-icons/lu';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
 
@@ -109,7 +110,7 @@ export default async function ProfilePage({ params }: PageProps) {
                     <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
                       profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
                     }`}>
-                      🔥 {profile.current_streak}w streak
+                      <LuFlame size={12} /> {profile.current_streak}w streak
                     </span>
                   )}
                 </div>

@@ -18,7 +18,7 @@ export function vouchReceivedEmail(
       <div style="text-align:center;margin-bottom:24px">
         <div style="display:inline-block;background:linear-gradient(135deg,#FF5C00,#FF8533);color:#fff;font-weight:800;font-size:18px;padding:8px 20px;border-radius:20px">GTM Commit</div>
       </div>
-      <h1 style="font-size:24px;font-weight:700;color:#1a1a1a;text-align:center;margin:0 0 8px">🤝 New Vouch!</h1>
+      <h1 style="font-size:24px;font-weight:700;color:#1a1a1a;text-align:center;margin:0 0 8px">New Vouch!</h1>
       <p style="color:#666;text-align:center;margin:0 0 24px;font-size:15px"><strong>${voucherName}</strong> vouched for your work.</p>
       ${message ? `<div style="background:#f7f8fa;border-radius:12px;padding:16px;margin-bottom:24px;font-style:italic;color:#666;font-size:14px">"${message}"</div>` : ''}
       <p style="color:#666;font-size:14px;text-align:center;margin-bottom:24px">Community vouches boost your score. Keep shipping!</p>

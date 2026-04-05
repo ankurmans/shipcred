@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { LuShare2, LuCheck, LuPartyPopper } from 'react-icons/lu';
+import {
+  LuShare2, LuCheck, LuPartyPopper, LuPackage, LuHammer,
+  LuRocket, LuTrophy, LuStar, LuTarget, LuFlame, LuHandshake,
+} from 'react-icons/lu';
+import type { IconType } from 'react-icons';
 
 interface Milestone {
   id: string;
@@ -19,11 +23,18 @@ const LABELS: Record<string, (val: string) => string> = {
   first_vouch: () => 'First Vouch Received!',
 };
 
-const EMOJI: Record<string, (val: string) => string> = {
-  tier_upgrade: (v) => ({ shipper: '📦', builder: '🔨', captain: '🚀', legend: '🏆' }[v] || '🎉'),
-  score_milestone: () => '⭐',
-  commit_count: (v) => v === '1' ? '🎯' : '🔥',
-  first_vouch: () => '🤝',
+const ICONS: Record<string, (val: string) => IconType> = {
+  tier_upgrade: (v) => ({ shipper: LuPackage, builder: LuHammer, captain: LuRocket, legend: LuTrophy }[v] || LuPartyPopper),
+  score_milestone: () => LuStar,
+  commit_count: (v) => v === '1' ? LuTarget : LuFlame,
+  first_vouch: () => LuHandshake,
+};
+
+const ICON_COLORS: Record<string, string> = {
+  tier_upgrade: 'text-brand bg-brand-50',
+  score_milestone: 'text-amber-600 bg-amber-50',
+  commit_count: 'text-indigo-600 bg-indigo-50',
+  first_vouch: 'text-green-600 bg-green-50',
 };
 
 export default function MilestoneCard({
@@ -62,7 +73,8 @@ export default function MilestoneCard({
       <div className="space-y-3">
         {milestones.map((m) => {
           const label = LABELS[m.milestone_type]?.(m.milestone_value) || m.milestone_type;
-          const emoji = EMOJI[m.milestone_type]?.(m.milestone_value) || '🎉';
+          const Icon = ICONS[m.milestone_type]?.(m.milestone_value) || LuPartyPopper;
+          const colorClass = ICON_COLORS[m.milestone_type] || 'text-brand bg-brand-50';
           const isNew = !m.seen_at;
 
           return (
@@ -73,7 +85,9 @@ export default function MilestoneCard({
               }`}
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{emoji}</span>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${colorClass}`}>
+                  <Icon size={16} />
+                </div>
                 <div>
                   <div className="text-sm font-semibold flex items-center gap-2">
                     {label}

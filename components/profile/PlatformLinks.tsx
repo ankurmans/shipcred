@@ -1,14 +1,18 @@
-import { LuExternalLink } from 'react-icons/lu';
+import {
+  LuExternalLink, LuBox, LuZap, LuHeart, LuPlay,
+  LuMonitor, LuTriangle, LuBolt, LuPalette,
+} from 'react-icons/lu';
+import type { IconType } from 'react-icons';
 
-const PLATFORM_META: Record<string, { label: string; icon: string }> = {
-  clay: { label: 'Clay', icon: '🧱' },
-  n8n: { label: 'n8n', icon: '⚡' },
-  lovable: { label: 'Lovable', icon: '💜' },
-  cursor: { label: 'Cursor', icon: '▶️' },
-  replit: { label: 'Replit', icon: '💻' },
-  vercel: { label: 'Vercel', icon: '▲' },
-  bolt: { label: 'Bolt', icon: '⚡' },
-  v0: { label: 'v0', icon: '🎨' },
+const PLATFORM_META: Record<string, { label: string; Icon: IconType }> = {
+  clay: { label: 'Clay', Icon: LuBox },
+  n8n: { label: 'n8n', Icon: LuZap },
+  lovable: { label: 'Lovable', Icon: LuHeart },
+  cursor: { label: 'Cursor', Icon: LuPlay },
+  replit: { label: 'Replit', Icon: LuMonitor },
+  vercel: { label: 'Vercel', Icon: LuTriangle },
+  bolt: { label: 'Bolt', Icon: LuBolt },
+  v0: { label: 'v0', Icon: LuPalette },
 };
 
 export default function PlatformLinks({ platformUrls }: { platformUrls: Record<string, string> | null }) {
@@ -22,6 +26,7 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
       {entries.map(([key, url]) => {
         const meta = PLATFORM_META[key];
         if (!meta) return null;
+        const { Icon } = meta;
         return (
           <a
             key={key}
@@ -30,7 +35,7 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors"
           >
-            <span>{meta.icon}</span>
+            <Icon size={12} />
             {meta.label}
             <LuExternalLink size={10} className="text-fg-faint" />
           </a>

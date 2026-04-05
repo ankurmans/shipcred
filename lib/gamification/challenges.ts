@@ -4,9 +4,9 @@ export interface ChallengeDefinition {
   description: string;
   target: number;
   bonusPoints: number;
-  icon: string;
+  iconName: string; // maps to icon in ChallengesCard
   track: 'onboarding' | 'weekly' | 'stretch';
-  expiresInDays: number | null; // null = no expiry
+  expiresInDays: number | null;
 }
 
 export const CHALLENGES: ChallengeDefinition[] = [
@@ -17,7 +17,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Fill in all your profile fields',
     target: 100,
     bonusPoints: 10,
-    icon: '👤',
+    iconName: 'user',
     track: 'onboarding',
     expiresInDays: null,
   },
@@ -27,7 +27,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Connect and sync your GitHub',
     target: 1,
     bonusPoints: 15,
-    icon: '🔗',
+    iconName: 'gitBranch',
     track: 'onboarding',
     expiresInDays: null,
   },
@@ -37,7 +37,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Upload a video, content, or certification',
     target: 1,
     bonusPoints: 10,
-    icon: '📋',
+    iconName: 'clipboardCheck',
     track: 'onboarding',
     expiresInDays: null,
   },
@@ -47,7 +47,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Endorse another community member',
     target: 1,
     bonusPoints: 5,
-    icon: '🤝',
+    iconName: 'handshake',
     track: 'onboarding',
     expiresInDays: null,
   },
@@ -59,7 +59,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Have 5 verified AI tools',
     target: 5,
     bonusPoints: 15,
-    icon: '🧰',
+    iconName: 'wrench',
     track: 'stretch',
     expiresInDays: null,
   },
@@ -69,7 +69,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Add 5 pieces of published content',
     target: 5,
     bonusPoints: 15,
-    icon: '✍️',
+    iconName: 'penTool',
     track: 'stretch',
     expiresInDays: null,
   },
@@ -79,7 +79,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Give 10 vouches to other builders',
     target: 10,
     bonusPoints: 20,
-    icon: '🏗️',
+    iconName: 'users',
     track: 'stretch',
     expiresInDays: null,
   },
@@ -89,7 +89,7 @@ export const CHALLENGES: ChallengeDefinition[] = [
     description: 'Add 3 video proof walkthroughs',
     target: 3,
     bonusPoints: 10,
-    icon: '🎬',
+    iconName: 'video',
     track: 'stretch',
     expiresInDays: null,
   },

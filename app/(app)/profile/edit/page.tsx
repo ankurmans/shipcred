@@ -1,17 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import {
+  LuBox, LuZap, LuHeart, LuPlay, LuMonitor,
+  LuTriangle, LuBolt, LuPalette,
+} from 'react-icons/lu';
+import type { IconType } from 'react-icons';
 import ProfileCompletenessBar from '@/components/shared/ProfileCompletenessBar';
 
-const PLATFORM_FIELDS = [
-  { key: 'clay', label: 'Clay', placeholder: 'https://app.clay.com/workspaces/...', icon: '🧱' },
-  { key: 'n8n', label: 'n8n', placeholder: 'https://n8n.io/workflows/...', icon: '⚡' },
-  { key: 'lovable', label: 'Lovable', placeholder: 'https://lovable.dev/projects/...', icon: '💜' },
-  { key: 'cursor', label: 'Cursor', placeholder: 'https://cursor.com/...', icon: '▶️' },
-  { key: 'replit', label: 'Replit', placeholder: 'https://replit.com/@...', icon: '💻' },
-  { key: 'vercel', label: 'Vercel', placeholder: 'https://vercel.com/...', icon: '▲' },
-  { key: 'bolt', label: 'Bolt', placeholder: 'https://bolt.new/...', icon: '⚡' },
-  { key: 'v0', label: 'v0', placeholder: 'https://v0.dev/...', icon: '🎨' },
+const PLATFORM_FIELDS: { key: string; label: string; placeholder: string; Icon: IconType }[] = [
+  { key: 'clay', label: 'Clay', placeholder: 'https://app.clay.com/workspaces/...', Icon: LuBox },
+  { key: 'n8n', label: 'n8n', placeholder: 'https://n8n.io/workflows/...', Icon: LuZap },
+  { key: 'lovable', label: 'Lovable', placeholder: 'https://lovable.dev/projects/...', Icon: LuHeart },
+  { key: 'cursor', label: 'Cursor', placeholder: 'https://cursor.com/...', Icon: LuPlay },
+  { key: 'replit', label: 'Replit', placeholder: 'https://replit.com/@...', Icon: LuMonitor },
+  { key: 'vercel', label: 'Vercel', placeholder: 'https://vercel.com/...', Icon: LuTriangle },
+  { key: 'bolt', label: 'Bolt', placeholder: 'https://bolt.new/...', Icon: LuBolt },
+  { key: 'v0', label: 'v0', placeholder: 'https://v0.dev/...', Icon: LuPalette },
 ];
 
 interface FormState {
@@ -126,7 +131,9 @@ export default function EditProfilePage() {
           <div className="space-y-3">
             {PLATFORM_FIELDS.map((pf) => (
               <div key={pf.key} className="flex items-center gap-2">
-                <span className="text-lg w-7 text-center shrink-0">{pf.icon}</span>
+                <div className="w-7 h-7 rounded-md bg-surface-muted flex items-center justify-center shrink-0">
+                  <pf.Icon size={14} className="text-fg-muted" />
+                </div>
                 <div className="flex-1">
                   <input
                     type="url"

@@ -4,7 +4,6 @@ export interface MilestoneEvent {
   type: string;
   value: string;
   label: string;
-  emoji: string;
   shareText: string;
 }
 
@@ -16,12 +15,6 @@ const TIER_LABELS: Record<string, string> = {
   builder: 'Builder',
   captain: 'Captain',
   legend: 'Legend',
-};
-const TIER_EMOJI: Record<string, string> = {
-  shipper: '📦',
-  builder: '🔨',
-  captain: '🚀',
-  legend: '🏆',
 };
 
 export function detectMilestones(
@@ -41,7 +34,6 @@ export function detectMilestones(
       type: 'tier_upgrade',
       value: newTier,
       label: `${TIER_LABELS[newTier]} Tier Unlocked!`,
-      emoji: TIER_EMOJI[newTier] || '🎉',
       shareText: `Just hit ${TIER_LABELS[newTier]} tier on GTM Commit! ${newScore}/1000. #GTMCommit #AIShipped`,
     });
   }
@@ -53,7 +45,6 @@ export function detectMilestones(
         type: 'score_milestone',
         value: String(threshold),
         label: `Score ${threshold} Reached!`,
-        emoji: '⭐',
         shareText: `My GTM Commit Score just crossed ${threshold}! Talk is cheap. Commits aren't. #GTMCommit`,
       });
     }
@@ -65,7 +56,6 @@ export function detectMilestones(
       type: 'commit_count',
       value: '1',
       label: 'First AI Commit Detected!',
-      emoji: '🎯',
       shareText: 'My first AI-assisted commit was just verified on GTM Commit! #GTMCommit #AIShipped',
     });
   }
@@ -77,7 +67,6 @@ export function detectMilestones(
         type: 'commit_count',
         value: String(threshold),
         label: `${threshold} AI Commits!`,
-        emoji: '🔥',
         shareText: `${threshold} verified AI commits on GTM Commit. Still shipping. #GTMCommit #AIShipped`,
       });
     }
@@ -89,7 +78,6 @@ export function detectMilestones(
       type: 'first_vouch',
       value: '1',
       label: 'First Vouch Received!',
-      emoji: '🤝',
       shareText: 'Just got my first community vouch on GTM Commit! Proof that real builders vouch for real work. #GTMCommit',
     });
   }

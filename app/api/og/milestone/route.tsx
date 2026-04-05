@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const name = searchParams.get('name') || 'Builder';
   const score = searchParams.get('score') || '0';
   const milestone = searchParams.get('milestone') || 'Achievement Unlocked!';
-  const emoji = searchParams.get('emoji') || '🎉';
+  const icon = searchParams.get('icon') || 'Achievement';
   const tier = searchParams.get('tier') || 'shipper';
 
   return new ImageResponse(
@@ -36,7 +36,22 @@ export async function GET(request: NextRequest) {
             boxShadow: '0 25px 50px rgba(0,0,0,0.15)',
           }}
         >
-          <span style={{ fontSize: '80px' }}>{emoji}</span>
+          <div
+            style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '20px',
+              background: '#FF5C00',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              fontSize: '32px',
+              fontWeight: 800,
+            }}
+          >
+            {icon.charAt(0).toUpperCase()}
+          </div>
           <div
             style={{
               fontSize: '40px',
