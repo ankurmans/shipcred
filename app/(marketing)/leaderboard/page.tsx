@@ -5,7 +5,7 @@ import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
 
 export const metadata = { title: 'Leaderboard', description: 'Top AI-native GTM professionals ranked by GTM Commit Score.' };
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   const supabase = createAdminClient();
