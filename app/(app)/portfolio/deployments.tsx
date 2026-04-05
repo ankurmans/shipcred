@@ -167,25 +167,49 @@ export default function DeploymentsSection() {
                 <a href={proof.project_url} target="_blank" rel="noopener noreferrer" className="text-xs text-fg-secondary hover:text-fg-primary shrink-0">Visit</a>
               </div>
 
-              {/* Meta tag verification section */}
+              {/* Ownership verification section */}
               {!proof.ownership_verified && proof.verification_code && (
                 <div className="mt-3 p-3 rounded-lg bg-surface-primary border border-surface-border">
-                  <p className="text-xs font-medium mb-2">Prove you own this site — add this to your site&apos;s {'<head>'}:</p>
-                  <div className="flex items-center gap-2">
-                    <code className="flex-1 text-xs bg-surface-muted px-3 py-2 rounded-lg font-mono text-fg-secondary overflow-x-auto">
-                      &lt;meta name=&quot;gtmcommit-verify&quot; content=&quot;{proof.verification_code}&quot;&gt;
-                    </code>
-                    <button
-                      onClick={() => {
-                        navigator.clipboard.writeText(`<meta name="gtmcommit-verify" content="${proof.verification_code}">`);
-                      }}
-                      className="text-xs text-brand hover:text-brand-dark shrink-0 font-medium"
-                    >
-                      Copy
-                    </button>
+                  <p className="text-xs font-medium mb-2">Prove you own this site — pick either option:</p>
+
+                  {/* Option A: Badge/Link (preferred — gives backlink) */}
+                  <div className="mb-3">
+                    <p className="text-xs font-semibold text-brand mb-1">Option A: Add a GTM Commit badge (recommended)</p>
+                    <div className="flex items-center gap-2">
+                      <code className="flex-1 text-xs bg-surface-muted px-3 py-2 rounded-lg font-mono text-fg-secondary overflow-x-auto">
+                        {`<a href="https://gtmcommit.com"><img src="https://gtmcommit.com/api/badge/verify" alt="GTM Commit" /></a>`}
+                      </code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`<a href="https://gtmcommit.com"><img src="https://gtmcommit.com/api/badge/verify" alt="GTM Commit" /></a>`);
+                        }}
+                        className="text-xs text-brand hover:text-brand-dark shrink-0 font-medium"
+                      >
+                        Copy
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Option B: Meta tag */}
+                  <div className="mb-2">
+                    <p className="text-xs font-semibold text-fg-secondary mb-1">Option B: Add a meta tag to {'<head>'}</p>
+                    <div className="flex items-center gap-2">
+                      <code className="flex-1 text-xs bg-surface-muted px-3 py-2 rounded-lg font-mono text-fg-secondary overflow-x-auto">
+                        &lt;meta name=&quot;gtmcommit-verify&quot; content=&quot;{proof.verification_code}&quot;&gt;
+                      </code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`<meta name="gtmcommit-verify" content="${proof.verification_code}">`);
+                        }}
+                        className="text-xs text-brand hover:text-brand-dark shrink-0 font-medium"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+
                   <p className="text-xs text-fg-muted mt-2">
-                    Prompt your AI tool: &quot;Add this meta tag to the head of my site&quot; — then deploy.
+                    Prompt your AI tool: &quot;Add this to my site&quot; — then deploy. We&apos;ll detect either one.
                   </p>
                   <div className="flex items-center gap-3 mt-3">
                     <button
@@ -205,7 +229,7 @@ export default function DeploymentsSection() {
               )}
 
               {proof.ownership_verified && (
-                <p className="text-xs text-green-600 mt-2">Ownership verified via meta tag — Tier 1 proof (30 pts)</p>
+                <p className="text-xs text-green-600 mt-2">Ownership verified — Tier 1 proof (30 pts)</p>
               )}
             </div>
           ))}

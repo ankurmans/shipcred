@@ -21,7 +21,7 @@ export function generateVerificationCode(): string {
 
 export interface MetaVerifyResult {
   found: boolean;
-  method: 'meta_tag';
+  method: 'meta_tag' | 'backlink';
   checkedAt: string;
 }
 
@@ -48,9 +48,19 @@ export async function verifyMetaTag(url: string, expectedCode: string): Promise<
       new RegExp(`<meta[^>]*content=["']${escapeRegex(expectedCode)}["'][^>]*name=["']gtmcommit-verify["'][^>]*/?>`, 'i'),
     ];
 
-    const found = patterns.some(p => p.test(html));
+    const metaFound = patterns.some(p => p.test(html));
+    if (metaFound) {
+      return { found: true, method: 'meta_tag', checkedAt: new Date().toISOString() };
+    }
 
-    return { found, method: 'meta_tag', checkedAt: new Date().toISOString() };
+    // Also check for a gtmcommit.com backlink (badge embed or plain link)
+    // Matches: <a href="https://gtmcommit.com/..."> anywhere on the page
+    const backlinkFound = /href=["']https?:\/\/(www\.)?gtmcommit\.com(\/[^"']*)?["']/i.test(html);
+    if (backlinkFound) {
+      return { found: true, method: 'backlink', checkedAt: new Date().toISOString() };
+    }
+
+    return { found: false, method: 'meta_tag', checkedAt: new Date().toISOString() };
   } catch {
     return { found: false, method: 'meta_tag', checkedAt: new Date().toISOString() };
   }

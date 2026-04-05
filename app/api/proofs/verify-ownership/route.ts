@@ -47,24 +47,27 @@ export async function POST(request: NextRequest) {
   const result = await verifyMetaTag(proof.project_url, proof.verification_code);
 
   if (result.found) {
+    const isBacklink = result.method === 'backlink';
     // Upgrade the proof
     await admin.from('external_proofs').update({
       ownership_verified: true,
       ownership_verified_at: result.checkedAt,
       verification_status: 'verified',
-      verification_method: 'meta_tag',
+      verification_method: result.method,
       verified_at: result.checkedAt,
       proof_score: proof.source_type !== 'custom_url' ? 30 : 20,
     }).eq('id', proof_id);
 
     return NextResponse.json({
       verified: true,
-      message: 'Ownership verified! Meta tag found.',
+      message: isBacklink
+        ? 'Ownership verified! GTM Commit link detected on your site.'
+        : 'Ownership verified! Meta tag found.',
     });
   }
 
   return NextResponse.json({
     verified: false,
-    message: `Meta tag not found. Make sure your site's <head> contains: <meta name="gtmcommit-verify" content="${proof.verification_code}">`,
+    message: `Verification tag or link not found. Add either a meta tag or a GTM Commit badge/link to your site.`,
   });
 }
