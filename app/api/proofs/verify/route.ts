@@ -80,5 +80,13 @@ export async function POST(request: NextRequest) {
     proof_score: proofScore,
   }).eq('id', proof_id);
 
+  // Trigger score recalculation in the background
+  const origin = request.headers.get('origin') || request.headers.get('host') || '';
+  const baseUrl = origin.startsWith('http') ? origin : `https://${origin}`;
+  fetch(`${baseUrl}/api/score/calculate`, {
+    method: 'POST',
+    headers: { cookie: request.headers.get('cookie') || '' },
+  }).catch(() => {});
+
   return NextResponse.json(result);
 }

@@ -82,6 +82,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 
+  // Trigger score recalculation in the background
+  const origin = request.headers.get('origin') || request.headers.get('host') || '';
+  const baseUrl = origin.startsWith('http') ? origin : `https://${origin}`;
+  fetch(`${baseUrl}/api/score/calculate`, {
+    method: 'POST',
+    headers: { cookie: request.headers.get('cookie') || '' },
+  }).catch(() => {});
+
   return NextResponse.json(item);
 }
 
