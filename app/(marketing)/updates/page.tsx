@@ -10,6 +10,26 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Gamified dashboard',
+        description: 'Complete dashboard overhaul with Next Actions engine, tier progress bar, score breakdown drill-down, leaderboard rank, and profile completeness bar.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Streak system',
+        description: 'Weekly streak tracking with flame badge on your dashboard and public profile. Keep shipping every week to build your streak.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Challenges',
+        description: 'Onboarding and stretch challenges with progress bars. Complete your profile, sync GitHub, add proofs, vouch for builders — each earns bonus points.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Platform profile URLs',
+        description: 'Link your Clay, n8n, Lovable, Cursor, Replit, Vercel, Bolt, and v0 profiles. They show as badges on your public page.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Clay, n8n & Make.com verification',
         description: 'Workflow automation platforms are now first-class proof sources. Add Clay workspace URLs, n8n community templates, or Make.com scenarios as verified proofs.',
       },
@@ -30,6 +50,11 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Visitor conversion banner',
+        description: 'Unauthenticated visitors on any profile page now see a sticky CTA banner prompting them to get their own score.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Embeddable profile badges',
         description: 'Grab an embed code from your dashboard to display your GTM Commit score on your personal site or README.',
       },
@@ -45,8 +70,28 @@ const UPDATES = [
       },
       {
         type: 'feat' as const,
+        title: 'Referral tracking',
+        description: 'Share your referral link from the dashboard. Referred users who complete a profile earn you bonus score points.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Profile view tracking',
-        description: 'See who\'s checking out your profile with view counts on your dashboard.',
+        description: 'See who\'s checking out your profile with view counts and a 7-day sparkline on your dashboard.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Recent Builders feed',
+        description: 'Landing page now shows the newest builders who joined, creating social proof and FOMO.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'SEO pages for tools & roles',
+        description: 'Browse builders by tool (/tools/claude_code) or role (/roles/growth) — auto-generated from community data.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Enhanced share text',
+        description: 'Twitter shares now include your score, tier, and #GTMCommit #AIShipped hashtags.',
       },
       {
         type: 'feat' as const,
@@ -56,7 +101,7 @@ const UPDATES = [
       {
         type: 'feat' as const,
         title: 'Public feedback page',
-        description: 'Anyone can request features or report bugs at /feedback — no account needed. Submissions become GitHub issues for community voting.',
+        description: 'Anyone can request features or report bugs at /feedback — no account needed.',
       },
       {
         type: 'feat' as const,
@@ -67,11 +112,6 @@ const UPDATES = [
         type: 'fix' as const,
         title: 'Score calculation fixes',
         description: 'Fixed anti-gaming filters that were incorrectly rejecting legitimate commits. First-time users now get scored properly without velocity limits.',
-      },
-      {
-        type: 'fix' as const,
-        title: 'Dynamic rendering for onboarding & leaderboard',
-        description: 'Pages that depend on live data now render correctly on every visit.',
       },
     ],
   },
