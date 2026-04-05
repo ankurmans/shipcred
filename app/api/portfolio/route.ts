@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+import { verifyMetaTag } from '@/lib/proofs/meta-verify';
 
 export async function GET() {
   const supabase = await createClient();
@@ -48,6 +49,20 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
 
+  // If a URL is provided, check for gtmcommit backlink/meta tag ownership
+  let verificationStatus = 'self_reported';
+  if (body.url) {
+    try {
+      // Use a dummy code — verifyMetaTag checks both meta tag AND backlinks
+      const result = await verifyMetaTag(body.url, '__portfolio_check__');
+      if (result.found && result.method === 'backlink') {
+        verificationStatus = 'verified';
+      }
+    } catch {
+      // Verification failed — stay as self_reported
+    }
+  }
+
   const { data: item, error } = await supabase
     .from('portfolio_items')
     .insert({
@@ -58,6 +73,7 @@ export async function POST(request: NextRequest) {
       screenshot_url: body.screenshot_url || null,
       category: body.category || null,
       tools_used: body.tools_used || [],
+      verification_status: verificationStatus,
     })
     .select()
     .single();
