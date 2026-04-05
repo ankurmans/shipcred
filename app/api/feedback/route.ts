@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const GITHUB_REPO = 'ankurmans/shipcred'; // owner/repo
+const GITHUB_REPO = 'ankurmans/gtmcommit'; // owner/repo
 const GITHUB_TOKEN = process.env.GITHUB_FEEDBACK_TOKEN;
 
 export async function POST(request: NextRequest) {
