@@ -135,15 +135,15 @@ export default async function ProfilePage({ params }: PageProps) {
           {/* Platform links */}
           <PlatformLinks platformUrls={profile.platform_urls} />
 
-          {/* Score Card — the hero screenshot unit */}
-          <div className="mt-5 sm:mt-6">
-            <ScoreCard profile={profile} tools={tools} appUrl={appUrl} showHeader={false} />
-          </div>
-
-          {/* Share & compare — below the wow moment */}
-          <div className="mt-4 flex items-center gap-2 flex-wrap">
+          {/* Share & compare */}
+          <div className="mt-3 flex items-center gap-2 flex-wrap">
             <ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
             <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare with me</a>
+          </div>
+
+          {/* Score Card */}
+          <div className="mt-5 sm:mt-6">
+            <ScoreCard profile={profile} tools={tools} appUrl={appUrl} showHeader={false} />
           </div>
           {githubStats.totalCommits > 0 && <div className="mt-6 sm:mt-8"><GitHubStats {...githubStats} /></div>}
           {portfolioItems.length > 0 && <div className="mt-6 sm:mt-8"><PortfolioGrid items={portfolioItems} /></div>}
