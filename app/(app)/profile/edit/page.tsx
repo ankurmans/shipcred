@@ -1,6 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ProfileCompletenessBar from '@/components/shared/ProfileCompletenessBar';
+
+function computeCompleteness(form: { display_name: string; bio: string; website_url: string; linkedin_url: string; twitter_handle: string; role: string; company: string }): number {
+  let score = 0;
+  if (form.bio && form.bio.length > 10) score += 25;
+  if (form.display_name) score += 15;
+  if (form.role) score += 15;
+  if (form.company) score += 10;
+  if (form.website_url || form.linkedin_url || form.twitter_handle) score += 20;
+  if (form.website_url && form.linkedin_url) score += 10;
+  if (form.twitter_handle) score += 5;
+  return Math.min(100, score);
+}
 
 export default function EditProfilePage() {
   const [loading, setLoading] = useState(true);
@@ -35,7 +48,8 @@ export default function EditProfilePage() {
     <div>
       <h1 className="font-display text-3xl font-bold">Edit Profile</h1>
       <p className="text-fg-secondary mt-1">Update your public profile information.</p>
-      <form onSubmit={handleSubmit} className="mt-8 space-y-5 max-w-lg">
+      <ProfileCompletenessBar completeness={computeCompleteness(form)} />
+      <form onSubmit={handleSubmit} className="space-y-5 max-w-lg">
         {[
           { label: 'Display Name', key: 'display_name', type: 'text', required: true },
           { label: 'Company', key: 'company', type: 'text' },

@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { calculateGtmCommitScore, scoreToTier } from '@/lib/scoring/calculate';
+import { updateStreak } from '@/lib/gamification/streaks';
+import { detectMilestones, saveMilestones } from '@/lib/milestones';
+import { assignAndEvaluateChallenges } from '@/lib/gamification/challenge-assigner';
 
 export async function POST() {
   const supabase = await createClient();
@@ -13,7 +16,7 @@ export async function POST() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role')
+    .select('id, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role, github_username, profile_completeness')
     .eq('user_id', user.id)
     .single();
 
@@ -58,11 +61,43 @@ export async function POST() {
 
   const tier = scoreToTier(score.total);
 
+  // Get old score/tier for milestone detection
+  const { data: oldProfile } = await admin
+    .from('profiles')
+    .select('gtmcommit_score, gtmcommit_tier')
+    .eq('id', profile.id)
+    .single();
+
+  const oldScore = oldProfile?.gtmcommit_score || 0;
+  const oldTier = oldProfile?.gtmcommit_tier || 'unranked';
+
   await admin.from('profiles').update({
     gtmcommit_score: score.total,
     gtmcommit_tier: tier,
     score_breakdown: score,
   }).eq('id', profile.id);
+
+  // Update streak
+  await updateStreak(profile.id);
+
+  // Detect and save milestones
+  const aiCommitCount = (commitsRes.data || []).filter((c: any) => c.ai_tool_detected).length;
+  const vouchCount = vouchesRes.data?.length || 0;
+  const milestones = detectMilestones(oldScore, score.total, oldTier, tier, aiCommitCount, vouchCount, 0);
+  await saveMilestones(profile.id, milestones);
+
+  // Evaluate challenges
+  const vouchesGivenRes = await admin.from('vouches').select('*', { count: 'exact', head: true }).eq('voucher_id', profile.id);
+  await assignAndEvaluateChallenges(
+    { id: profile.id, github_username: profile.github_username, profile_completeness: profile.profile_completeness || 0 },
+    {
+      videoCount: (videosRes.data || []).length,
+      contentCount: (contentRes.data || []).length,
+      certCount: (certsRes.data || []).length,
+      vouchesGiven: vouchesGivenRes.count || 0,
+      verifiedTools: (toolsRes.data || []).filter((t: any) => t.is_verified).length,
+    },
+  );
 
   return NextResponse.json({ score, tier });
 }

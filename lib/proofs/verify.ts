@@ -3,6 +3,9 @@ import { verifyLovable } from './lovable';
 import { verifyReplit } from './replit';
 import { verifyBolt } from './bolt';
 import { verifyV0 } from './v0';
+import { verifyClay } from './clay';
+import { verifyN8n } from './n8n';
+import { verifyMake } from './make';
 import { verifyGenericURL } from './url';
 
 export interface ProofVerification {
@@ -28,6 +31,13 @@ export function detectPlatform(url: string): string {
     [/\.fly\.dev/i, 'fly'],
     [/figma\.com\/file/i, 'figma'],
     [/figma\.com\/design/i, 'figma'],
+    [/clay\.com\/(workspaces|tables|public)/i, 'clay'],
+    [/n8n\.io\/(workflows|templates)/i, 'n8n'],
+    [/\.app\.n8n\.cloud/i, 'n8n'],
+    [/make\.com\/en\/templates/i, 'make'],
+    [/make\.com\/.*\/scenarios/i, 'make'],
+    [/eu[12]\.make\.com/i, 'make'],
+    [/us[12]\.make\.com/i, 'make'],
   ];
 
   for (const [pattern, platform] of patterns) {
@@ -50,6 +60,12 @@ export async function verifyProof(url: string): Promise<ProofVerification> {
       return verifyBolt(url);
     case 'v0':
       return verifyV0(url);
+    case 'clay':
+      return verifyClay(url);
+    case 'n8n':
+      return verifyN8n(url);
+    case 'make':
+      return verifyMake(url);
     default:
       return verifyGenericURL(url);
   }

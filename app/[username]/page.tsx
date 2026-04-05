@@ -3,8 +3,7 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { createAdminClient } from '@/lib/supabase/admin';
 import Avatar from '@/components/shared/Avatar';
-import GtmCommitScore from '@/components/profile/GtmCommitScore';
-import ToolBadges from '@/components/profile/ToolBadges';
+import ScoreCard from '@/components/profile/ScoreCard';
 import GitHubStats from '@/components/profile/GitHubStats';
 import PortfolioGrid from '@/components/profile/PortfolioGrid';
 import VideoProofs from '@/components/profile/VideoProofs';
@@ -89,6 +88,18 @@ export default async function ProfilePage({ params }: PageProps) {
             <div className="flex-1 min-w-0">
               <h1 className="font-display text-2xl sm:text-3xl font-bold truncate">{profile.display_name}</h1>
               <p className="text-fg-muted text-sm mt-0.5 truncate">@{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}</p>
+              {/* Gamification badges */}
+              {(profile.current_streak > 0) && (
+                <div className="flex items-center gap-2 mt-1.5">
+                  {profile.current_streak > 0 && (
+                    <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                      profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
+                    }`}>
+                      🔥 {profile.current_streak}w streak
+                    </span>
+                  )}
+                </div>
+              )}
               {profile.bio && <p className="mt-2 text-sm hidden sm:block">{profile.bio}</p>}
               <div className="hidden sm:flex gap-3 mt-2">
                 {profile.website_url && <a href={profile.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">Website</a>}
@@ -106,17 +117,16 @@ export default async function ProfilePage({ params }: PageProps) {
             </div>
           )}
 
-          {/* Share & compare */}
-          <div className="mt-3 flex items-center gap-2 flex-wrap">
+          {/* Score Card — the hero screenshot unit */}
+          <div className="mt-5 sm:mt-6">
+            <ScoreCard profile={profile} tools={tools} appUrl={appUrl} />
+          </div>
+
+          {/* Share & compare — below the wow moment */}
+          <div className="mt-4 flex items-center gap-2 flex-wrap">
             <ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
             <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare with me</a>
           </div>
-
-          {/* Score */}
-          <div className="mt-6 sm:mt-8"><GtmCommitScore score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} breakdown={profile.score_breakdown} size="lg" /></div>
-
-          {/* Content sections */}
-          {tools.length > 0 && <div className="mt-6 sm:mt-8"><h3 className="font-display text-lg font-semibold mb-3">Tools</h3><ToolBadges tools={tools} /></div>}
           {githubStats.totalCommits > 0 && <div className="mt-6 sm:mt-8"><GitHubStats {...githubStats} /></div>}
           {portfolioItems.length > 0 && <div className="mt-6 sm:mt-8"><PortfolioGrid items={portfolioItems} /></div>}
           {videoProofs.length > 0 && <div className="mt-6 sm:mt-8"><VideoProofs videos={videoProofs} /></div>}

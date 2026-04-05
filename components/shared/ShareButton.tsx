@@ -41,6 +41,7 @@ export default function ShareButton({ url, title, score, tier }: ShareButtonProp
         target="_blank"
         rel="noopener noreferrer"
         className="btn-ghost btn-sm"
+        aria-label="Share on X (Twitter)"
       >
         𝕏
       </a>
@@ -49,6 +50,7 @@ export default function ShareButton({ url, title, score, tier }: ShareButtonProp
         target="_blank"
         rel="noopener noreferrer"
         className="btn-ghost btn-sm"
+        aria-label="Share on LinkedIn"
       >
         in
       </a>

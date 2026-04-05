@@ -12,6 +12,8 @@ const RECOGNIZED_CERT_DOMAINS: Record<string, { issuer: string; points: number }
   'academy.hubspot.com': { issuer: 'hubspot', points: 20 },
   'app.hubspot.com/academy': { issuer: 'hubspot', points: 20 },
   'gtmaiacademy.com': { issuer: 'gtm_ai_academy', points: 20 },
+  'n8n.io': { issuer: 'n8n', points: 20 },
+  'academy.make.com': { issuer: 'make', points: 20 },
   'productmarketingalliance.com': { issuer: 'pma', points: 15 },
 };
 
@@ -56,6 +58,8 @@ export const CERT_POINTS: Record<string, number> = {
   hubspot: 20,
   gtm_ai_academy: 20,
   pavilion: 20,
+  n8n: 20,
+  make: 20,
   pma: 15,
   other: 10,
 };

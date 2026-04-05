@@ -47,7 +47,9 @@ export async function POST(request: NextRequest) {
   const result = await verifyProof(proof.project_url);
 
   // Anti-gaming: blank template detection for verified URLs
-  if (result.verification_status === 'verified') {
+  // Skip for automation platforms — they render platform UI, not user HTML
+  const SKIP_CONTENT_CHECK = ['clay', 'n8n', 'make'];
+  if (result.verification_status === 'verified' && !SKIP_CONTENT_CHECK.includes(result.source_type)) {
     const contentCheck = await verifyDeploymentContent(proof.project_url);
     if (!contentCheck.valid) {
       await admin.from('external_proofs').update({

@@ -16,7 +16,8 @@ interface Proof {
 const PLATFORM_LABELS: Record<string, string> = {
   vercel: 'Vercel', lovable: 'Lovable', bolt: 'Bolt.new', v0: 'v0.dev',
   replit: 'Replit', railway: 'Railway', netlify: 'Netlify', figma: 'Figma',
-  fly: 'Fly.io', custom_url: 'Website',
+  fly: 'Fly.io', clay: 'Clay', n8n: 'n8n', make: 'Make.com',
+  custom_url: 'Website',
 };
 
 export default function DeploymentsSection() {
@@ -28,6 +29,11 @@ export default function DeploymentsSection() {
   const [saving, setSaving] = useState(false);
   const [verifying, setVerifying] = useState<string | null>(null);
   const [verifyMsg, setVerifyMsg] = useState<Record<string, { ok: boolean; msg: string }>>({});
+  const [showImport, setShowImport] = useState(false);
+  const [importFile, setImportFile] = useState<File | null>(null);
+  const [importName, setImportName] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState<{ ok: boolean; msg: string; analysis?: Record<string, unknown> } | null>(null);
 
   useEffect(() => {
     fetch('/api/proofs').then(r => r.json()).then(d => {
@@ -76,14 +82,43 @@ export default function DeploymentsSection() {
     setVerifying(null);
   };
 
+  const handleImportWorkflow = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!importFile) return;
+    setImporting(true);
+    setImportResult(null);
+
+    const formData = new FormData();
+    formData.append('file', importFile);
+    if (importName) formData.append('project_name', importName);
+
+    try {
+      const res = await fetch('/api/proofs/import-workflow', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      if (res.ok) {
+        setProofs([data.proof, ...proofs]);
+        setImportResult({ ok: true, msg: `Imported! Complexity: ${data.analysis.complexity_score}/100, ${data.analysis.node_count} nodes`, analysis: data.analysis });
+        setImportFile(null);
+        setImportName('');
+        setShowImport(false);
+      } else {
+        setImportResult({ ok: false, msg: data.error || 'Import failed' });
+      }
+    } catch {
+      setImportResult({ ok: false, msg: 'Network error' });
+    }
+    setImporting(false);
+  };
+
   if (loading) return <div className="flex justify-center py-8"><div className="w-6 h-6 border-2 border-brand border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
     <div className="mt-10">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="font-display text-xl font-bold">Platform Deployments</h2>
-          <p className="text-fg-secondary text-sm mt-0.5">Add your Vercel, Lovable, Bolt, v0 projects. Verify ownership with a meta tag.</p>
+          <h2 className="font-display text-xl font-bold">Platform Deployments & Automations</h2>
+          <p className="text-fg-secondary text-sm mt-0.5">Add your Vercel, Lovable, Bolt, v0, Clay, n8n, or Make.com projects. Verify ownership with a meta tag.</p>
         </div>
         <button onClick={() => setShowAdd(!showAdd)} className="btn-brand btn-sm">{showAdd ? 'Cancel' : 'Add Deployment'}</button>
       </div>
@@ -94,7 +129,7 @@ export default function DeploymentsSection() {
             <label className="block text-sm font-medium mb-1.5">Deployment URL</label>
             <input type="url" required placeholder="https://my-app.vercel.app" value={url} onChange={e => setUrl(e.target.value)}
               className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand" />
-            <p className="text-xs text-fg-muted mt-1">Vercel, Lovable, Bolt, v0, Replit, Netlify, Railway, or any URL</p>
+            <p className="text-xs text-fg-muted mt-1">Vercel, Lovable, Bolt, v0, Replit, Netlify, Railway, Clay, n8n, Make.com, or any URL</p>
           </div>
           <div>
             <label className="block text-sm font-medium mb-1.5">Project Name (optional)</label>

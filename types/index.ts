@@ -237,6 +237,8 @@ export type ProofSourceType =
   | 'fly'
   | 'figma'
   | 'clay'
+  | 'n8n'
+  | 'make'
   | 'custom_url';
 
 export type ProofVerificationStatus =

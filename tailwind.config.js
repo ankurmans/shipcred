@@ -25,7 +25,7 @@ module.exports = {
         fg: {
           primary: '#1A1A1A',
           secondary: '#666666',
-          muted: '#888888',
+          muted: '#767676',
           faint: '#CCCCCC',
           inverse: '#FFFFFF',
         },
