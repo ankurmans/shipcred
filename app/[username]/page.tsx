@@ -77,11 +77,24 @@ export default async function ProfilePage({ params }: PageProps) {
   const cookieStore = await cookies();
   const isAuthenticated = cookieStore.getAll().some(c => c.name.includes('auth-token'));
 
+  // Tier-based page gradient
+  const tierGradient: Record<string, string> = {
+    legend: 'from-amber-50 via-amber-50/50 to-transparent',
+    captain: 'from-indigo-50 via-indigo-50/40 to-transparent',
+    builder: 'from-orange-50 via-orange-50/40 to-transparent',
+    shipper: 'from-stone-50 via-stone-50/30 to-transparent',
+    unranked: 'from-gray-50/50 to-transparent',
+  };
+  const gradient = tierGradient[profile.gtmcommit_tier] || tierGradient.unranked;
+
   return (
     <>
       <Navbar />
-      <main className="min-h-screen">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      <main className="min-h-screen relative">
+        {/* Tier-based background gradient — fades to white */}
+        <div className={`absolute inset-x-0 top-0 h-80 bg-gradient-to-b ${gradient} pointer-events-none`} aria-hidden="true" />
+
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
           {/* Profile header — always inline */}
           <div className="flex items-start gap-4 sm:gap-6">
             <Avatar src={profile.avatar_url} alt={profile.display_name} size="xl" isVerified={profile.is_verified} />

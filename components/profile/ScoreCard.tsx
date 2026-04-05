@@ -122,6 +122,17 @@ function getTierGlow(tier: GtmCommitTier): string {
   }
 }
 
+// Tier-specific left accent bar gradient
+function getTierAccent(tier: GtmCommitTier): string {
+  switch (tier) {
+    case 'legend': return 'from-amber-400 via-yellow-300 to-amber-500';
+    case 'captain': return 'from-indigo-400 via-blue-400 to-indigo-500';
+    case 'builder': return 'from-brand via-brand-light to-brand';
+    case 'shipper': return 'from-stone-300 via-stone-400 to-stone-300';
+    default: return 'from-gray-200 via-gray-300 to-gray-200';
+  }
+}
+
 export default function ScoreCard({ profile, tools, appUrl }: ScoreCardProps) {
   const animatedScore = useCountUp(profile.gtmcommit_score);
   const parsed = parseTierBreakdown(profile.score_breakdown);
@@ -133,8 +144,14 @@ export default function ScoreCard({ profile, tools, appUrl }: ScoreCardProps) {
     return () => clearTimeout(timer);
   }, []);
 
+  const accentGradient = getTierAccent(profile.gtmcommit_tier);
+
   return (
-    <div className={`card-light p-5 sm:p-6 ${getTierGlow(profile.gtmcommit_tier)} transition-shadow duration-500`}>
+    <div className={`card-light overflow-hidden ${getTierGlow(profile.gtmcommit_tier)} transition-shadow duration-500`}>
+      {/* Tier accent bar */}
+      <div className={`h-1 w-full bg-gradient-to-r ${accentGradient}`} aria-hidden="true" />
+
+      <div className="p-5 sm:p-6">
       {/* Header: Avatar + Name + Streak */}
       <div className="flex items-center gap-3">
         <Avatar src={profile.avatar_url} alt={profile.display_name} size="lg" isVerified={profile.is_verified} />
@@ -252,6 +269,7 @@ export default function ScoreCard({ profile, tools, appUrl }: ScoreCardProps) {
         <span className="text-xs text-fg-faint font-mono">{appUrl.replace(/https?:\/\//, '')}/{profile.username}</span>
         <span className="text-[10px] text-fg-faint uppercase tracking-wider font-semibold">Verified Proof-of-Work</span>
       </div>
+      </div>{/* close inner padding wrapper */}
     </div>
   );
 }

@@ -6,6 +6,26 @@ export const metadata = { title: 'Updates', description: 'What we\'ve shipped an
 
 const UPDATES = [
   {
+    date: 'April 6, 2026',
+    entries: [
+      {
+        type: 'feat' as const,
+        title: 'Clay, n8n & Make.com verification',
+        description: 'Workflow automation platforms are now first-class proof sources. Add Clay workspace URLs, n8n community templates, or Make.com scenarios as verified proofs.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'n8n workflow JSON import',
+        description: 'Export your n8n workflows as JSON and import them directly. We parse node complexity, detect AI-powered nodes, and auto-strip credentials for privacy.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Automation platform certifications',
+        description: 'n8n and Make.com certification links are now auto-recognized alongside Clay University, HubSpot Academy, and others.',
+      },
+    ],
+  },
+  {
     date: 'April 5, 2026',
     entries: [
       {

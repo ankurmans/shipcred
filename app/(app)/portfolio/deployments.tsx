@@ -143,7 +143,7 @@ export default function DeploymentsSection() {
       {proofs.length === 0 ? (
         <div className="text-center py-12 text-fg-muted">
           <p className="text-lg">No deployments yet.</p>
-          <p className="text-sm mt-1">Add your Lovable, Vercel, Bolt, or v0 project URLs.</p>
+          <p className="text-sm mt-1">Add your Vercel, Lovable, Clay, n8n, Make.com, or other project URLs.</p>
         </div>
       ) : (
         <div className="space-y-3 mt-4">
@@ -211,6 +211,57 @@ export default function DeploymentsSection() {
           ))}
         </div>
       )}
+
+      {/* n8n Workflow JSON Import */}
+      <div className="mt-10">
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="font-display text-xl font-bold">Import n8n Workflow</h2>
+            <p className="text-fg-secondary text-sm mt-0.5">Upload an exported n8n workflow JSON. Credentials are automatically stripped.</p>
+          </div>
+          <button onClick={() => { setShowImport(!showImport); setImportResult(null); }} className="btn-brand btn-sm">{showImport ? 'Cancel' : 'Import Workflow'}</button>
+        </div>
+
+        {showImport && (
+          <form onSubmit={handleImportWorkflow} className="bg-surface-secondary rounded-card p-5 mt-4 space-y-4">
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Workflow JSON File</label>
+              <input
+                type="file"
+                accept=".json,application/json"
+                required
+                onChange={e => setImportFile(e.target.files?.[0] || null)}
+                className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-brand file:text-white file:text-sm file:font-medium file:cursor-pointer"
+              />
+              <p className="text-xs text-fg-muted mt-1">Export from n8n: Menu → Download → JSON. Max 1MB. Min 3 nodes.</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1.5">Workflow Name (optional)</label>
+              <input type="text" placeholder="Lead Enrichment Pipeline" value={importName} onChange={e => setImportName(e.target.value)}
+                className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30" />
+            </div>
+            <button type="submit" className="btn-brand btn-sm" disabled={importing || !importFile}>
+              {importing ? 'Analyzing...' : 'Import & Verify'}
+            </button>
+          </form>
+        )}
+
+        {importResult && (
+          <div className={`mt-3 p-3 rounded-lg border ${importResult.ok ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+            <p className={`text-sm font-medium ${importResult.ok ? 'text-green-700' : 'text-red-700'}`}>{importResult.msg}</p>
+            {importResult.ok && importResult.analysis && (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {(importResult.analysis.node_types as string[] || []).slice(0, 8).map((t: string) => (
+                  <span key={t} className="badge bg-surface-muted text-fg-muted">{t}</span>
+                ))}
+                {importResult.analysis.has_ai_nodes === true && (
+                  <span className="badge bg-purple-100 text-purple-700">AI-Powered</span>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
