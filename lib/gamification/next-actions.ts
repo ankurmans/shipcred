@@ -78,7 +78,7 @@ export function getNextActions(
       label: 'Add a Video Proof',
       description: 'Record a Loom walkthrough of your AI workflow',
       pointsPotential: 30,
-      href: '/proofs',
+      href: '/showcase',
       category: 'proof',
       priority: 45,
     });
@@ -91,7 +91,7 @@ export function getNextActions(
       label: 'Publish Content',
       description: 'Add blog posts, tweets, or LinkedIn articles about your AI work',
       pointsPotential: 25,
-      href: '/proofs',
+      href: '/showcase',
       category: 'content',
       priority: 40,
     });
@@ -104,7 +104,7 @@ export function getNextActions(
       label: 'Add a Deployment',
       description: 'Link a Vercel, Lovable, or Replit project you shipped',
       pointsPotential: 150,
-      href: '/proofs',
+      href: '/showcase',
       category: 'proof',
       priority: 100,
     });
@@ -130,7 +130,7 @@ export function getNextActions(
       label: 'Use More AI Tools',
       description: 'Commits from 3+ tools unlocks diversity bonus',
       pointsPotential: 80 - (detail.toolDiversity || 0),
-      href: '/proofs',
+      href: '/showcase',
       category: 'proof',
       priority: 30,
     });
@@ -143,7 +143,7 @@ export function getNextActions(
       label: 'Add a Certification',
       description: 'Link AI tool certifications for auto-verification',
       pointsPotential: 80,
-      href: '/proofs',
+      href: '/showcase',
       category: 'proof',
       priority: 50,
     });

@@ -9,7 +9,7 @@ import UploadSection from './upload-section';
 
 type Tab = 'videos' | 'content' | 'certifications' | 'uploads';
 
-export default function ProofsPage() {
+export default function ShowcasePage() {
   const [tab, setTab] = useState<Tab>('videos');
   const [videos, setVideos] = useState<VideoProof[]>([]);
   const [content, setContent] = useState<ContentProof[]>([]);
@@ -50,9 +50,9 @@ export default function ProofsPage() {
   return (
     <div>
       <div>
-        <h1 className="font-display text-3xl font-bold">Proof of Work</h1>
+        <h1 className="font-display text-3xl font-bold">Showcase</h1>
         <p className="text-fg-secondary mt-1">
-          Add videos, content, certifications, and skill files to boost your GTM Commit Score.
+          Add videos, content, certifications, and skill files to showcase your AI expertise.
         </p>
       </div>
 

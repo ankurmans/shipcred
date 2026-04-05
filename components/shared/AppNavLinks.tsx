@@ -6,7 +6,7 @@ import { LuMenu, LuX } from 'react-icons/lu';
 
 const NAV_ITEMS = [
   { href: '/portfolio', label: 'Portfolio' },
-  { href: '/proofs', label: 'Proofs' },
+  { href: '/showcase', label: 'Showcase' },
   { href: '/profile/edit', label: 'Profile' },
   { href: '/settings', label: 'Settings' },
 ];
