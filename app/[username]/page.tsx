@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
 import { createAdminClient } from '@/lib/supabase/admin';
-import { createClient } from '@/lib/supabase/server';
 import Avatar from '@/components/shared/Avatar';
 import GtmCommitScore from '@/components/profile/GtmCommitScore';
 import ToolBadges from '@/components/profile/ToolBadges';
@@ -74,44 +74,56 @@ export default async function ProfilePage({ params }: PageProps) {
   const { profile, portfolioItems, tools, vouches, videoProofs, contentProofs, certifications, githubStats } = data;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
-  // Check if visitor is authenticated
-  let isAuthenticated = false;
-  try {
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    isAuthenticated = !!user;
-  } catch { /* not authenticated */ }
+  // Check auth via cookie presence (no network call — fast)
+  const cookieStore = await cookies();
+  const isAuthenticated = cookieStore.getAll().some(c => c.name.includes('auth-token'));
 
   return (
     <>
       <Navbar />
       <main className="min-h-screen">
-        <div className="max-w-3xl mx-auto px-6 py-8">
-          <div className="flex flex-col sm:flex-row items-start gap-6">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+          {/* Profile header — always inline */}
+          <div className="flex items-start gap-4 sm:gap-6">
             <Avatar src={profile.avatar_url} alt={profile.display_name} size="xl" isVerified={profile.is_verified} />
-            <div className="flex-1">
-              <h1 className="font-display text-3xl font-bold">{profile.display_name}</h1>
-              <p className="text-fg-muted mt-1">@{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}</p>
-              {profile.bio && <p className="mt-3 text-sm">{profile.bio}</p>}
-              <div className="flex gap-3 mt-3">
+            <div className="flex-1 min-w-0">
+              <h1 className="font-display text-2xl sm:text-3xl font-bold truncate">{profile.display_name}</h1>
+              <p className="text-fg-muted text-sm mt-0.5 truncate">@{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}</p>
+              {profile.bio && <p className="mt-2 text-sm hidden sm:block">{profile.bio}</p>}
+              <div className="hidden sm:flex gap-3 mt-2">
                 {profile.website_url && <a href={profile.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">Website</a>}
                 {profile.twitter_handle && <a href={`https://twitter.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">@{profile.twitter_handle}</a>}
               </div>
-              <div className="mt-3 flex items-center gap-3 flex-wrap">
-                <ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
-                <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare with me</a>
-              </div>
             </div>
           </div>
-          <div className="mt-8"><GtmCommitScore score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} breakdown={profile.score_breakdown} size="lg" /></div>
-          {tools.length > 0 && <div className="mt-8"><h3 className="font-display text-lg font-semibold mb-3">Tools</h3><ToolBadges tools={tools} /></div>}
-          {githubStats.totalCommits > 0 && <div className="mt-8"><GitHubStats {...githubStats} /></div>}
-          {portfolioItems.length > 0 && <div className="mt-8"><PortfolioGrid items={portfolioItems} /></div>}
-          {videoProofs.length > 0 && <div className="mt-8"><VideoProofs videos={videoProofs} /></div>}
-          {contentProofs.length > 0 && <div className="mt-8"><ContentProofs content={contentProofs} /></div>}
-          {certifications.length > 0 && <div className="mt-8"><CertificationsDisplay certifications={certifications} /></div>}
-          {vouches.length > 0 && <div className="mt-8"><VouchSection vouches={vouches} /></div>}
-          <div className="mt-8"><PoweredByBadge /></div>
+
+          {/* Mobile-only: bio & links below header */}
+          {profile.bio && <p className="mt-2 text-sm sm:hidden">{profile.bio}</p>}
+          {(profile.website_url || profile.twitter_handle) && (
+            <div className="flex gap-3 mt-1.5 sm:hidden">
+              {profile.website_url && <a href={profile.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">Website</a>}
+              {profile.twitter_handle && <a href={`https://twitter.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">@{profile.twitter_handle}</a>}
+            </div>
+          )}
+
+          {/* Share & compare */}
+          <div className="mt-3 flex items-center gap-2 flex-wrap">
+            <ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
+            <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare with me</a>
+          </div>
+
+          {/* Score */}
+          <div className="mt-6 sm:mt-8"><GtmCommitScore score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} breakdown={profile.score_breakdown} size="lg" /></div>
+
+          {/* Content sections */}
+          {tools.length > 0 && <div className="mt-6 sm:mt-8"><h3 className="font-display text-lg font-semibold mb-3">Tools</h3><ToolBadges tools={tools} /></div>}
+          {githubStats.totalCommits > 0 && <div className="mt-6 sm:mt-8"><GitHubStats {...githubStats} /></div>}
+          {portfolioItems.length > 0 && <div className="mt-6 sm:mt-8"><PortfolioGrid items={portfolioItems} /></div>}
+          {videoProofs.length > 0 && <div className="mt-6 sm:mt-8"><VideoProofs videos={videoProofs} /></div>}
+          {contentProofs.length > 0 && <div className="mt-6 sm:mt-8"><ContentProofs content={contentProofs} /></div>}
+          {certifications.length > 0 && <div className="mt-6 sm:mt-8"><CertificationsDisplay certifications={certifications} /></div>}
+          {vouches.length > 0 && <div className="mt-6 sm:mt-8"><VouchSection vouches={vouches} /></div>}
+          <div className="mt-6 sm:mt-8"><PoweredByBadge /></div>
         </div>
       </main>
       <Footer />

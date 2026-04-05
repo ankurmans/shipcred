@@ -57,12 +57,12 @@ export default function GtmCommitScore({ score, tier, breakdown, size = 'lg' }: 
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center gap-4">
-        <div className={`${size === 'lg' ? 'text-6xl px-6 py-3' : 'text-3xl px-4 py-2'} font-display font-bold text-white gradient-brand rounded-2xl`}>
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div className={`${size === 'lg' ? 'text-5xl sm:text-6xl px-5 sm:px-6 py-2.5 sm:py-3' : 'text-3xl px-4 py-2'} font-display font-bold text-white gradient-brand rounded-2xl`}>
           {score}
         </div>
         <div>
-          <div className={`${size === 'lg' ? 'text-lg' : 'text-sm'} font-semibold`}>GTM Commit Score</div>
+          <div className={`${size === 'lg' ? 'text-base sm:text-lg' : 'text-sm'} font-semibold`}>GTM Commit Score</div>
           <span className="text-sm"><TierBadge tier={tier} /></span>
         </div>
       </div>

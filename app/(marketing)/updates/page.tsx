@@ -25,11 +25,6 @@ const UPDATES = [
       },
       {
         type: 'feat' as const,
-        title: 'Programmatic SEO pages for tools & roles',
-        description: 'Browse builders by tool (/tools/claude-code) or role (/roles/growth-engineer) — public, no login required.',
-      },
-      {
-        type: 'feat' as const,
         title: 'Profile view tracking',
         description: 'See who\'s checking out your profile with view counts on your dashboard.',
       },
@@ -47,11 +42,6 @@ const UPDATES = [
         type: 'feat' as const,
         title: 'Login page with GitHub, Google & LinkedIn',
         description: 'Multiple sign-in options so you can get started with whatever account you prefer.',
-      },
-      {
-        type: 'feat' as const,
-        title: 'Privacy policy',
-        description: 'Full privacy policy page covering how we handle your data, GitHub tokens, and commit metadata.',
       },
       {
         type: 'fix' as const,

@@ -7,7 +7,7 @@ interface AvatarProps {
   isVerified?: boolean;
 }
 
-const sizeMap = { sm: 32, md: 48, lg: 64, xl: 96 };
+const sizeMap = { sm: 32, md: 48, lg: 64, xl: 80 };
 
 export default function Avatar({ src, alt, size = 'md', isVerified }: AvatarProps) {
   const px = sizeMap[size];
