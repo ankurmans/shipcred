@@ -43,16 +43,6 @@ const UPDATES = [
         title: 'Automation platform certifications',
         description: 'n8n and Make.com certification links are now auto-recognized alongside Clay University, HubSpot Academy, and others.',
       },
-      {
-        type: 'feat' as const,
-        title: 'Proofs renamed to Showcase',
-        description: 'The Proofs section is now Showcase — a clearer name for your portfolio of shipped work.',
-      },
-      {
-        type: 'fix' as const,
-        title: 'Profile layout improvements',
-        description: 'Share and compare buttons moved above the score card. All emojis replaced with clean React icons throughout the app.',
-      },
     ],
   },
   {
