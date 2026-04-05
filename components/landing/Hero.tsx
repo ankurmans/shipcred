@@ -62,15 +62,12 @@ export default function Hero() {
                 />
               </div>
               <a
-                href={`/api/auth/github${username ? `?username=${encodeURIComponent(username)}` : ''}`}
+                href={`/login${username ? `?username=${encodeURIComponent(username)}` : ''}`}
                 className="btn-brand whitespace-nowrap text-center justify-center"
               >
                 CLAIM MY PAGE <LuArrowRight size={16} />
               </a>
             </div>
-            <p className="text-xs text-fg-muted mt-2 text-center lg:text-left">
-              No GitHub? <a href="/login" className="text-brand hover:text-brand-dark font-medium">Sign in with Google</a> — verify via project URLs instead.
-            </p>
 
             {/* Social proof */}
             <div className="mt-6 flex flex-col sm:flex-row items-center lg:items-start gap-3 sm:gap-4">
