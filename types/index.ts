@@ -109,13 +109,26 @@ export type AITool =
   | 'aider'
   | 'windsurf'
   | 'devin'
-  | 'lovable';
+  | 'lovable'
+  | 'bolt'
+  | 'replit'
+  | 'v0'
+  | 'base44'
+  | 'codex'
+  | 'jules'
+  | 'gemini'
+  | 'cody'
+  | 'pythagora'
+  | 'same_dev'
+  | 'firebase_studio';
 
 export type AIDetectionMethod =
   | 'co_author_trailer'
   | 'bot_commit'
   | 'branch_name'
-  | 'cursorrules';
+  | 'cursorrules'
+  | 'commit_message'
+  | 'author_email';
 
 // ============================================================
 // PORTFOLIO ITEMS
@@ -291,7 +304,12 @@ export interface GitHubAPICommit {
     message: string;
     author: {
       name: string;
+      email?: string;
       date: string;
+    };
+    committer?: {
+      name?: string;
+      email?: string;
     };
     tree: {
       sha: string;
