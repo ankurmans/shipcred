@@ -19,7 +19,7 @@ export default function Footer() {
         </div>
         <div className="text-xs text-white/30">
           Built with Claude Code by{' '}
-          <a href="https://twitter.com/AnkurShrestha" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">
+          <a href="https://www.linkedin.com/in/ankur-shrestha/" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">
             @AnkurShrestha
           </a>
         </div>
