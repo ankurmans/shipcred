@@ -12,7 +12,7 @@ export default function CTA() {
           What&apos;s your GTM Commit?
         </h2>
         <p className="mt-3 sm:mt-4 text-white/70 text-base sm:text-lg leading-relaxed">
-          Free forever. Takes 2 minutes. Your score is waiting.
+          Free. 2 minutes. The next job description will say &ldquo;AI-pilled required.&rdquo; Be ready.
         </p>
 
         {/* URL input CTA */}

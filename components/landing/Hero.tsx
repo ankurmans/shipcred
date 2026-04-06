@@ -30,8 +30,8 @@ export default function Hero() {
       <div className="w-full bg-brand-50 py-2 text-center px-4">
         <span className="text-xs sm:text-sm font-medium text-brand inline-flex items-center gap-1">
           <LuTrendingUp size={14} />
-          <span className="hidden sm:inline">GTM Engineer roles grew 205% in 2024–2025. Are you verified?</span>
-          <span className="sm:hidden">GTM Engineer roles grew 205%. Are you verified?</span>
+          <span className="hidden sm:inline">Ramp, Notion, Stripe are hiring &ldquo;extremely AI-pilled&rdquo; GTM roles. Can you prove it?</span>
+          <span className="sm:hidden">Companies want &ldquo;AI-pilled&rdquo; GTM hires. Can you prove it?</span>
           <LuArrowRight size={14} className="ml-1" />
         </span>
       </div>
@@ -63,8 +63,8 @@ export default function Hero() {
 
             {/* Subhead */}
             <p className="mt-4 sm:mt-6 text-base sm:text-lg text-fg-secondary leading-relaxed max-w-md mx-auto lg:mx-0">
-              Everyone says they&apos;re AI-native. GTM Commit is the score that proves it.
-              Connect GitHub, get auto-verified, and share your credential anywhere.
+              Job descriptions now say &ldquo;extremely AI-pilled required.&rdquo;
+              GTM Commit is the verified score that proves you actually ship with AI &mdash; not just talk about it.
             </p>
 
             {/* URL input CTA */}

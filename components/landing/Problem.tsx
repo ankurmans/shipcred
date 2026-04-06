@@ -5,19 +5,19 @@ export default function Problem() {
     <section className="py-12 sm:py-20 px-4 sm:px-6 bg-surface-secondary">
       <div className="max-w-5xl mx-auto">
         <p className="text-center font-mono text-sm text-brand font-semibold tracking-wide mb-3">
-          GTM ENGINEER ROLES: +205% YoY
+          RAMP &middot; NOTION &middot; STRIPE &middot; INCIDENT.IO &middot; LOVABLE
         </p>
         <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center">
-          Everyone claims they&apos;re AI-native.{' '}
-          <span className="text-brand">Who&apos;s actually shipping?</span>
+          &ldquo;Extremely AI-pilled&rdquo; is now a job requirement.{' '}
+          <span className="text-brand">How do you prove it?</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mt-8 sm:mt-12">
           <div className="p-5 sm:p-6 rounded-card border-2 border-red-200 bg-white">
             <h3 className="font-display text-lg sm:text-xl font-bold text-red-500 mb-3 sm:mb-4">The Talker</h3>
             <ul className="space-y-2 text-sm text-fg-secondary">
               <li>Lists &ldquo;AI Tools&rdquo; in LinkedIn skills</li>
+              <li>Says &ldquo;I&apos;m AI-pilled&rdquo; in interviews</li>
               <li>Shares ChatGPT screenshots</li>
-              <li>Says &ldquo;I use Claude&rdquo; in interviews</li>
               <li>Zero commits. Zero shipped projects.</li>
             </ul>
             <div className="mt-3 sm:mt-4 text-sm font-semibold text-red-500 flex items-center gap-1.5">
@@ -27,10 +27,10 @@ export default function Problem() {
           <div className="p-5 sm:p-6 rounded-card border-2 border-green-200 bg-white">
             <h3 className="font-display text-lg sm:text-xl font-bold text-green-600 mb-3 sm:mb-4">The Doer</h3>
             <ul className="space-y-2 text-sm text-fg-secondary">
-              <li>Built 3 outbound landing pages with Claude Code</li>
+              <li>Ships landing pages from Claude Code</li>
+              <li>Builds fleets of AI agents for marketing</li>
               <li>Automated lead enrichment with Clay + Cursor</li>
-              <li>Shipped AI-powered email sequences</li>
-              <li>47 verified AI commits this quarter</li>
+              <li>712 verified AI commits this quarter</li>
             </ul>
             <div className="mt-3 sm:mt-4 text-sm font-semibold text-green-600 flex items-center gap-1.5">
               <LuCircleCheck size={16} /> Proof: Verified on GitHub
