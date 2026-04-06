@@ -17,12 +17,8 @@ const faqs = [
     a: 'No. We read commit metadata only — timestamps, diff stats, and AI tool signatures. We never store source code. Private repo names are never displayed publicly. Disconnect anytime and all data is deleted immediately.',
   },
   {
-    q: 'Is this free?',
-    a: 'Free to get started. Pro features coming soon for power users.',
-  },
-  {
     q: 'What AI tools do you detect?',
-    a: 'Claude Code, GitHub Copilot, Cursor, Aider, Devin, Cody, and more. We also verify deployments on Vercel, Replit, Lovable, Bolt, and v0.',
+    a: 'We detect 18 tools: Claude Code, GitHub Copilot, Cursor, Aider, Windsurf, Devin, Lovable, Bolt.new, Replit Agent, v0.dev, Base44, OpenAI Codex, Google Jules, Gemini Code Assist, Cody, Pythagora, Same.dev, and Firebase Studio.',
   },
 ];
 
