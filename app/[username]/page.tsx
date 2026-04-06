@@ -20,6 +20,8 @@ import { FaXTwitter } from 'react-icons/fa6';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
 
+export const dynamic = 'force-dynamic';
+
 interface PageProps { params: Promise<{ username: string }> }
 
 async function getProfileData(username: string) {
