@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
   // Recalculate scores for affected profiles
   for (const profileId of affectedProfiles) {
     const [commitsRes, portfolioRes, vouchesRes, toolsRes, proofsRes, videosRes, contentRes, certsRes, uploadsRes, profileRes] = await Promise.all([
-      admin.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name').eq('profile_id', profileId),
+      admin.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name, additions, deletions, repo_is_private').eq('profile_id', profileId),
       admin.from('portfolio_items').select('vouch_count').eq('profile_id', profileId),
       admin.from('vouches').select('id').eq('vouchee_id', profileId),
       admin.from('tool_declarations').select('is_verified, tool_name').eq('profile_id', profileId),

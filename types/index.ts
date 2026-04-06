@@ -51,10 +51,13 @@ export interface ScoreBreakdown {
   total: number;
   detail: {
     githubCommits: number;
+    commitImpact: number;
+    privateRepoBonus: number;
     platformDeploys: number;
     certsTier1: number;
     toolDiversity: number;
     consistency: number;
+    streak: number;
     vouchedPortfolio: number;
     vouchedUploads: number;
     vouchedVideos: number;

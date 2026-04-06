@@ -16,7 +16,7 @@ export async function POST() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role, github_username, profile_completeness')
+    .select('id, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role, github_username, profile_completeness, current_streak, longest_streak')
     .eq('user_id', user.id)
     .single();
 
@@ -27,7 +27,7 @@ export async function POST() {
   const admin = createAdminClient();
 
   const [commitsRes, portfolioRes, vouchesRes, toolsRes, proofsRes, videosRes, contentRes, certsRes, uploadsRes] = await Promise.all([
-    admin.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name').eq('profile_id', profile.id),
+    admin.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name, additions, deletions, repo_is_private').eq('profile_id', profile.id),
     admin.from('portfolio_items').select('vouch_count').eq('profile_id', profile.id),
     admin.from('vouches').select('id').eq('vouchee_id', profile.id),
     admin.from('tool_declarations').select('is_verified, tool_name').eq('profile_id', profile.id),
@@ -48,6 +48,7 @@ export async function POST() {
     contentProofs: contentRes.data || [],
     certifications: certsRes.data || [],
     uploadedFiles: uploadsRes.data || [],
+    streak: { current: profile.current_streak || 0, longest: profile.longest_streak || 0 },
     profile: {
       bio: profile.bio,
       avatar_url: profile.avatar_url,

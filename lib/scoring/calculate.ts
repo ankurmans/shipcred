@@ -6,7 +6,14 @@ import { CERT_POINTS } from '@/lib/proofs/certification';
 // ============================================================
 
 export interface ProfileData {
-  commits: { ai_tool_detected: string | null; committed_at: string; repo_full_name?: string }[];
+  commits: {
+    ai_tool_detected: string | null;
+    committed_at: string;
+    repo_full_name?: string;
+    additions?: number;
+    deletions?: number;
+    repo_is_private?: boolean;
+  }[];
   portfolioItems: { vouch_count: number }[];
   vouchCount: number;
   toolDeclarations: { is_verified: boolean; tool_name?: string }[];
@@ -15,6 +22,7 @@ export interface ProfileData {
   contentProofs: { url_verified: boolean; platform: string; vouch_count: number }[];
   certifications: { verification_status: string; issuer: string; vouch_count: number }[];
   uploadedFiles: { is_parsed_valid: boolean; vouch_count: number; file_type: string }[];
+  streak?: { current: number; longest: number };
   // Profile fields for completeness scoring
   profile?: {
     bio: string | null;
@@ -38,7 +46,7 @@ function countActiveMonths(dates: Date[]): number {
 }
 
 // ============================================================
-// TIER 1 — Auto-Verified (cap 600)
+// TIER 1 — Auto-Verified (cap 700)
 // ============================================================
 
 function scoreGitHubCommits(commits: ProfileData['commits']): number {
@@ -49,22 +57,54 @@ function scoreGitHubCommits(commits: ProfileData['commits']): number {
   const uniqueRepos = new Set(aiCommits.map(c => c.repo_full_name).filter(Boolean)).size;
   const tools = new Set(aiCommits.map(c => c.ai_tool_detected));
 
-  // Volume: logarithmic (diminishing returns past ~100 commits) — max 80
-  const volumeScore = Math.min(80, Math.round(25 * Math.log2(totalCommits + 1)));
+  // Volume: flatter curve — 712 commits scores meaningfully more than 50
+  // log2(51) = 5.7 → 171, log2(713) = 9.5 → 285 (capped at 150)
+  const volumeScore = Math.min(150, Math.round(30 * Math.log2(totalCommits + 1)));
 
-  // Repo diversity: more repos = more genuine usage — max 50
-  const diversityScore = Math.min(50, uniqueRepos * 10);
+  // Repo diversity: more repos = more genuine usage — max 60
+  const diversityScore = Math.min(60, uniqueRepos * 10);
 
   // Tool diversity within commits — max 40
   const toolScore = Math.min(40, Math.max(0, (tools.size - 1) * 20));
 
-  // Recency: commits in last 30 days — max 30
+  // Recency: commits in last 30 days — max 40
   const recentCommits = aiCommits.filter(c =>
     Date.now() - new Date(c.committed_at).getTime() < 30 * 86400 * 1000
   ).length;
-  const recencyScore = Math.min(30, recentCommits * 3);
+  const recencyScore = Math.min(40, recentCommits * 3);
 
-  return Math.min(200, volumeScore + diversityScore + toolScore + recencyScore);
+  // Velocity bonus: 100+ AI commits in last 30 days = prolific — max 30
+  const velocityBonus = recentCommits >= 100 ? 30 : recentCommits >= 50 ? 20 : recentCommits >= 20 ? 10 : 0;
+
+  return Math.min(350, volumeScore + diversityScore + toolScore + recencyScore + velocityBonus);
+}
+
+function scoreCommitImpact(commits: ProfileData['commits']): number {
+  const aiCommits = commits.filter(c => c.ai_tool_detected);
+  if (aiCommits.length === 0) return 0;
+
+  // Total lines changed across AI commits
+  const totalLines = aiCommits.reduce((sum, c) => sum + (c.additions || 0) + (c.deletions || 0), 0);
+
+  // Logarithmic: 10K+ lines is substantial, 100K+ is extraordinary
+  // log2(10001) = 13.3 → 40, log2(100001) = 16.6 → 50
+  return Math.min(60, Math.round(3 * Math.log2(totalLines + 1)));
+}
+
+function scorePrivateRepos(commits: ProfileData['commits']): number {
+  const aiCommits = commits.filter(c => c.ai_tool_detected);
+  if (aiCommits.length === 0) return 0;
+
+  const privateCommits = aiCommits.filter(c => c.repo_is_private).length;
+  const privateRatio = privateCommits / aiCommits.length;
+
+  // Working on private repos = real company work, not just toy projects
+  // 50%+ private = max bonus
+  if (privateRatio >= 0.5) return 40;
+  if (privateRatio >= 0.3) return 30;
+  if (privateRatio >= 0.1) return 20;
+  if (privateCommits > 0) return 10;
+  return 0;
 }
 
 function scorePlatformDeployments(proofs: ProfileData['externalProofs']): number {
@@ -138,29 +178,49 @@ function scoreConsistency(data: ProfileData): number {
   return 0;
 }
 
+function scoreStreak(streak: ProfileData['streak']): number {
+  if (!streak) return 0;
+  const current = streak.current;
+  const longest = streak.longest;
+
+  // Current streak: active shipping habit
+  let score = 0;
+  if (current >= 12) score += 40;
+  else if (current >= 8) score += 30;
+  else if (current >= 4) score += 20;
+  else if (current >= 2) score += 10;
+
+  // Longest streak bonus: proven track record
+  if (longest >= 12) score += 20;
+  else if (longest >= 8) score += 15;
+  else if (longest >= 4) score += 10;
+
+  return Math.min(50, score);
+}
+
 // ============================================================
-// TIER 2 — Community/Third-Party Verified (cap 250)
+// TIER 2 — Community/Third-Party Verified (cap 200)
 // ============================================================
 
 function scoreVouchedPortfolio(items: ProfileData['portfolioItems']): number {
   const vouched = items.filter(p => p.vouch_count >= 2);
-  return Math.min(120, vouched.length * 30);
+  return Math.min(100, vouched.length * 25);
 }
 
 function scoreVouchedUploads(uploads: ProfileData['uploadedFiles']): number {
   const vouched = uploads.filter(u => u.is_parsed_valid && u.vouch_count >= 2);
-  return Math.min(60, vouched.length * 20);
+  return Math.min(40, vouched.length * 15);
 }
 
 function scoreVouchedVideos(videos: ProfileData['videoProofs']): number {
   const vouched = videos.filter(v => v.url_verified && v.vouch_count >= 2);
   let total = 0;
   for (const v of vouched.slice(0, 5)) {
-    const base = v.category === 'build_session' ? 40 : v.category === 'workflow_walkthrough' ? 35 : 25;
+    const base = v.category === 'build_session' ? 35 : v.category === 'workflow_walkthrough' ? 30 : 20;
     const mult = (v.duration_seconds || 0) > 300 ? 1.2 : (v.duration_seconds || 0) > 120 ? 1.1 : 1.0;
     total += Math.round(base * mult);
   }
-  return Math.min(60, total);
+  return Math.min(50, total);
 }
 
 function scoreVouchedContent(content: ProfileData['contentProofs']): number {
@@ -173,7 +233,7 @@ function scoreVouchedContent(content: ProfileData['contentProofs']): number {
   for (const c of vouched.slice(0, 8)) {
     total += PLATFORM_PTS[c.platform] || 15;
   }
-  return Math.min(50, total);
+  return Math.min(40, total);
 }
 
 function scoreCertsTier2(certs: ProfileData['certifications']): number {
@@ -184,72 +244,72 @@ function scoreCertsTier2(certs: ProfileData['certifications']): number {
   for (const cert of vouchVerified) {
     total += CERT_POINTS[cert.issuer] || 10;
   }
-  return Math.min(40, total);
+  return Math.min(30, total);
 }
 
 // ============================================================
-// TIER 3 — Self-Reported (cap 150)
+// TIER 3 — Self-Reported (cap 100)
 // ============================================================
 
 function scoreUnvouchedPortfolio(items: ProfileData['portfolioItems']): number {
   const unvouched = items.filter(p => p.vouch_count < 2);
-  return Math.min(50, unvouched.length * 10);
+  return Math.min(30, unvouched.length * 8);
 }
 
 function scoreUnvouchedUploads(uploads: ProfileData['uploadedFiles']): number {
   const unvouched = uploads.filter(u => u.is_parsed_valid && u.vouch_count < 2);
-  return Math.min(45, unvouched.length * 15);
+  return Math.min(25, unvouched.length * 10);
 }
 
 function scoreUnvouchedVideos(videos: ProfileData['videoProofs']): number {
   const unvouched = videos.filter(v => v.url_verified && v.vouch_count < 2);
   let total = 0;
   for (const v of unvouched.slice(0, 5)) {
-    const base = v.category === 'build_session' ? 15 : v.category === 'workflow_walkthrough' ? 12 : 8;
+    const base = v.category === 'build_session' ? 12 : v.category === 'workflow_walkthrough' ? 10 : 6;
     total += base;
   }
-  return Math.min(30, total);
+  return Math.min(20, total);
 }
 
 function scoreUnvouchedContent(content: ProfileData['contentProofs']): number {
   const PLATFORM_PTS: Record<string, number> = {
-    blog: 15, substack: 12, beehiiv: 12, medium: 10, github: 12,
-    twitter: 8, linkedin: 8, other: 6,
+    blog: 12, substack: 10, beehiiv: 10, medium: 8, github: 10,
+    twitter: 6, linkedin: 6, other: 5,
   };
   const unvouched = content.filter(c => c.url_verified && c.vouch_count < 2);
   let total = 0;
   for (const c of unvouched.slice(0, 8)) {
-    total += PLATFORM_PTS[c.platform] || 6;
+    total += PLATFORM_PTS[c.platform] || 5;
   }
-  return Math.min(25, total);
+  return Math.min(15, total);
 }
 
 function scoreUnrecognizedCerts(certs: ProfileData['certifications']): number {
   const pending = certs.filter(c => c.verification_status === 'pending' && c.vouch_count < 2);
-  return Math.min(20, pending.length * 10);
+  return Math.min(10, pending.length * 5);
 }
 
 function scoreToolDeclarations(declarations: ProfileData['toolDeclarations']): number {
   const verified = declarations.filter(t => t.is_verified);
   const declared = declarations.filter(t => !t.is_verified);
-  return Math.min(30, verified.length * 8 + declared.length * 3);
+  return Math.min(15, verified.length * 5 + declared.length * 2);
 }
 
 function scoreProfileCompleteness(data: ProfileData): number {
   let score = 0;
   const p = data.profile;
   if (p) {
-    if (p.bio && p.bio.length > 10) score += 5;
-    if (p.avatar_url) score += 4;
-    if (p.display_name) score += 3;
-    if (p.role) score += 2;
-    if (p.website_url || p.linkedin_url || p.twitter_handle) score += 3;
+    if (p.bio && p.bio.length > 10) score += 3;
+    if (p.avatar_url) score += 3;
+    if (p.display_name) score += 2;
+    if (p.role) score += 1;
+    if (p.website_url || p.linkedin_url || p.twitter_handle) score += 2;
   }
   // Proof-based completeness
   if (data.commits.length > 0) score += 1;
   if (data.portfolioItems.length > 0) score += 1;
   if (data.toolDeclarations.length > 0) score += 1;
-  return Math.min(20, score);
+  return Math.min(15, score);
 }
 
 // ============================================================
@@ -257,29 +317,33 @@ function scoreProfileCompleteness(data: ProfileData): number {
 // ============================================================
 
 export function calculateGtmCommitScore(data: ProfileData): ScoreBreakdown {
-  // === TIER 1: Auto-Verified (cap 600) ===
+  // === TIER 1: Auto-Verified (cap 700) ===
   const githubCommits = scoreGitHubCommits(data.commits);
+  const commitImpactVal = scoreCommitImpact(data.commits);
+  const privateRepoBonusVal = scorePrivateRepos(data.commits);
   const platformDeploys = scorePlatformDeployments(data.externalProofs);
   const certsTier1Val = scoreCertsTier1(data.certifications);
   const toolDiversityVal = scoreToolDiversity(data);
   const consistencyVal = scoreConsistency(data);
+  const streakVal = scoreStreak(data.streak);
 
-  const tier1 = Math.min(600,
-    githubCommits + platformDeploys + certsTier1Val + toolDiversityVal + consistencyVal
+  const tier1 = Math.min(700,
+    githubCommits + commitImpactVal + privateRepoBonusVal +
+    platformDeploys + certsTier1Val + toolDiversityVal + consistencyVal + streakVal
   );
 
-  // === TIER 2: Community Verified (cap 250) ===
+  // === TIER 2: Community Verified (cap 200) ===
   const vouchedPortfolioVal = scoreVouchedPortfolio(data.portfolioItems);
   const vouchedUploadsVal = scoreVouchedUploads(data.uploadedFiles);
   const vouchedVideosVal = scoreVouchedVideos(data.videoProofs);
   const vouchedContentVal = scoreVouchedContent(data.contentProofs);
   const certsTier2Val = scoreCertsTier2(data.certifications);
 
-  const tier2 = Math.min(250,
+  const tier2 = Math.min(200,
     vouchedPortfolioVal + vouchedUploadsVal + vouchedVideosVal + vouchedContentVal + certsTier2Val
   );
 
-  // === TIER 3: Self-Reported (cap 150) ===
+  // === TIER 3: Self-Reported (cap 100) ===
   const unvouchedPortfolioVal = scoreUnvouchedPortfolio(data.portfolioItems);
   const unvouchedUploadsVal = scoreUnvouchedUploads(data.uploadedFiles);
   const unvouchedVideosVal = scoreUnvouchedVideos(data.videoProofs);
@@ -288,7 +352,7 @@ export function calculateGtmCommitScore(data: ProfileData): ScoreBreakdown {
   const toolDeclsVal = scoreToolDeclarations(data.toolDeclarations);
   const profileCompleteVal = scoreProfileCompleteness(data);
 
-  const tier3 = Math.min(150,
+  const tier3 = Math.min(100,
     unvouchedPortfolioVal + unvouchedUploadsVal + unvouchedVideosVal +
     unvouchedContentVal + unrecognizedCertsVal + toolDeclsVal + profileCompleteVal
   );
@@ -302,10 +366,13 @@ export function calculateGtmCommitScore(data: ProfileData): ScoreBreakdown {
     total,
     detail: {
       githubCommits,
+      commitImpact: commitImpactVal,
+      privateRepoBonus: privateRepoBonusVal,
       platformDeploys,
       certsTier1: certsTier1Val,
       toolDiversity: toolDiversityVal,
       consistency: consistencyVal,
+      streak: streakVal,
       vouchedPortfolio: vouchedPortfolioVal,
       vouchedUploads: vouchedUploadsVal,
       vouchedVideos: vouchedVideosVal,
