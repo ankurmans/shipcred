@@ -20,6 +20,9 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
           <Link href="/leaderboard" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
             Explore
           </Link>
+          <Link href="/scoring" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
+            Scoring
+          </Link>
           <Link href="/about" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
             About
           </Link>
@@ -44,6 +47,9 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
         <div className="sm:hidden absolute top-full left-0 right-0 bg-white border-b border-surface-border z-50 px-4 py-4 space-y-3">
           <Link href="/leaderboard" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">
             Explore
+          </Link>
+          <Link href="/scoring" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">
+            Scoring
           </Link>
           <Link href="/about" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">
             About

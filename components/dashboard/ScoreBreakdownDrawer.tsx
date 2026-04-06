@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { LuChevronDown, LuChevronUp, LuArrowRight, LuShield, LuUsers, LuPenLine, LuZap } from 'react-icons/lu';
+import Link from 'next/link';
+import { LuChevronDown, LuChevronUp, LuArrowRight, LuShield, LuUsers, LuPenLine, LuZap, LuInfo } from 'react-icons/lu';
 import { SCORE_DETAIL_META, TIER_LABELS } from '@/lib/gamification/score-labels';
 import type { ScoreBreakdown } from '@/types';
 
@@ -165,6 +166,9 @@ export default function ScoreBreakdownDrawer({ breakdown }: { breakdown: ScoreBr
               </div>
             );
           })}
+          <Link href="/scoring" className="flex items-center justify-center gap-1.5 text-xs text-brand hover:text-brand-dark font-medium pt-2 transition-colors">
+            <LuInfo size={12} /> How scoring works
+          </Link>
         </div>
         </div>
       </div>

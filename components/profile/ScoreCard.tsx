@@ -259,6 +259,7 @@ export default function ScoreCard({ profile, tools, appUrl, showHeader = true }:
                     </div>
                   );
                 })}
+                <a href="/scoring" className="text-xs text-brand hover:text-brand-dark mt-2 inline-block">How scoring works</a>
               </div>
             </details>
           )}
