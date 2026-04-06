@@ -27,3 +27,4 @@ supabase/.temp/
 .claude/
 .vibe/
 .vscode/
+.vercel
