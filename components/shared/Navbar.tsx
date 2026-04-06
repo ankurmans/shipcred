@@ -26,7 +26,10 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
           {isLoggedIn ? (
             <Link href="/dashboard" className="btn-primary btn-sm">Dashboard</Link>
           ) : (
-            <a href="/api/auth/github" className="btn-primary btn-sm">Claim yours</a>
+            <>
+              <Link href="/login" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Log in</Link>
+              <a href="/api/auth/github" className="btn-primary btn-sm">Claim yours</a>
+            </>
           )}
         </div>
 
@@ -48,7 +51,10 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
           {isLoggedIn ? (
             <Link href="/dashboard" className="btn-primary btn-sm w-full text-center">Dashboard</Link>
           ) : (
-            <a href="/api/auth/github" className="btn-primary btn-sm w-full text-center">Claim yours</a>
+            <>
+              <Link href="/login" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">Log in</Link>
+              <a href="/api/auth/github" className="btn-primary btn-sm w-full text-center">Claim yours</a>
+            </>
           )}
         </div>
       )}
