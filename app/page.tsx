@@ -36,7 +36,7 @@ export default async function Home() {
       <FAQ />
       <Privacy />
       <CTA />
-      <Footer />
+      <Footer showLeaderboard={showExplore} />
     </main>
   );
 }

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { LuPackageCheck } from 'react-icons/lu';
 import { analytics } from '@/lib/analytics';
 
-export default function Footer() {
+export default function Footer({ showLeaderboard = true }: { showLeaderboard?: boolean }) {
   return (
     <footer className="border-t border-surface-border-dark bg-surface-inverse text-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="flex items-center gap-6">
           <Link href="/about" onClick={() => analytics.footerLinkClicked('about')} className="text-xs text-white/40 hover:text-white/70 transition-colors">About</Link>
           <Link href="/scoring" onClick={() => analytics.footerLinkClicked('scoring')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Scoring</Link>
-          <Link href="/leaderboard" onClick={() => analytics.footerLinkClicked('leaderboard')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>
+          {showLeaderboard && <Link href="/leaderboard" onClick={() => analytics.footerLinkClicked('leaderboard')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>}
           <Link href="/privacy" onClick={() => analytics.footerLinkClicked('privacy')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Privacy</Link>
           <Link href="/updates" onClick={() => analytics.footerLinkClicked('updates')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Updates</Link>
           <Link href="/feedback" onClick={() => analytics.footerLinkClicked('feedback')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Feedback</Link>
