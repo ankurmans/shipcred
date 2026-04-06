@@ -121,40 +121,40 @@ export default async function ProfilePage({ params }: PageProps) {
             <p className="mt-4 text-sm text-fg-secondary leading-relaxed">{profile.bio}</p>
           )}
 
-          {/* All links — single row of icon pills */}
-          {(profile.website_url || profile.twitter_handle || profile.linkedin_url || profile.platform_urls) && (
-            <div className="flex flex-wrap gap-2 mt-3">
-              {profile.website_url && (
-                <a href={profile.website_url} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
-                  <LuGlobe size={12} />
-                  {new URL(profile.website_url).hostname.replace('www.', '')}
-                  <LuExternalLink size={10} className="text-fg-faint" />
-                </a>
-              )}
-              {profile.twitter_handle && (
-                <a href={`https://x.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
-                  <FaXTwitter size={12} />
-                  @{profile.twitter_handle}
-                </a>
-              )}
-              {profile.linkedin_url && (
-                <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
-                  <LuLinkedin size={12} />
-                  LinkedIn
-                  <LuExternalLink size={10} className="text-fg-faint" />
-                </a>
-              )}
-              <PlatformLinks platformUrls={profile.platform_urls} />
-            </div>
-          )}
+          {/* Links + Share — single unified row */}
+          <div className="flex flex-wrap items-center gap-2 mt-3">
+            {/* Profile links */}
+            {profile.website_url && (
+              <a href={profile.website_url} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                <LuGlobe size={12} />
+                {(() => { try { return new URL(profile.website_url).hostname.replace('www.', ''); } catch { return 'Website'; } })()}
+              </a>
+            )}
+            {profile.twitter_handle && (
+              <a href={`https://x.com/${profile.twitter_handle.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                <FaXTwitter size={12} />
+                @{profile.twitter_handle.replace('@', '')}
+              </a>
+            )}
+            {profile.linkedin_url && (
+              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                <LuLinkedin size={12} />
+                LinkedIn
+              </a>
+            )}
+            <PlatformLinks platformUrls={profile.platform_urls} />
 
-          {/* Share & compare */}
-          <div className="mt-3 flex items-center gap-2 flex-wrap">
+            {/* Separator */}
+            {(profile.website_url || profile.twitter_handle || profile.linkedin_url || profile.platform_urls) && (
+              <span className="w-px h-4 bg-surface-border" />
+            )}
+
+            {/* Share actions */}
             <ShareButton url={`${appUrl}/${profile.username}`} title={`${profile.display_name}'s GTM Commit — Score: ${profile.gtmcommit_score}`} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
-            <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare with me</a>
+            <a href={`/compare/${profile.username}/`} className="btn-ghost btn-sm text-xs">Compare</a>
           </div>
 
           {/* Score Card */}

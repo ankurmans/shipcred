@@ -32,28 +32,10 @@ export default function ShareButton({ url, title, score, tier }: ShareButtonProp
     <div className="flex items-center gap-2">
       <button
         onClick={handleCopy}
-        className="btn-ghost btn-sm inline-flex items-center gap-1.5"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors"
       >
-        {copied ? <><LuCheck size={14} /> Copied!</> : <><LuCopy size={14} /> Copy URL</>}
+        {copied ? <><LuCheck size={12} /> Copied!</> : <><LuShare2 size={12} /> Share</>}
       </button>
-      <a
-        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterText)}&url=${encodeURIComponent(url)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-ghost btn-sm"
-        aria-label="Share on X (Twitter)"
-      >
-        𝕏
-      </a>
-      <a
-        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="btn-ghost btn-sm"
-        aria-label="Share on LinkedIn"
-      >
-        in
-      </a>
     </div>
   );
 }
