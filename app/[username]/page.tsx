@@ -108,6 +108,9 @@ export default async function ProfilePage({ params }: PageProps) {
             <div className="flex-1 min-w-0">
               <h1 className="font-display text-2xl sm:text-3xl font-bold truncate">{profile.display_name}</h1>
               <p className="text-fg-muted text-sm mt-0.5 truncate">@{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}</p>
+              {profile.bio && (
+                <p className="text-xs text-fg-secondary mt-1 line-clamp-2">{profile.bio}</p>
+              )}
               {profile.current_streak > 0 && (
                 <div className="mt-1.5">
                   <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
@@ -119,11 +122,6 @@ export default async function ProfilePage({ params }: PageProps) {
               )}
             </div>
           </div>
-
-          {/* Bio */}
-          {profile.bio && (
-            <p className="mt-4 text-sm text-fg-secondary leading-relaxed">{profile.bio}</p>
-          )}
 
           {/* Links + Share — single unified row */}
           <div className="flex flex-wrap items-center gap-2 mt-3">
