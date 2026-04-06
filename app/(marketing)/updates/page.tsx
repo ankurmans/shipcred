@@ -10,8 +10,33 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Landing page rehaul',
+        description: 'New copy powered by AI-Pilled research signals. Sharper messaging for the GTM Engineer audience with real market data.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Scoring v2 algorithm',
+        description: 'Commits-first scoring with code impact weighting, private repo bonus, and shipping streak multiplier. Transparent /scoring page documents exactly how points are earned.',
+      },
+      {
+        type: 'feat' as const,
+        title: '18 AI tools detected',
+        description: 'Now detecting Claude Code, Copilot, Cursor, Aider, Windsurf, Cline, Devin, Lovable, Bolt, v0, Replit Agent, Tabnine, Codeium, Amazon Q, Gemini Code Assist, JetBrains AI, Sourcegraph Cody, and Continue.dev.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Daily GitHub sync',
+        description: 'Automated daily cron job keeps your commit data fresh without manual syncing.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Custom platform profiles',
+        description: 'Add any platform beyond the preset 8 — type a name and paste a URL.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Gamified dashboard',
-        description: 'Complete dashboard overhaul with Next Actions engine, tier progress bar, score breakdown drill-down, leaderboard rank, and profile completeness bar.',
+        description: 'Next Actions engine, tier progress bar, score breakdown drill-down, leaderboard rank, and profile completeness bar.',
       },
       {
         type: 'feat' as const,
