@@ -28,8 +28,8 @@ export default function Hero() {
         </span>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-8">
-        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-8">
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
           {/* Phone mockup — shows below copy on mobile via order */}
           <div className="shrink-0 order-2 lg:order-1">
             <RotatingPhone />
@@ -61,7 +61,7 @@ export default function Hero() {
 
             {/* URL input CTA */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-6 sm:mt-8">
-              <div className="flex items-center border border-surface-border rounded-full px-4 sm:px-5 py-3 bg-white flex-1 sm:max-w-xs focus-within:ring-2 focus-within:ring-brand/30 focus-within:border-brand transition-all">
+              <div className="flex items-center border border-surface-border rounded-full px-4 sm:px-5 py-3 bg-white flex-1 focus-within:ring-2 focus-within:ring-brand/30 focus-within:border-brand transition-all">
                 <span className="text-fg-muted font-mono text-sm">gtmcommit.com/</span>
                 <input
                   type="text"
@@ -73,7 +73,7 @@ export default function Hero() {
               </div>
               <a
                 href={`/login${username ? `?username=${encodeURIComponent(username)}` : ''}`}
-                className="btn-brand whitespace-nowrap text-center justify-center"
+                className="btn-brand whitespace-nowrap text-center justify-center !px-6 !py-3 text-sm"
               >
                 CLAIM YOUR SCORE <LuArrowRight size={16} />
               </a>

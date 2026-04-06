@@ -8,7 +8,7 @@ export default function PhoneMockup({ children, url = 'gtmcommit.com/sarahchen',
   return (
     <div className={`relative ${className}`}>
       {/* iPhone frame */}
-      <div className="relative w-[304px] rounded-[38px] border-[8px] border-[#1A1A1A] bg-[#1A1A1A] shadow-[0_26px_80px_rgba(0,0,0,0.35)] overflow-hidden">
+      <div className="relative w-[336px] rounded-[42px] border-[8px] border-[#1A1A1A] bg-[#1A1A1A] shadow-[0_26px_80px_rgba(0,0,0,0.35)] overflow-hidden">
         {/* Dynamic Island */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 z-20">
           <div className="w-[104px] h-[27px] bg-[#1A1A1A] rounded-b-[16px]" />
@@ -51,7 +51,7 @@ export default function PhoneMockup({ children, url = 'gtmcommit.com/sarahchen',
         </div>
 
         {/* Content area */}
-        <div className="h-[512px] overflow-hidden relative">
+        <div className="h-[564px] overflow-hidden relative">
           {children}
         </div>
 
