@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { unstable_noStore as noStore } from 'next/cache';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 import { createAdminClient } from '@/lib/supabase/admin';
@@ -25,6 +26,7 @@ export const dynamic = 'force-dynamic';
 interface PageProps { params: Promise<{ username: string }> }
 
 async function getProfileData(username: string) {
+  noStore();
   const supabase = createAdminClient();
   const { data: profile } = await supabase.from('profiles').select('*').eq('username', username).single();
   if (!profile) return null;
