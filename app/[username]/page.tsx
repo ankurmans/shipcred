@@ -78,7 +78,7 @@ export default async function ProfilePage({ params }: PageProps) {
 
   // Check auth via cookie presence (no network call — fast)
   const cookieStore = await cookies();
-  const isAuthenticated = cookieStore.getAll().some(c => c.name.includes('auth-token'));
+  const isAuthenticated = cookieStore.getAll().some(c => c.name.includes('auth-token') || c.name.includes('auth_flow'));
 
   // Tier-based page gradient
   const tierGradient: Record<string, string> = {
