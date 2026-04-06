@@ -4,6 +4,7 @@ import type { LeaderboardEntry } from '@/types';
 import Link from 'next/link';
 import { LuMedal } from 'react-icons/lu';
 import { TierBadge } from '@/components/shared/TierIcon';
+import Avatar from '@/components/shared/Avatar';
 import { analytics } from '@/lib/analytics';
 
 const RANK_COLORS = ['', '#FFD700', '#C0C0C0', '#CD7F32'];
@@ -14,9 +15,7 @@ export default function RankCard({ entry, rank }: { entry: LeaderboardEntry; ran
       <div className="text-lg font-bold text-fg-faint w-8 text-right">
         {rank <= 3 ? <LuMedal size={20} style={{ color: RANK_COLORS[rank] }} /> : `#${rank}`}
       </div>
-      <div className="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-xs font-bold">
-        {entry.display_name.charAt(0)}
-      </div>
+      <Avatar src={entry.avatar_url} alt={entry.display_name} size="sm" />
       <div className="flex-1 min-w-0">
         <div className="font-semibold truncate">{entry.display_name}</div>
         <div className="text-xs text-fg-muted truncate">@{entry.username}{entry.role && ` · ${entry.role}`}</div>
