@@ -1,16 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LuTrendingUp, LuArrowRight, LuStar } from 'react-icons/lu';
+import { LuTrendingUp, LuArrowRight } from 'react-icons/lu';
 import RotatingPhone from './RotatingPhone';
-
-const EARLY_BUILDERS = [
-  { name: 'Sarah C.', color: '#FF5C00' },
-  { name: 'Marc R.', color: '#6366F1' },
-  { name: 'Priya P.', color: '#06B6D4' },
-  { name: 'Alex K.', color: '#EC4899' },
-  { name: 'Jordan L.', color: '#F59E0B' },
-];
 
 export default function Hero() {
   const [username, setUsername] = useState('');
@@ -85,30 +77,6 @@ export default function Hero() {
               >
                 CLAIM YOUR SCORE <LuArrowRight size={16} />
               </a>
-            </div>
-
-            {/* Social proof */}
-            <div className="mt-6 flex flex-col sm:flex-row items-center lg:items-start gap-3 sm:gap-4">
-              <div className="flex -space-x-2 shrink-0">
-                {EARLY_BUILDERS.map((builder, i) => (
-                  <div
-                    key={i}
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border-2 border-white flex items-center justify-center text-[10px] font-bold text-white"
-                    style={{ backgroundColor: builder.color }}
-                    title={builder.name}
-                  >
-                    {builder.name.charAt(0)}
-                  </div>
-                ))}
-              </div>
-              <div className="text-center sm:text-left">
-                <div className="flex items-center justify-center sm:justify-start gap-1 text-brand">
-                  {[...Array(5)].map((_, i) => <LuStar key={i} size={13} fill="currentColor" />)}
-                </div>
-                <p className="text-sm text-fg-secondary mt-0.5">
-                  Be one of the <span className="font-semibold text-fg-primary">first builders</span> to get scored.
-                </p>
-              </div>
             </div>
 
             {/* Trust badges */}
