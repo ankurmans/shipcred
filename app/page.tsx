@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import AnnouncementBar from '@/components/shared/AnnouncementBar';
 import Navbar from '@/components/shared/Navbar';
 import Hero from '@/components/landing/Hero';
 import Problem from '@/components/landing/Problem';
@@ -19,6 +20,7 @@ export default async function Home() {
 
   return (
     <main>
+      <AnnouncementBar />
       <Navbar />
       <Hero />
       <Problem />

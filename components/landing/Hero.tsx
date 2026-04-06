@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LuTrendingUp, LuArrowRight } from 'react-icons/lu';
+import { LuArrowRight } from 'react-icons/lu';
 import RotatingPhone from './RotatingPhone';
+import { analytics } from '@/lib/analytics';
 
 export default function Hero() {
   const [username, setUsername] = useState('');
@@ -18,16 +19,6 @@ export default function Hero() {
 
   return (
     <section className="w-full">
-      {/* Announcement bar */}
-      <div className="w-full bg-brand-50 py-2 text-center px-4">
-        <span className="text-xs sm:text-sm font-medium text-brand inline-flex items-center gap-1">
-          <LuTrendingUp size={14} />
-          <span className="hidden sm:inline">Ramp, Notion, Stripe are hiring &ldquo;extremely AI-pilled&rdquo; GTM roles. Can you prove it?</span>
-          <span className="sm:hidden">Companies want &ldquo;AI-pilled&rdquo; GTM hires. Can you prove it?</span>
-          <LuArrowRight size={14} className="ml-1" />
-        </span>
-      </div>
-
       <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-8">
         <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-12">
           {/* Phone mockup — shows below copy on mobile via order */}
@@ -73,6 +64,7 @@ export default function Hero() {
               </div>
               <a
                 href={`/login${username ? `?username=${encodeURIComponent(username)}` : ''}`}
+                onClick={() => analytics.heroCTAClicked(username)}
                 className="btn-brand whitespace-nowrap text-center justify-center !px-6 !py-3 text-sm"
               >
                 CLAIM YOUR SCORE <LuArrowRight size={16} />
