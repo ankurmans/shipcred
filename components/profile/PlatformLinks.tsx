@@ -1,6 +1,6 @@
 import {
   LuExternalLink, LuBox, LuZap, LuHeart, LuPlay,
-  LuMonitor, LuTriangle, LuBolt, LuPalette,
+  LuMonitor, LuTriangle, LuBolt, LuPalette, LuLink,
 } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
 
@@ -25,8 +25,8 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
     <>
       {entries.map(([key, url]) => {
         const meta = PLATFORM_META[key];
-        if (!meta) return null;
-        const { Icon } = meta;
+        const Icon = meta?.Icon || LuLink;
+        const label = meta?.label || key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
         return (
           <a
             key={key}
@@ -36,7 +36,7 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors"
           >
             <Icon size={12} />
-            {meta.label}
+            {label}
             <LuExternalLink size={10} className="text-fg-faint" />
           </a>
         );

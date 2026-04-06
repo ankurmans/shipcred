@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   LuBox, LuZap, LuHeart, LuPlay, LuMonitor,
-  LuTriangle, LuBolt, LuPalette,
+  LuTriangle, LuBolt, LuPalette, LuPlus, LuX, LuLink,
 } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
 import ProfileCompletenessBar from '@/components/shared/ProfileCompletenessBar';
@@ -82,6 +82,27 @@ export default function EditProfilePage() {
     setForm({ ...form, platform_urls: { ...form.platform_urls, [key]: value } });
   };
 
+  const removePlatformUrl = (key: string) => {
+    const urls = { ...form.platform_urls };
+    delete urls[key];
+    setForm({ ...form, platform_urls: urls });
+  };
+
+  // Custom platforms = keys in platform_urls that aren't in PLATFORM_FIELDS
+  const presetKeys = new Set(PLATFORM_FIELDS.map(p => p.key));
+  const customPlatforms = Object.entries(form.platform_urls).filter(([key]) => !presetKeys.has(key) && key !== '__new_label');
+
+  const [newLabel, setNewLabel] = useState('');
+  const [newUrl, setNewUrl] = useState('');
+
+  const addCustomPlatform = () => {
+    const key = newLabel.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_');
+    if (!key || !newUrl) return;
+    updatePlatformUrl(key, newUrl);
+    setNewLabel('');
+    setNewUrl('');
+  };
+
   if (loading) return <div className="flex justify-center py-12"><div className="w-8 h-8 border-3 border-brand border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
@@ -145,6 +166,56 @@ export default function EditProfilePage() {
                 </div>
               </div>
             ))}
+
+            {/* Custom platforms */}
+            {customPlatforms.map(([key, url]) => (
+              <div key={key} className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-md bg-surface-muted flex items-center justify-center shrink-0">
+                  <LuLink size={14} className="text-fg-muted" />
+                </div>
+                <div className="flex-1 flex items-center gap-2">
+                  <span className="text-xs font-medium text-fg-secondary w-20 shrink-0 capitalize">{key.replace(/_/g, ' ')}</span>
+                  <input
+                    type="url"
+                    className="flex-1 px-3 py-2 rounded-lg border border-surface-border bg-white text-fg-primary text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
+                    value={url}
+                    onChange={(e) => updatePlatformUrl(key, e.target.value)}
+                  />
+                </div>
+                <button type="button" onClick={() => removePlatformUrl(key)} className="text-fg-muted hover:text-red-500 shrink-0">
+                  <LuX size={14} />
+                </button>
+              </div>
+            ))}
+
+            {/* Add custom */}
+            <div className="flex items-center gap-2 pt-2">
+              <div className="w-7 h-7 rounded-md bg-surface-muted flex items-center justify-center shrink-0">
+                <LuPlus size={14} className="text-fg-muted" />
+              </div>
+              <input
+                type="text"
+                placeholder="Platform name"
+                className="w-28 px-3 py-2 rounded-lg border border-surface-border bg-white text-fg-primary text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
+                value={newLabel}
+                onChange={(e) => setNewLabel(e.target.value)}
+              />
+              <input
+                type="url"
+                placeholder="https://..."
+                className="flex-1 px-3 py-2 rounded-lg border border-surface-border bg-white text-fg-primary text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={addCustomPlatform}
+                disabled={!newLabel.trim() || !newUrl.trim()}
+                className="text-xs font-medium text-brand hover:text-brand-dark disabled:text-fg-faint shrink-0"
+              >
+                Add
+              </button>
+            </div>
           </div>
         </div>
 
