@@ -1,5 +1,8 @@
+'use client';
+
 import Link from 'next/link';
 import { LuPackageCheck } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 export default function Footer() {
   return (
@@ -10,16 +13,16 @@ export default function Footer() {
           <span className="text-xs text-white/40 hidden sm:inline">Talk is cheap. Commits aren&apos;t.</span>
         </div>
         <div className="flex items-center gap-6">
-          <Link href="/about" className="text-xs text-white/40 hover:text-white/70 transition-colors">About</Link>
-          <Link href="/scoring" className="text-xs text-white/40 hover:text-white/70 transition-colors">Scoring</Link>
-          <Link href="/leaderboard" className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>
-          <Link href="/privacy" className="text-xs text-white/40 hover:text-white/70 transition-colors">Privacy</Link>
-          <Link href="/updates" className="text-xs text-white/40 hover:text-white/70 transition-colors">Updates</Link>
-          <Link href="/feedback" className="text-xs text-white/40 hover:text-white/70 transition-colors">Feedback</Link>
+          <Link href="/about" onClick={() => analytics.footerLinkClicked('about')} className="text-xs text-white/40 hover:text-white/70 transition-colors">About</Link>
+          <Link href="/scoring" onClick={() => analytics.footerLinkClicked('scoring')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Scoring</Link>
+          <Link href="/leaderboard" onClick={() => analytics.footerLinkClicked('leaderboard')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>
+          <Link href="/privacy" onClick={() => analytics.footerLinkClicked('privacy')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Privacy</Link>
+          <Link href="/updates" onClick={() => analytics.footerLinkClicked('updates')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Updates</Link>
+          <Link href="/feedback" onClick={() => analytics.footerLinkClicked('feedback')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Feedback</Link>
         </div>
         <div className="text-xs text-white/30">
           Built with Claude Code by{' '}
-          <a href="https://www.linkedin.com/in/ankur-shrestha/" target="_blank" rel="noopener noreferrer" className="hover:text-white/50 transition-colors">
+          <a href="https://www.linkedin.com/in/ankur-shrestha/" target="_blank" rel="noopener noreferrer" onClick={() => analytics.externalLinkClicked('https://www.linkedin.com/in/ankur-shrestha/', 'footer_author')} className="hover:text-white/50 transition-colors">
             @AnkurShrestha
           </a>
         </div>

@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+import { analytics } from '@/lib/analytics';
 
-export default function ProfileViewTracker({ profileId }: { profileId: string }) {
+export default function ProfileViewTracker({ profileId, username }: { profileId: string; username: string }) {
   useEffect(() => {
     // Fire-and-forget view tracking
     fetch(`/api/profiles/view`, {
@@ -10,7 +11,10 @@ export default function ProfileViewTracker({ profileId }: { profileId: string })
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ profile_id: profileId }),
     }).catch(() => {});
-  }, [profileId]);
+
+    // PostHog profile view
+    analytics.profileViewed(username, false);
+  }, [profileId, username]);
 
   return null;
 }

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { FlagType, FlagReason } from '@/types';
+import { analytics } from '@/lib/analytics';
 
 const REASONS: { value: FlagReason; label: string }[] = [
   { value: 'fake_commits', label: 'Fake commits' },
@@ -43,6 +44,7 @@ export default function FlagButton({ flagType, targetId, targetProfileId }: Flag
     });
 
     if (res.ok) {
+      analytics.flagSubmitted(flagType, reason);
       setSubmitted(true);
       setOpen(false);
     } else {

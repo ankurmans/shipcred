@@ -12,6 +12,7 @@ import ReferralSection from '@/components/dashboard/ReferralSection';
 import EmbedCodeGenerator from '@/components/dashboard/EmbedCodeGenerator';
 import StreakBadge from '@/components/dashboard/StreakBadge';
 import ChallengesCard from '@/components/dashboard/ChallengesCard';
+import DashboardTracker from '@/components/dashboard/DashboardTracker';
 import { getNextActions } from '@/lib/gamification/next-actions';
 import type { ScoreBreakdown, GtmCommitTier } from '@/types';
 
@@ -252,6 +253,14 @@ export default async function DashboardPage() {
           <EmbedCodeGenerator username={profile.username} score={profile.gtmcommit_score} tier={profile.gtmcommit_tier} />
         </div>
       </div>
+      <DashboardTracker
+        userId={user.id}
+        username={profile.username}
+        score={profile.gtmcommit_score}
+        tier={profile.gtmcommit_tier}
+        role={profile.role}
+        githubUsername={profile.github_username}
+      />
     </div>
   );
 }

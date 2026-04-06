@@ -43,6 +43,12 @@ export const analytics = {
   visitorCTADismissed: () =>
     posthog.capture('visitor_cta_dismissed'),
 
+  profileExternalLinkClicked: (platform: string, url: string) =>
+    posthog.capture('profile_external_link_clicked', { platform, url }),
+
+  compareProfileViewed: (user1: string, user2: string) =>
+    posthog.capture('compare_profile_viewed', { user1, user2 }),
+
   // ═══ GITHUB ═══
   githubConnected: () =>
     posthog.capture('github_connected'),
@@ -64,17 +70,29 @@ export const analytics = {
   showcaseTabSwitched: (tab: string) =>
     posthog.capture('showcase_tab_switched', { tab }),
 
-  videoProofAdded: () =>
-    posthog.capture('video_proof_added'),
+  videoProofAdded: (category: string) =>
+    posthog.capture('video_proof_added', { category }),
 
-  contentProofAdded: () =>
-    posthog.capture('content_proof_added'),
+  videoProofDeleted: () =>
+    posthog.capture('video_proof_deleted'),
 
-  certificationAdded: () =>
-    posthog.capture('certification_added'),
+  contentProofAdded: (platform: string) =>
+    posthog.capture('content_proof_added', { platform }),
 
-  fileUploaded: () =>
-    posthog.capture('file_uploaded'),
+  contentProofDeleted: () =>
+    posthog.capture('content_proof_deleted'),
+
+  certificationAdded: (name: string) =>
+    posthog.capture('certification_added', { cert_name: name }),
+
+  certificationDeleted: () =>
+    posthog.capture('certification_deleted'),
+
+  fileUploaded: (fileType: string, fileSize: number) =>
+    posthog.capture('file_uploaded', { file_type: fileType, file_size_kb: Math.round(fileSize / 1024) }),
+
+  fileDeleted: () =>
+    posthog.capture('file_deleted'),
 
   // ═══ LEADERBOARD ═══
   leaderboardFiltered: (role: string) =>
@@ -94,6 +112,17 @@ export const analytics = {
   feedbackSubmitted: (category: string) =>
     posthog.capture('feedback_submitted', { category }),
 
+  // ═══ FLAGGING ═══
+  flagSubmitted: (flagType: string, reason: string) =>
+    posthog.capture('flag_submitted', { flag_type: flagType, reason }),
+
+  // ═══ DASHBOARD ═══
+  nextActionClicked: (actionId: string, category: string, pointsPotential: number) =>
+    posthog.capture('next_action_clicked', { action_id: actionId, category, points_potential: pointsPotential }),
+
+  dashboardViewed: (score: number, tier: string) =>
+    posthog.capture('dashboard_viewed', { score, tier }),
+
   // ═══ EXTERNAL LINKS ═══
   externalLinkClicked: (url: string, context: string) =>
     posthog.capture('external_link_clicked', { url, context }),
@@ -101,4 +130,8 @@ export const analytics = {
   // ═══ USER IDENTIFICATION ═══
   identify: (userId: string, properties?: Record<string, any>) =>
     posthog.identify(userId, properties),
+
+  // Set user properties that persist across sessions
+  setPersonProperties: (properties: Record<string, any>) =>
+    posthog.people.set(properties),
 };

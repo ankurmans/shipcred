@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { VideoProof, VideoCategory } from '@/types';
+import { analytics } from '@/lib/analytics';
 
 const VIDEO_CATEGORIES: { value: VideoCategory; label: string }[] = [
   { value: 'build_session', label: 'Build Session Recording' },
@@ -29,6 +30,7 @@ export default function VideoProofSection({ videos, setVideos }: Props) {
     });
     if (res.ok) {
       const video = await res.json();
+      analytics.videoProofAdded(form.category);
       setVideos([video, ...videos]);
       setForm({ url: '', category: '', description: '' });
       setShowForm(false);
@@ -39,6 +41,7 @@ export default function VideoProofSection({ videos, setVideos }: Props) {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this video proof?')) return;
     await fetch(`/api/video-proofs?id=${id}`, { method: 'DELETE' });
+    analytics.videoProofDeleted();
     setVideos(videos.filter(v => v.id !== id));
   };
 

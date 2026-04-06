@@ -16,6 +16,7 @@ import ShareButton from '@/components/shared/ShareButton';
 import VisitorCTA from '@/components/profile/VisitorCTA';
 import ProfileViewTracker from '@/components/profile/ProfileViewTracker';
 import PlatformLinks from '@/components/profile/PlatformLinks';
+import TrackedExternalLink from '@/components/profile/TrackedExternalLink';
 import { LuFlame, LuGlobe, LuLinkedin, LuExternalLink } from 'react-icons/lu';
 import { FaXTwitter } from 'react-icons/fa6';
 import Navbar from '@/components/shared/Navbar';
@@ -127,23 +128,23 @@ export default async function ProfilePage({ params }: PageProps) {
           <div className="flex flex-wrap items-center gap-2 mt-3">
             {/* Profile links */}
             {profile.website_url && (
-              <a href={profile.website_url} target="_blank" rel="noopener noreferrer"
+              <TrackedExternalLink href={profile.website_url} platform="website"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
                 <LuGlobe size={12} />
                 {(() => { try { return new URL(profile.website_url).hostname.replace('www.', ''); } catch { return 'Website'; } })()}
-              </a>
+              </TrackedExternalLink>
             )}
             {profile.twitter_handle && (
-              <a href={`https://x.com/${profile.twitter_handle.replace('@', '')}`} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"
+              <TrackedExternalLink href={`https://x.com/${profile.twitter_handle.replace('@', '')}`} platform="twitter" aria-label="X (Twitter)"
                 className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-secondary border border-surface-border text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
                 <FaXTwitter size={14} />
-              </a>
+              </TrackedExternalLink>
             )}
             {profile.linkedin_url && (
-              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+              <TrackedExternalLink href={profile.linkedin_url} platform="linkedin" aria-label="LinkedIn"
                 className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-secondary border border-surface-border text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
                 <LuLinkedin size={14} />
-              </a>
+              </TrackedExternalLink>
             )}
             <PlatformLinks platformUrls={profile.platform_urls} />
 
@@ -172,7 +173,7 @@ export default async function ProfilePage({ params }: PageProps) {
       </main>
       <Footer />
       {!isAuthenticated && <VisitorCTA />}
-      <ProfileViewTracker profileId={profile.id} />
+      <ProfileViewTracker profileId={profile.id} username={profile.username} />
     </>
   );
 }

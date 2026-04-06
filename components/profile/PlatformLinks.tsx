@@ -1,8 +1,11 @@
+'use client';
+
 import {
   LuExternalLink, LuBox, LuZap, LuHeart, LuPlay,
   LuMonitor, LuTriangle, LuBolt, LuPalette, LuLink,
 } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
+import { analytics } from '@/lib/analytics';
 
 const PLATFORM_META: Record<string, { label: string; Icon: IconType }> = {
   clay: { label: 'Clay', Icon: LuBox },
@@ -33,6 +36,7 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
             href={url}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => analytics.profileExternalLinkClicked(label, url)}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors"
           >
             <Icon size={12} />

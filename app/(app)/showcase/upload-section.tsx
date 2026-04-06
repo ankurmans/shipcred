@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { UploadedFile } from '@/types';
+import { analytics } from '@/lib/analytics';
 
 interface Props {
   uploads: UploadedFile[];
@@ -36,6 +37,7 @@ export default function UploadSection({ uploads, setUploads }: Props) {
 
     if (res.ok) {
       const upload = await res.json();
+      analytics.fileUploaded(upload.file_type || 'unknown', upload.file_size || 0);
       setUploads([upload, ...uploads]);
     } else {
       const data = await res.json();
@@ -48,6 +50,7 @@ export default function UploadSection({ uploads, setUploads }: Props) {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this upload?')) return;
     await fetch(`/api/uploads?id=${id}`, { method: 'DELETE' });
+    analytics.fileDeleted();
     setUploads(uploads.filter(u => u.id !== id));
   };
 

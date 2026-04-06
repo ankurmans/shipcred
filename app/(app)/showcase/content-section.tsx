@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { ContentProof } from '@/types';
+import { analytics } from '@/lib/analytics';
 
 interface Props {
   content: ContentProof[];
@@ -23,6 +24,7 @@ export default function ContentProofSection({ content, setContent }: Props) {
     });
     if (res.ok) {
       const item = await res.json();
+      analytics.contentProofAdded(item.platform || 'unknown');
       setContent([item, ...content]);
       setForm({ url: '', description: '' });
       setShowForm(false);
@@ -33,6 +35,7 @@ export default function ContentProofSection({ content, setContent }: Props) {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this content proof?')) return;
     await fetch(`/api/content-proofs?id=${id}`, { method: 'DELETE' });
+    analytics.contentProofDeleted();
     setContent(content.filter(c => c.id !== id));
   };
 

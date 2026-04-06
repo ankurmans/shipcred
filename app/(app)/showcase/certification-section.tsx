@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Certification } from '@/types';
+import { analytics } from '@/lib/analytics';
 
 interface Props {
   certs: Certification[];
@@ -27,6 +28,7 @@ export default function CertificationSection({ certs, setCerts }: Props) {
     });
     if (res.ok) {
       const cert = await res.json();
+      analytics.certificationAdded(form.cert_name);
       setCerts([cert, ...certs]);
       setForm({ cert_name: '', cert_url: '', cert_id: '', issued_at: '' });
       setShowForm(false);
@@ -37,6 +39,7 @@ export default function CertificationSection({ certs, setCerts }: Props) {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this certification?')) return;
     await fetch(`/api/certifications?id=${id}`, { method: 'DELETE' });
+    analytics.certificationDeleted();
     setCerts(certs.filter(c => c.id !== id));
   };
 

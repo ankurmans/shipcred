@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { createAdminClient } from '@/lib/supabase/admin';
 import CompareCard from '@/components/profile/CompareCard';
+import CompareTracker from '@/components/profile/CompareTracker';
 import ShareButton from '@/components/shared/ShareButton';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
@@ -58,6 +59,7 @@ export default async function ComparePage({ params }: PageProps) {
         </div>
       </main>
       <Footer />
+      <CompareTracker user1={user1} user2={user2} />
     </>
   );
 }

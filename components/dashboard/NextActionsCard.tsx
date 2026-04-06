@@ -2,6 +2,7 @@
 
 import { LuRocket, LuGitBranch, LuVideo, LuFileText, LuUsers, LuArrowRight, LuWrench } from 'react-icons/lu';
 import type { NextAction } from '@/lib/gamification/next-actions';
+import { analytics } from '@/lib/analytics';
 
 const CATEGORY_ICON: Record<string, typeof LuRocket> = {
   setup: LuGitBranch,
@@ -35,6 +36,7 @@ export default function NextActionsCard({ actions }: { actions: NextAction[] }) 
             <a
               key={action.id}
               href={action.href}
+              onClick={() => analytics.nextActionClicked(action.id, action.category, action.pointsPotential)}
               className="flex items-center gap-3 bg-white border border-surface-border rounded-xl p-4 hover:shadow-card-hover hover:border-brand/20 transition-all group"
             >
               <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${colorClass}`}>
