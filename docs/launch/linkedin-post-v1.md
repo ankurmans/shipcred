@@ -1,44 +1,50 @@
-# LinkedIn Launch Post — v2
+# LinkedIn Launch Post — v3
 
 **Instructions:** Post with a screenshot of your gtmcommit.com/ankur profile. Pin as featured post. Tag Brendan Short, Adam Schoenfeld, Tom Wentworth.
 
 ---
 
-I'm building QuoteSweep — and when the time comes to hire GTM people, I have a problem.
+I just mass-rejected 47 candidates.
 
-GTM folks are great at telling stories. It's literally the job. But that makes it really hard to validate hard skills from a resume. Everyone's LinkedIn says "AI-native" and "prompt engineering" now. How do I tell who's actually shipping vs who just talks about it?
+Every single resume said "AI-native." Every single LinkedIn had "prompt engineering" in the skills section. Every single one.
 
-Then I started noticing the signals:
+I couldn't tell who actually ships and who just updated their buzzwords last month.
 
-Ramp posted an "Agentic Operator" role. The JD says "extremely AI-pilled required." $168-231K.
+If you're a founder hiring for GTM right now, you know this pain. The best BS-ers in the world are... marketers. It's literally the job description. They sell stories for a living. Which makes validating hard skills from a resume nearly impossible.
 
-Notion is hiring a "GTM AI + Innovation Manager." Stripe has three "Agentic Commerce" roles open. Lovable's GTM lead wants an EA who is "completely AI-pilled."
+Meanwhile:
 
-The GTM Engineer role grew 205% from 2024-2025. But there's no way to verify who actually builds vs who just lists "AI Tools" on their LinkedIn.
+→ Ramp's JD says "extremely AI-pilled required" ($168-231K)
+→ Notion is hiring a "GTM AI + Innovation Manager"
+→ Stripe has three "Agentic Commerce" roles open
+→ Lovable's GTM lead requires their EA to be "completely AI-pilled"
 
-So I built the thing I wished existed: GTM Commit.
+The demand is real. The proof is fake.
 
-Connect your GitHub → we auto-detect AI-assisted commits across 18 tools (Claude Code, Cursor, Copilot, Lovable, Bolt, and more) → you get a verified score out of 1,000.
+So I stopped complaining and built what I wished existed.
 
-My profile: 712 AI commits. 2 tools verified. Captain tier. [screenshot]
+GTM Commit — a verified score (0-1,000) that proves you actually ship with AI tools. Not self-reported. Not vibes. Auto-detected from your GitHub commits.
 
-Think of it as a credit score for AI-native builders. Except instead of measuring debt, it measures what you've actually shipped.
+How it works:
+Connect GitHub → we scan for AI tool signatures across 18 tools (Claude Code, Cursor, Copilot, Lovable, Bolt, Replit, and more) → you get a score weighted by verified proof.
 
-The scoring is transparent and weighted by verification level:
-→ Tier 1 (auto-verified from GitHub): up to 700 pts
-→ Tier 2 (community-verified): up to 200 pts
-→ Tier 3 (self-reported): up to 100 pts
+My profile: 712 AI commits. Captain tier. [screenshot]
 
-Verified proof counts the most. Self-reported claims count the least. That's the point.
+The scoring is deliberately unfair:
+→ Verified GitHub commits = up to 700 pts
+→ Community vouches = up to 200 pts
+→ Self-reported claims = up to 100 pts
 
-This was inspired by watching people like Adam Schoenfeld track the AI + GTM jobs explosion, Brendan Short rally 500 people for a Claude Code GTM workshop, and Tom Wentworth push the boundaries of what GTM engineers can build. The signal is clear — the market wants proof, not promises.
+If you can't prove it, it barely counts. That's the point.
 
-I built GTM Commit in a week with Claude Code (yes, eating my own dog food).
+I built this in a week with Claude Code — eating my own dog food for QuoteSweep's future hiring.
+
+Founders: would you look at a candidate's GTM Commit score before an interview?
+
+Inspired by Adam Schoenfeld tracking the AI+GTM jobs explosion, Brendan Short rallying 500 people for Claude Code GTM workshops, and Tom Wentworth pushing what GTM engineers can build.
 
 Talk is cheap. Commits aren't.
 
-Claim yours: gtmcommit.com
-
-cc: Adam Schoenfeld Brendan Short Tom Wentworth
+→ gtmcommit.com
 
 #GTMCommit #AIShipped #VibeCoding #GTMEngineer
