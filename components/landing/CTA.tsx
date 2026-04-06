@@ -16,7 +16,7 @@ export default function CTA() {
           Free. 2 minutes. The next job description will say &ldquo;AI-pilled required.&rdquo; Be ready.
         </p>
 
-        {/* URL input CTA */}
+        {/* URL input CTA — matches Hero sizing */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mt-6 sm:mt-8 max-w-lg mx-auto">
           <div className="flex items-center border border-surface-border-dark rounded-full px-4 sm:px-5 py-3 bg-white/10 flex-1 focus-within:ring-2 focus-within:ring-brand/30 focus-within:border-brand transition-all">
             <span className="text-white/40 font-mono text-sm">gtmcommit.com/</span>
@@ -31,7 +31,7 @@ export default function CTA() {
           <a
             href={`/login${username ? `?username=${encodeURIComponent(username)}` : ''}`}
             onClick={() => analytics.footerCTAClicked(username)}
-            className="btn-brand whitespace-nowrap text-center justify-center"
+            className="btn-brand whitespace-nowrap text-center justify-center !px-6 !py-3 text-sm"
           >
             CLAIM YOUR SCORE <LuArrowRight size={16} />
           </a>
