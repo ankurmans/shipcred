@@ -1,18 +1,22 @@
-# LinkedIn Launch Post — v4
+# LinkedIn Launch Post — v5 (final)
 
 **Instructions:** Post with a screenshot of your gtmcommit.com/ankur profile. Pin as featured post. Tag Brendan Short, Adam Schoenfeld, Tom Wentworth.
 
 ---
 
-Every marketer's LinkedIn now says "AI-native."
-
-Every SDR resume lists "prompt engineering." Every growth hire claims they "build with Claude and Cursor."
-
 If you're a founder trying to hire GTM people right now — how do you tell who actually ships vs who just updated their buzzwords last month?
 
-You can't. And that's the problem.
+Every growth hire claims they "build AI agents with Claude Code."
 
-GTM people are professional storytellers. It's literally the job. Which makes them the hardest hires to validate on hard skills.
+Every marketer's LinkedIn now says "AI-native."
+
+Every SDR resume lists "GTM Engineer."
+
+GTM people are professional storytellers.
+
+It's literally the job.
+
+Which makes them the hardest hires to validate on hard skills.
 
 Meanwhile, the market is screaming for proof:
 
@@ -21,29 +25,42 @@ Meanwhile, the market is screaming for proof:
 → Stripe has three "Agentic Commerce" roles open
 → Lovable's GTM lead requires their EA to be "completely AI-pilled"
 
-The demand is real. The proof doesn't exist. Until now.
+The demand is real.
 
-I built GTM Commit — a verified score (0-1,000) that proves you actually ship with AI tools. Not self-reported. Not vibes. Auto-detected from your GitHub commits.
+The proof doesn't exist.
 
-Connect GitHub → we scan for AI tool signatures across 18 tools (Claude Code, Cursor, Copilot, Lovable, Bolt, Replit, and more) → you get a score weighted by verified proof.
+Until now.
 
-My profile: 712 AI commits. Captain tier. [screenshot]
+I built GTM Commit — a verified score (0-1,000) that proves you actually ship with AI tools.
+
+Not self-reported. Not vibes.
+
+Auto-detected from your GitHub commits.
+
+Connect GitHub → gtmcommit scans for AI tool signatures across 18 tools (Claude Code, Cursor, Copilot, Lovable, Bolt, Replit, and more) → you get a score weighted by verified proof.
+
+My profile: 712 AI commits. Captain tier.
 
 The scoring is deliberately unfair:
 → Verified GitHub commits = up to 700 pts
 → Community vouches = up to 200 pts
 → Self-reported claims = up to 100 pts
 
-If you can't prove it, it barely counts. That's the point.
+If you can't prove it, it barely counts.
+
+That's the point.
 
 I'm building this because I'll need to hire AI-native GTM people for QuoteSweep soon — and I refuse to guess who's real based on LinkedIn skills sections.
 
-Built the whole thing in a week with Claude Code. Talk about eating your own dog food.
-
 Inspired by Adam Schoenfeld tracking the AI+GTM jobs explosion, Brendan Short rallying 500 people for Claude Code GTM workshops, and Tom Wentworth pushing what GTM engineers can build.
 
-Talk is cheap. Commits aren't.
+Talk is cheap.
 
-→ gtmcommit.com
+Commits aren't.
 
-#GTMCommit #AIShipped #VibeCoding #GTMEngineer
+Get your score today → gtmcommit.com
+
+#AINative
+#GTMOperators
+#VibeCoding
+#GTMEngineer
