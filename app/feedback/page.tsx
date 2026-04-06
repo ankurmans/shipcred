@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { LuPackageCheck, LuSend, LuCircleCheck, LuCircleX, LuArrowLeft } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 const CATEGORIES = [
   { value: 'feature', label: 'Feature Request' },
@@ -43,6 +44,7 @@ export default function FeedbackPage() {
       }
 
       setIssueUrl(data.issueUrl);
+      analytics.feedbackSubmitted(form.category);
       setStatus('success');
     } catch (err: any) {
       setErrorMsg(err.message);

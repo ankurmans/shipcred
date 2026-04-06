@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LuArrowRight } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 export default function CTA() {
   const [username, setUsername] = useState('');
@@ -29,6 +30,7 @@ export default function CTA() {
           </div>
           <a
             href={`/login${username ? `?username=${encodeURIComponent(username)}` : ''}`}
+            onClick={() => analytics.footerCTAClicked(username)}
             className="btn-brand whitespace-nowrap text-center justify-center"
           >
             CLAIM YOUR SCORE <LuArrowRight size={16} />

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LuCopy, LuCheck, LuUsers } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 export default function ReferralSection({
   username,
@@ -16,6 +17,7 @@ export default function ReferralSection({
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(referralLink);
+    analytics.referralLinkCopied();
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };

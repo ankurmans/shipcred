@@ -3,6 +3,7 @@
 import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { analytics } from '@/lib/analytics';
 
 function CallbackHandler() {
   const router = useRouter();
@@ -20,6 +21,10 @@ function CallbackHandler() {
       // Check if we have a session
       supabase.auth.getSession().then(async ({ data: { session } }) => {
         if (session) {
+          analytics.identify(session.user.id, {
+            email: session.user.email,
+            provider: provider || 'unknown',
+          });
           // Check if profile exists for this user
           const { data: profile } = await supabase
             .from('profiles')

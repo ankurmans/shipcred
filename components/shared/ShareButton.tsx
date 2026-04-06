@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LuCopy, LuCheck, LuShare2 } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 interface ShareButtonProps {
   url: string;
@@ -16,6 +17,7 @@ export default function ShareButton({ url, title, score, tier }: ShareButtonProp
   const handleCopy = async () => {
     await navigator.clipboard.writeText(url);
     setCopied(true);
+    analytics.profileShared('copy', url);
     setTimeout(() => setCopied(false), 2000);
   };
 

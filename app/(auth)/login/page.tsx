@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
+import { analytics } from '@/lib/analytics';
 
 function LoginForm() {
   const searchParams = useSearchParams();
@@ -13,6 +14,7 @@ function LoginForm() {
 
   const handleOAuthSignIn = async (provider: 'google' | 'linkedin_oidc') => {
     setLoading(provider);
+    analytics.loginStarted(provider);
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
@@ -36,7 +38,7 @@ function LoginForm() {
       {/* GitHub */}
       <a
         href={githubUrl}
-        onClick={() => setLoading('github')}
+        onClick={() => { setLoading('github'); analytics.loginStarted('github'); }}
         className="btn-primary w-full mt-6 gap-2"
       >
         {loading === 'github' ? (

@@ -1,13 +1,16 @@
+'use client';
+
 import type { LeaderboardEntry } from '@/types';
 import Link from 'next/link';
 import { LuMedal } from 'react-icons/lu';
 import { TierBadge } from '@/components/shared/TierIcon';
+import { analytics } from '@/lib/analytics';
 
 const RANK_COLORS = ['', '#FFD700', '#C0C0C0', '#CD7F32'];
 
 export default function RankCard({ entry, rank }: { entry: LeaderboardEntry; rank: number }) {
   return (
-    <Link href={`/${entry.username}`} className="flex items-center gap-4 p-3 rounded-lg hover:bg-surface-secondary transition-colors">
+    <Link href={`/${entry.username}`} onClick={() => analytics.leaderboardProfileClicked(entry.username, rank)} className="flex items-center gap-4 p-3 rounded-lg hover:bg-surface-secondary transition-colors">
       <div className="text-lg font-bold text-fg-faint w-8 text-right">
         {rank <= 3 ? <LuMedal size={20} style={{ color: RANK_COLORS[rank] }} /> : `#${rank}`}
       </div>

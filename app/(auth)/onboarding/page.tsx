@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { analytics } from '@/lib/analytics';
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -84,6 +85,8 @@ export default function OnboardingPage() {
       return;
     }
 
+    analytics.signupCompleted(username);
+    analytics.identify(user.id, { username, display_name: displayName });
     router.push('/dashboard');
   };
 

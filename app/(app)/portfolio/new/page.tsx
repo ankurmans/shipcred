@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { analytics } from '@/lib/analytics';
 
 const TOOLS = ['claude_code', 'cursor', 'copilot', 'aider', 'windsurf', 'lovable', 'bolt', 'v0', 'replit', 'clay'];
 const CATEGORIES = [
@@ -21,7 +22,10 @@ export default function NewPortfolioPage() {
     e.preventDefault();
     setSaving(true);
     const res = await fetch('/api/portfolio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
-    if (res.ok) router.push('/portfolio');
+    if (res.ok) {
+      analytics.portfolioItemAdded(form.category, form.tools_used);
+      router.push('/portfolio');
+    }
     setSaving(false);
   };
 

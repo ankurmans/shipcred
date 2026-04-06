@@ -7,6 +7,7 @@ import {
 } from 'react-icons/lu';
 import type { IconType } from 'react-icons';
 import ProfileCompletenessBar from '@/components/shared/ProfileCompletenessBar';
+import { analytics } from '@/lib/analytics';
 
 const PLATFORM_FIELDS: { key: string; label: string; placeholder: string; Icon: IconType }[] = [
   { key: 'clay', label: 'Clay', placeholder: 'https://app.clay.com/workspaces/...', Icon: LuBox },
@@ -73,6 +74,7 @@ export default function EditProfilePage() {
     e.preventDefault();
     setSaving(true);
     await fetch('/api/profiles', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+    analytics.profileEdited(Object.keys(form).filter(k => (form as any)[k]));
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);

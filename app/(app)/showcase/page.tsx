@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { VideoProof, ContentProof, Certification, UploadedFile } from '@/types';
+import { analytics } from '@/lib/analytics';
 import VideoProofSection from './video-section';
 import ContentProofSection from './content-section';
 import CertificationSection from './certification-section';
@@ -11,6 +12,7 @@ type Tab = 'videos' | 'content' | 'certifications' | 'uploads';
 
 export default function ShowcasePage() {
   const [tab, setTab] = useState<Tab>('videos');
+  const switchTab = (t: Tab) => { setTab(t); analytics.showcaseTabSwitched(t); };
   const [videos, setVideos] = useState<VideoProof[]>([]);
   const [content, setContent] = useState<ContentProof[]>([]);
   const [certs, setCerts] = useState<Certification[]>([]);
@@ -61,7 +63,7 @@ export default function ShowcasePage() {
         {tabs.map(t => (
           <button
             key={t.key}
-            onClick={() => setTab(t.key)}
+            onClick={() => switchTab(t.key)}
             className={`px-4 py-2.5 text-sm font-medium transition-colors border-b-2 -mb-px whitespace-nowrap ${
               tab === t.key
                 ? 'border-brand text-brand'

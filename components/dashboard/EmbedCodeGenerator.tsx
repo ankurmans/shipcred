@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { LuCopy, LuCheck, LuCode } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 interface EmbedCodeGeneratorProps {
   username: string;
@@ -31,6 +32,7 @@ export default function EmbedCodeGenerator({ username, score, tier }: EmbedCodeG
 
   const handleCopy = async (id: string, code: string) => {
     await navigator.clipboard.writeText(code);
+    analytics.embedCodeCopied(id as 'md' | 'html');
     setCopied(id);
     setTimeout(() => setCopied(null), 2000);
   };

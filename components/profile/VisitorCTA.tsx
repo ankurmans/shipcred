@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { LuArrowRight, LuX } from 'react-icons/lu';
+import { analytics } from '@/lib/analytics';
 
 export default function VisitorCTA() {
   const [dismissed, setDismissed] = useState(true); // start hidden to avoid flash
@@ -14,6 +15,7 @@ export default function VisitorCTA() {
   const handleDismiss = () => {
     sessionStorage.setItem('visitor_cta_dismissed', '1');
     setDismissed(true);
+    analytics.visitorCTADismissed();
   };
 
   if (dismissed) return null;
@@ -33,6 +35,7 @@ export default function VisitorCTA() {
           <div className="flex items-center gap-2 shrink-0">
             <a
               href="/login"
+              onClick={() => analytics.visitorCTAClicked()}
               className="inline-flex items-center gap-1.5 bg-white text-brand font-semibold text-sm px-4 py-2 rounded-full hover:bg-white/90 transition-colors"
             >
               Get Yours <LuArrowRight size={14} />
