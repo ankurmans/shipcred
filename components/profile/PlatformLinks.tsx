@@ -22,7 +22,7 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
   if (entries.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-2 mt-3">
+    <>
       {entries.map(([key, url]) => {
         const meta = PLATFORM_META[key];
         if (!meta) return null;
@@ -41,6 +41,6 @@ export default function PlatformLinks({ platformUrls }: { platformUrls: Record<s
           </a>
         );
       })}
-    </div>
+    </>
   );
 }

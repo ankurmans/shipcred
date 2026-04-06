@@ -15,7 +15,8 @@ import ShareButton from '@/components/shared/ShareButton';
 import VisitorCTA from '@/components/profile/VisitorCTA';
 import ProfileViewTracker from '@/components/profile/ProfileViewTracker';
 import PlatformLinks from '@/components/profile/PlatformLinks';
-import { LuFlame } from 'react-icons/lu';
+import { LuFlame, LuGlobe, LuLinkedin, LuExternalLink } from 'react-icons/lu';
+import { FaXTwitter } from 'react-icons/fa6';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
 
@@ -97,43 +98,58 @@ export default async function ProfilePage({ params }: PageProps) {
         <div className={`absolute inset-x-0 top-0 h-80 bg-gradient-to-b ${gradient} pointer-events-none`} aria-hidden="true" />
 
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          {/* Profile header — always inline */}
+          {/* Profile header */}
           <div className="flex items-start gap-4 sm:gap-6">
             <Avatar src={profile.avatar_url} alt={profile.display_name} size="xl" isVerified={profile.is_verified} />
             <div className="flex-1 min-w-0">
               <h1 className="font-display text-2xl sm:text-3xl font-bold truncate">{profile.display_name}</h1>
               <p className="text-fg-muted text-sm mt-0.5 truncate">@{profile.username}{profile.role && ` · ${profile.role}`}{profile.company && ` @ ${profile.company}`}</p>
-              {/* Gamification badges */}
-              {(profile.current_streak > 0) && (
-                <div className="flex items-center gap-2 mt-1.5">
-                  {profile.current_streak > 0 && (
-                    <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
-                      profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
-                    }`}>
-                      <LuFlame size={12} /> {profile.current_streak}w streak
-                    </span>
-                  )}
+              {profile.current_streak > 0 && (
+                <div className="mt-1.5">
+                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                    profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
+                  }`}>
+                    <LuFlame size={12} /> {profile.current_streak}w streak
+                  </span>
                 </div>
               )}
-              {profile.bio && <p className="mt-2 text-sm hidden sm:block">{profile.bio}</p>}
-              <div className="hidden sm:flex gap-3 mt-2">
-                {profile.website_url && <a href={profile.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">Website</a>}
-                {profile.twitter_handle && <a href={`https://twitter.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">@{profile.twitter_handle}</a>}
-              </div>
             </div>
           </div>
 
-          {/* Mobile-only: bio & links below header */}
-          {profile.bio && <p className="mt-2 text-sm sm:hidden">{profile.bio}</p>}
-          {(profile.website_url || profile.twitter_handle) && (
-            <div className="flex gap-3 mt-1.5 sm:hidden">
-              {profile.website_url && <a href={profile.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">Website</a>}
-              {profile.twitter_handle && <a href={`https://twitter.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer" className="text-sm text-brand hover:text-brand-dark">@{profile.twitter_handle}</a>}
-            </div>
+          {/* Bio */}
+          {profile.bio && (
+            <p className="mt-4 text-sm text-fg-secondary leading-relaxed">{profile.bio}</p>
           )}
 
-          {/* Platform links */}
-          <PlatformLinks platformUrls={profile.platform_urls} />
+          {/* All links — single row of icon pills */}
+          {(profile.website_url || profile.twitter_handle || profile.linkedin_url || profile.platform_urls) && (
+            <div className="flex flex-wrap gap-2 mt-3">
+              {profile.website_url && (
+                <a href={profile.website_url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                  <LuGlobe size={12} />
+                  {new URL(profile.website_url).hostname.replace('www.', '')}
+                  <LuExternalLink size={10} className="text-fg-faint" />
+                </a>
+              )}
+              {profile.twitter_handle && (
+                <a href={`https://x.com/${profile.twitter_handle}`} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                  <FaXTwitter size={12} />
+                  @{profile.twitter_handle}
+                </a>
+              )}
+              {profile.linkedin_url && (
+                <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                  <LuLinkedin size={12} />
+                  LinkedIn
+                  <LuExternalLink size={10} className="text-fg-faint" />
+                </a>
+              )}
+              <PlatformLinks platformUrls={profile.platform_urls} />
+            </div>
+          )}
 
           {/* Share & compare */}
           <div className="mt-3 flex items-center gap-2 flex-wrap">
