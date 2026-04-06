@@ -10,6 +10,16 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'PostHog analytics',
+        description: 'Full event tracking across all pages — pageviews, profile views, share clicks, next action clicks, external link clicks, and more.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'About page rewrite',
+        description: 'New About page with the full story behind GTM Commit — why we built it, how it works, and what\'s next.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Landing page rehaul',
         description: 'New copy powered by AI-Pilled research signals. Sharper messaging for the GTM Engineer audience with real market data.',
       },
