@@ -36,7 +36,7 @@ export default function CTA() {
         </div>
 
         <p className="mt-4 text-sm text-white/40">
-          Join 100+ builders who prove they ship.
+          Join the first builders proving they ship.
         </p>
       </div>
     </section>

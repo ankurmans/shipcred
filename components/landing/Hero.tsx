@@ -106,7 +106,7 @@ export default function Hero() {
                   {[...Array(5)].map((_, i) => <LuStar key={i} size={13} fill="currentColor" />)}
                 </div>
                 <p className="text-sm text-fg-secondary mt-0.5">
-                  Join <span className="font-semibold text-fg-primary">100+ builders</span> who prove they ship — not just talk.
+                  Be one of the <span className="font-semibold text-fg-primary">first builders</span> to get scored.
                 </p>
               </div>
             </div>
