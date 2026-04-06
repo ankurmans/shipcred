@@ -132,17 +132,15 @@ export default async function ProfilePage({ params }: PageProps) {
               </a>
             )}
             {profile.twitter_handle && (
-              <a href={`https://x.com/${profile.twitter_handle.replace('@', '')}`} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
-                <FaXTwitter size={12} />
-                @{profile.twitter_handle.replace('@', '')}
+              <a href={`https://x.com/${profile.twitter_handle.replace('@', '')}`} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-secondary border border-surface-border text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                <FaXTwitter size={14} />
               </a>
             )}
             {profile.linkedin_url && (
-              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-secondary border border-surface-border text-xs font-medium text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
-                <LuLinkedin size={12} />
-                LinkedIn
+              <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
+                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-secondary border border-surface-border text-fg-secondary hover:border-brand/30 hover:text-brand transition-colors">
+                <LuLinkedin size={14} />
               </a>
             )}
             <PlatformLinks platformUrls={profile.platform_urls} />
