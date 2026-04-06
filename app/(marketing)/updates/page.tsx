@@ -15,16 +15,6 @@ const UPDATES = [
       },
       {
         type: 'feat' as const,
-        title: 'About page rewrite',
-        description: 'New About page with the full story behind GTM Commit — why we built it, how it works, and what\'s next.',
-      },
-      {
-        type: 'feat' as const,
-        title: 'Landing page rehaul',
-        description: 'New copy powered by AI-Pilled research signals. Sharper messaging for the GTM Engineer audience with real market data.',
-      },
-      {
-        type: 'feat' as const,
         title: 'Scoring v2 algorithm',
         description: 'Commits-first scoring with code impact weighting, private repo bonus, and shipping streak multiplier. Transparent /scoring page documents exactly how points are earned.',
       },
