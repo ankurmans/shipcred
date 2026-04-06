@@ -7,7 +7,7 @@ export default function Problem() {
         <p className="text-center font-mono text-sm text-brand font-semibold tracking-wide mb-3">
           RAMP &middot; NOTION &middot; STRIPE &middot; INCIDENT.IO &middot; LOVABLE
         </p>
-        <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center">
+        <h2 className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-center max-w-2xl mx-auto">
           &ldquo;Extremely AI-pilled&rdquo; is now a job requirement.{' '}
           <span className="text-brand">How do you prove it?</span>
         </h2>

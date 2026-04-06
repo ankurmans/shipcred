@@ -73,19 +73,6 @@ export default function RotatingPhone() {
         </div>
       </PhoneMockup>
 
-      {/* Dot indicators */}
-      <div className="flex items-center gap-2">
-        {SLIDES.map((s, i) => (
-          <button
-            key={s.url}
-            onClick={() => goTo(i)}
-            className={`h-2 rounded-full transition-all duration-300 ${
-              i === current ? 'bg-brand w-6' : 'bg-fg-faint w-2 hover:bg-fg-muted'
-            }`}
-            aria-label={`Show ${s.url}`}
-          />
-        ))}
-      </div>
     </div>
   );
 }
