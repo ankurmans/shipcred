@@ -6,7 +6,7 @@ import { LuChevronDown } from 'react-icons/lu';
 const faqs = [
   {
     q: 'What if my score is low?',
-    a: 'Everyone starts somewhere. Self-reported proof gets you up to 150 points immediately. Add portfolio items, get peer vouches, and keep shipping — your score rewards consistency over time.',
+    a: 'Everyone starts somewhere. Self-reported proof gets you up to 100 points immediately. Add portfolio items, get peer vouches, and keep shipping — your score rewards consistency over time.',
   },
   {
     q: "What if I don't use GitHub?",

@@ -2,9 +2,9 @@ import { LuPackage, LuHammer, LuRocket, LuTrophy } from 'react-icons/lu';
 import Link from 'next/link';
 
 const bars = [
-  { label: 'Auto-Verified', subtitle: 'GitHub commits, platform deploys, certifications', max: 600, pct: 60, color: 'bg-green-500' },
-  { label: 'Community Verified', subtitle: 'Peer vouches, endorsed portfolio items', max: 250, pct: 25, color: 'bg-blue-500' },
-  { label: 'Self-Reported', subtitle: 'Tool declarations, uploaded artifacts, profile', max: 150, pct: 15, color: 'bg-amber-500' },
+  { label: 'Auto-Verified', subtitle: 'GitHub commits, code impact, deployments, certifications, streaks', max: 700, pct: 70, color: 'bg-green-500' },
+  { label: 'Community Verified', subtitle: 'Peer vouches, endorsed portfolio items', max: 200, pct: 20, color: 'bg-blue-500' },
+  { label: 'Self-Reported', subtitle: 'Tool declarations, uploaded artifacts, profile', max: 100, pct: 10, color: 'bg-amber-500' },
 ];
 
 const tiers = [
@@ -51,7 +51,7 @@ export default function ScoreBreakdown() {
         </div>
 
         <div className="text-center mt-6">
-          <Link href="/about#scoring" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
+          <Link href="/scoring" className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
             See full scoring methodology →
           </Link>
         </div>
