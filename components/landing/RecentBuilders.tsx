@@ -1,6 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import Link from 'next/link';
-import { LuArrowRight, LuSparkles } from 'react-icons/lu';
+import { LuArrowRight, LuUsers } from 'react-icons/lu';
 
 async function getRecentBuilders() {
   const supabase = createAdminClient();
@@ -24,14 +24,14 @@ function timeAgo(dateStr: string): string {
 export default async function RecentBuilders() {
   const builders = await getRecentBuilders();
 
-  if (builders.length === 0) return null;
+  if (builders.length < 10) return null;
 
   return (
     <section className="py-12 sm:py-16 bg-surface-secondary">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-display text-xl sm:text-2xl font-bold flex items-center gap-2">
-            <LuSparkles size={20} className="text-brand" />
+            <LuUsers size={20} className="text-brand" />
             Recently Joined
           </h2>
           <Link href="/leaderboard" className="text-sm text-brand font-medium flex items-center gap-1 hover:text-brand-dark transition-colors">

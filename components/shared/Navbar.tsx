@@ -6,7 +6,7 @@ import Logo from './Logo';
 import { LuMenu, LuX } from 'react-icons/lu';
 import { analytics } from '@/lib/analytics';
 
-export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean }) {
+export default function Navbar({ isLoggedIn = false, showExplore = true }: { isLoggedIn?: boolean; showExplore?: boolean }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -18,9 +18,11 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
 
         {/* Desktop nav */}
         <div className="hidden sm:flex items-center gap-6">
-          <Link href="/leaderboard" onClick={() => analytics.navClicked('explore', 'desktop')} className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
-            Explore
-          </Link>
+          {showExplore && (
+            <Link href="/leaderboard" onClick={() => analytics.navClicked('explore', 'desktop')} className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
+              Explore
+            </Link>
+          )}
           <Link href="/scoring" onClick={() => analytics.navClicked('scoring', 'desktop')} className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">
             Scoring
           </Link>
@@ -46,9 +48,11 @@ export default function Navbar({ isLoggedIn = false }: { isLoggedIn?: boolean })
       {/* Mobile menu */}
       {open && (
         <div className="sm:hidden absolute top-full left-0 right-0 bg-white border-b border-surface-border z-50 px-4 py-4 space-y-3">
-          <Link href="/leaderboard" onClick={() => { setOpen(false); analytics.navClicked('explore', 'mobile'); }} className="block text-sm text-fg-secondary py-2">
-            Explore
-          </Link>
+          {showExplore && (
+            <Link href="/leaderboard" onClick={() => { setOpen(false); analytics.navClicked('explore', 'mobile'); }} className="block text-sm text-fg-secondary py-2">
+              Explore
+            </Link>
+          )}
           <Link href="/scoring" onClick={() => { setOpen(false); analytics.navClicked('scoring', 'mobile'); }} className="block text-sm text-fg-secondary py-2">
             Scoring
           </Link>
