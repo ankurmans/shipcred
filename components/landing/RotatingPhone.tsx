@@ -21,6 +21,7 @@ interface ProfileSlide {
   tier3Max: number;
   tools: { name: string; color: string }[];
   username: string;
+  streak: number;
   dark: boolean;
 }
 
@@ -35,7 +36,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Cursor', color: '#6366F1' },
       { name: 'Copilot', color: '#1F883D' },
     ],
-    username: 'sarahchen', dark: true,
+    username: 'sarahchen', streak: 8, dark: true,
   },
   {
     name: 'Marc Rivera', role: 'SDR', company: 'Apollo',
@@ -47,7 +48,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Cursor', color: '#6366F1' },
       { name: 'Copilot', color: '#1F883D' },
     ],
-    username: 'marc', dark: false,
+    username: 'marc', streak: 12, dark: false,
   },
   {
     name: 'Priya Patel', role: 'RevOps Lead', company: 'Intercom',
@@ -59,7 +60,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Clay', color: '#3B82F6' },
       { name: 'n8n', color: '#EA4335' },
     ],
-    username: 'priya', dark: true,
+    username: 'priya', streak: 6, dark: true,
   },
   {
     name: 'Alex Kim', role: 'GTM Engineer', company: 'Notion',
@@ -71,7 +72,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Lovable', color: '#EC4899' },
       { name: 'Bolt', color: '#F59E0B' },
     ],
-    username: 'alex', dark: false,
+    username: 'alex', streak: 4, dark: false,
   },
   {
     name: 'Jordan Lee', role: 'Agentic Operator', company: 'Stripe',
@@ -83,7 +84,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Devin', color: '#10B981' },
       { name: 'Replit', color: '#F97316' },
     ],
-    username: 'jordan', dark: true,
+    username: 'jordan', streak: 10, dark: true,
   },
   {
     name: 'Mia Thompson', role: 'Growth Marketer', company: 'Lovable',
@@ -95,7 +96,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'v0', color: '#000000' },
       { name: 'Make', color: '#6366F1' },
     ],
-    username: 'mia', dark: false,
+    username: 'mia', streak: 3, dark: false,
   },
 ];
 
