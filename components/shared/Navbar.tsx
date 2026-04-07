@@ -33,8 +33,7 @@ export default function Navbar({ isLoggedIn = false, showExplore = true }: { isL
             <Link href="/dashboard" className="btn-primary btn-sm">Dashboard</Link>
           ) : (
             <>
-              <Link href="/login" onClick={() => analytics.navClicked('login', 'desktop')} className="text-sm text-fg-secondary hover:text-fg-primary transition-colors">Log in</Link>
-              <a href="/api/auth/github" onClick={() => analytics.navClicked('claim_yours', 'desktop')} className="btn-primary btn-sm">Claim yours</a>
+              <Link href="/login" onClick={() => analytics.navClicked('claim_yours', 'desktop')} className="btn-primary btn-sm">Get Started</Link>
             </>
           )}
         </div>
@@ -63,8 +62,7 @@ export default function Navbar({ isLoggedIn = false, showExplore = true }: { isL
             <Link href="/dashboard" className="btn-primary btn-sm w-full text-center">Dashboard</Link>
           ) : (
             <>
-              <Link href="/login" onClick={() => setOpen(false)} className="block text-sm text-fg-secondary py-2">Log in</Link>
-              <a href="/api/auth/github" className="btn-primary btn-sm w-full text-center">Claim yours</a>
+              <Link href="/login" onClick={() => setOpen(false)} className="btn-primary btn-sm w-full text-center">Get Started</Link>
             </>
           )}
         </div>
