@@ -36,7 +36,7 @@ export default function NewPortfolioPage() {
       <form onSubmit={handleSubmit} className="mt-8 space-y-5 max-w-lg">
         <div>
           <label className="block text-sm font-medium mb-1.5">Project Title</label>
-          <input type="text" required placeholder="My Landing Page" className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
+          <input type="text" required placeholder="My Project Name" className="w-full px-4 py-2.5 rounded-lg border border-surface-border bg-white focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1.5">Description</label>
