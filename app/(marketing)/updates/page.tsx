@@ -15,11 +15,6 @@ const UPDATES = [
       },
       {
         type: 'feat' as const,
-        title: 'Programmatic growth features',
-        description: 'Public API, XML sitemap, /stats page, /claim page for unclaimed GitHub profiles, and webhook infrastructure for integrations.',
-      },
-      {
-        type: 'feat' as const,
         title: 'Streak backfill',
         description: 'Existing users get their shipping streak calculated from commit history — no more starting at zero.',
       },
