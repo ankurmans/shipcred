@@ -10,6 +10,11 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Security hardening',
+        description: 'SSRF protection on all URL verification, rate limiting on API endpoints, cron authentication, and security headers across the app.',
+      },
+      {
+        type: 'feat' as const,
         title: 'Agent Builder badge',
         description: 'Automatic detection and display of autonomous agent builders based on MCP configs, Claude MD files, and agentic tool usage.',
       },
