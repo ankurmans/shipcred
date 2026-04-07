@@ -85,9 +85,13 @@ export async function POST() {
     gtmcommit_score: score.total,
     gtmcommit_tier: tier,
     score_breakdown: score,
+  }).eq('id', profile.id);
+
+  // Agent builder badge (separate update — column may not exist yet)
+  await admin.from('profiles').update({
     is_agent_builder: agentResult.qualifies,
     agent_builder_signals: agentResult.signals,
-  }).eq('id', profile.id);
+  }).eq('id', profile.id).then(() => {}).catch(() => {});
 
   // Update streak
   await updateStreak(profile.id);

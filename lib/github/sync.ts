@@ -240,7 +240,11 @@ async function recalculateScore(profileId: string) {
     gtmcommit_tier: tier,
     score_breakdown: score,
     is_verified: (commitsRes.data || []).some(c => c.ai_tool_detected !== null),
+  }).eq('id', profileId);
+
+  // Agent builder badge (separate update — column may not exist yet)
+  await supabase.from('profiles').update({
     is_agent_builder: agentResult.qualifies,
     agent_builder_signals: agentResult.signals,
-  }).eq('id', profileId);
+  }).eq('id', profileId).then(() => {}).catch(() => {});
 }
