@@ -69,7 +69,7 @@ function LoginForm() {
         <button
           onClick={() => handleOAuthSignIn('google')}
           disabled={loading !== null}
-          className="btn-ghost flex-1 gap-2"
+          className="btn-ghost flex-1 gap-2 !border-2 !border-fg-faint"
         >
           {loading === 'google' ? (
             <div className="w-4 h-4 border-2 border-fg-muted border-t-transparent rounded-full animate-spin" />
@@ -87,7 +87,7 @@ function LoginForm() {
         <button
           onClick={() => handleOAuthSignIn('linkedin_oidc')}
           disabled={loading !== null}
-          className="btn-ghost flex-1 gap-2"
+          className="btn-ghost flex-1 gap-2 !border-2 !border-fg-faint"
         >
           {loading === 'linkedin_oidc' ? (
             <div className="w-4 h-4 border-2 border-fg-muted border-t-transparent rounded-full animate-spin" />
