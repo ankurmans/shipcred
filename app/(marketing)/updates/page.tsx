@@ -10,6 +10,36 @@ const UPDATES = [
     entries: [
       {
         type: 'feat' as const,
+        title: 'Agent Builder badge',
+        description: 'Automatic detection and display of autonomous agent builders based on MCP configs, Claude MD files, and agentic tool usage.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Programmatic growth features',
+        description: 'Public API, XML sitemap, /stats page, /claim page for unclaimed GitHub profiles, and webhook infrastructure for integrations.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Streak backfill',
+        description: 'Existing users get their shipping streak calculated from commit history — no more starting at zero.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Expanded certification support',
+        description: 'Auto-verification for Anthropic/Skilljar, Google, Microsoft, AWS, and Coursera certification links.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Terms of Service',
+        description: 'Full Terms of Service page covering platform usage, data handling, and community guidelines.',
+      },
+      {
+        type: 'feat' as const,
+        title: 'Portfolio ownership verification',
+        description: 'Verify you own a project by adding a meta tag to your site. Verified items get a checkmark badge.',
+      },
+      {
+        type: 'feat' as const,
         title: 'PostHog analytics',
         description: 'Full event tracking across all pages — pageviews, profile views, share clicks, next action clicks, external link clicks, and more.',
       },
