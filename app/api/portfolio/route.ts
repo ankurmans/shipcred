@@ -93,6 +93,38 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(item);
 }
 
+export async function PATCH(request: NextRequest) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const { data: profile } = await supabase
+    .from('profiles').select('id').eq('user_id', user.id).single();
+  if (!profile) return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+
+  const body = await request.json();
+  const { id, title, description, url, category, tools_used } = body;
+  if (!id) return NextResponse.json({ error: 'id is required' }, { status: 400 });
+
+  const updates: Record<string, unknown> = {};
+  if (title !== undefined) updates.title = title;
+  if (description !== undefined) updates.description = description || null;
+  if (url !== undefined) updates.url = url || null;
+  if (category !== undefined) updates.category = category || null;
+  if (tools_used !== undefined) updates.tools_used = tools_used;
+
+  const { data: item, error } = await supabase
+    .from('portfolio_items')
+    .update(updates)
+    .eq('id', id)
+    .eq('profile_id', profile.id)
+    .select()
+    .single();
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  return NextResponse.json(item);
+}
+
 export async function DELETE(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();

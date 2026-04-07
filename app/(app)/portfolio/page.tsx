@@ -10,6 +10,9 @@ export default function PortfolioPage() {
   const [loading, setLoading] = useState(true);
   const [verifying, setVerifying] = useState<string | null>(null);
   const [verifyMsg, setVerifyMsg] = useState<Record<string, { ok: boolean; msg: string }>>({});
+  const [editing, setEditing] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState({ title: '', description: '', url: '', category: '', tools_used: [] as string[] });
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     fetch('/api/portfolio').then(r => r.json()).then(d => { setItems(d); setLoading(false); }).catch(() => setLoading(false));
@@ -40,6 +43,33 @@ export default function PortfolioPage() {
     setVerifying(null);
   };
 
+  const startEdit = (item: PortfolioItem) => {
+    setEditing(item.id);
+    setEditForm({
+      title: item.title,
+      description: item.description || '',
+      url: item.url || '',
+      category: item.category || '',
+      tools_used: item.tools_used || [],
+    });
+  };
+
+  const handleSave = async () => {
+    if (!editing) return;
+    setSaving(true);
+    const res = await fetch('/api/portfolio', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: editing, ...editForm }),
+    });
+    if (res.ok) {
+      const updated = await res.json();
+      setItems(items.map(i => i.id === editing ? { ...i, ...updated } : i));
+      setEditing(null);
+    }
+    setSaving(false);
+  };
+
   if (loading) return <div className="flex justify-center py-12"><div className="w-8 h-8 border-3 border-brand border-t-transparent rounded-full animate-spin" /></div>;
 
   return (
@@ -61,6 +91,34 @@ export default function PortfolioPage() {
         <div className="space-y-3 mt-8">
           {items.map((item) => (
             <div key={item.id} className="bg-surface-secondary rounded-card p-4">
+              {editing === item.id ? (
+                /* Edit mode */
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-xs font-medium mb-1">Title</label>
+                    <input type="text" value={editForm.title} onChange={e => setEditForm({ ...editForm, title: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-surface-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1">Description</label>
+                    <textarea rows={2} value={editForm.description} onChange={e => setEditForm({ ...editForm, description: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-surface-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand/30 resize-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium mb-1">URL</label>
+                    <input type="url" value={editForm.url} onChange={e => setEditForm({ ...editForm, url: e.target.value })}
+                      className="w-full px-3 py-2 rounded-lg border border-surface-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-brand/30" />
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={handleSave} disabled={saving} className="btn-brand btn-sm">
+                      {saving ? 'Saving...' : 'Save'}
+                    </button>
+                    <button onClick={() => setEditing(null)} className="btn-ghost btn-sm">Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                /* View mode */
+                <>
               <div className="flex items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
@@ -80,6 +138,7 @@ export default function PortfolioPage() {
                 </div>
                 <div className="flex gap-2 shrink-0">
                   {item.url && <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-xs text-fg-secondary hover:text-fg-primary">Visit</a>}
+                  <button onClick={() => startEdit(item)} className="text-xs text-brand hover:text-brand-dark">Edit</button>
                   <button onClick={() => handleDelete(item.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
                 </div>
               </div>
@@ -114,6 +173,8 @@ export default function PortfolioPage() {
                     )}
                   </div>
                 </div>
+              )}
+                </>
               )}
             </div>
           ))}
