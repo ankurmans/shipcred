@@ -49,7 +49,8 @@ export async function POST(request: NextRequest) {
     if (error.code === '23505') {
       return NextResponse.json({ error: 'You have already vouched for this person' }, { status: 409 });
     }
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.error('Vouch creation error:', error.message);
+    return NextResponse.json({ error: 'Failed to create vouch' }, { status: 400 });
   }
 
   // Trigger score recalculation for the vouchee
@@ -81,6 +82,9 @@ export async function DELETE(request: NextRequest) {
     .eq('id', id)
     .eq('voucher_id', profile.id);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    console.error('Vouch deletion error:', error.message);
+    return NextResponse.json({ error: 'Failed to delete vouch' }, { status: 400 });
+  }
   return NextResponse.json({ success: true });
 }

@@ -1,8 +1,9 @@
 import type { ProofVerification } from './verify';
+import { safeFetch } from '@/lib/url-validation';
 
 export async function verifyGenericURL(url: string): Promise<ProofVerification> {
   try {
-    const response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    const response = await safeFetch(url, { method: 'HEAD' });
     return {
       source_type: 'custom_url',
       verification_status: response.ok ? 'verified' : 'failed',

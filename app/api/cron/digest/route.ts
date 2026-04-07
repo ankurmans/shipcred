@@ -4,9 +4,13 @@ import { sendEmail } from '@/lib/email/send';
 import { weeklyDigestEmail } from '@/lib/email/templates/weekly-digest';
 
 export async function GET(request: NextRequest) {
-  // Verify cron secret
+  // Verify cron secret — reject if not configured to prevent Bearer undefined bypass
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+  }
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

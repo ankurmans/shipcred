@@ -1,8 +1,9 @@
 import type { ProofVerification } from './verify';
+import { safeFetch } from '@/lib/url-validation';
 
 export async function verifyN8n(url: string): Promise<ProofVerification> {
   try {
-    const response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    const response = await safeFetch(url, { method: 'HEAD' });
 
     const isTemplate = /n8n\.io\/(workflows|templates)/i.test(url);
     const isCloudInstance = /\.app\.n8n\.cloud/i.test(url);

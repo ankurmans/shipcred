@@ -1,8 +1,9 @@
 import type { ProofVerification } from './verify';
+import { safeFetch } from '@/lib/url-validation';
 
 export async function verifyVercel(url: string): Promise<ProofVerification> {
   try {
-    const response = await fetch(url, { method: 'HEAD', redirect: 'follow' });
+    const response = await safeFetch(url, { method: 'HEAD' });
 
     return {
       source_type: 'vercel',

@@ -59,8 +59,7 @@ export async function POST(request: NextRequest) {
     }).eq('id', proof_id);
 
     // Trigger score recalculation in the background
-    const origin = request.headers.get('origin') || request.headers.get('host') || '';
-    const baseUrl = origin.startsWith('http') ? origin : `https://${origin}`;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtmcommit.com';
     fetch(`${baseUrl}/api/score/calculate`, {
       method: 'POST',
       headers: { cookie: request.headers.get('cookie') || '' },

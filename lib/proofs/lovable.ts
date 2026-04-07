@@ -1,8 +1,9 @@
 import type { ProofVerification } from './verify';
+import { safeFetch } from '@/lib/url-validation';
 
 export async function verifyLovable(url: string): Promise<ProofVerification> {
   try {
-    const response = await fetch(url);
+    const response = await safeFetch(url);
     if (!response.ok) {
       return { source_type: 'lovable', verification_status: 'failed', verification_method: 'api_lookup', platform_data: {} };
     }

@@ -79,12 +79,12 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.error('Portfolio creation error:', error.message);
+    return NextResponse.json({ error: 'Failed to add portfolio item' }, { status: 400 });
   }
 
   // Trigger score recalculation in the background
-  const origin = request.headers.get('origin') || request.headers.get('host') || '';
-  const baseUrl = origin.startsWith('http') ? origin : `https://${origin}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtmcommit.com';
   fetch(`${baseUrl}/api/score/calculate`, {
     method: 'POST',
     headers: { cookie: request.headers.get('cookie') || '' },
@@ -114,7 +114,8 @@ export async function DELETE(request: NextRequest) {
     .eq('id', id);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.error('Portfolio deletion error:', error.message);
+    return NextResponse.json({ error: 'Failed to delete portfolio item' }, { status: 400 });
   }
 
   return NextResponse.json({ success: true });

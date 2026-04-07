@@ -37,11 +37,22 @@ function generateBadgeSVG(score: number, tier: string, username: string): string
 </svg>`;
 }
 
+function sanitizeSvgText(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+const USERNAME_REGEX = /^[a-z0-9_-]+$/;
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ username: string }> }
 ) {
   const { username } = await params;
+
+  if (!USERNAME_REGEX.test(username)) {
+    return new NextResponse('Not found', { status: 404 });
+  }
+
   const supabase = createAdminClient();
 
   const { data: profile } = await supabase
@@ -54,7 +65,7 @@ export async function GET(
     return new NextResponse('Not found', { status: 404 });
   }
 
-  const svg = generateBadgeSVG(profile.gtmcommit_score, profile.gtmcommit_tier, username);
+  const svg = generateBadgeSVG(profile.gtmcommit_score, profile.gtmcommit_tier, sanitizeSvgText(username));
 
   return new NextResponse(svg, {
     headers: {

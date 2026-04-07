@@ -6,6 +6,7 @@ import { updateStreak } from '@/lib/gamification/streaks';
 import { detectMilestones, saveMilestones } from '@/lib/milestones';
 import { assignAndEvaluateChallenges } from '@/lib/gamification/challenge-assigner';
 import { detectAgentBuilder } from '@/lib/gamification/agent-builder';
+import { rateLimit, getUserRateLimitKey } from '@/lib/rate-limit';
 
 export async function POST() {
   const supabase = await createClient();
@@ -13,6 +14,12 @@ export async function POST() {
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Rate limit: 10 score calculations per minute per user
+  const rl = rateLimit(getUserRateLimitKey(user.id, 'score-calc'), { windowMs: 60_000, max: 10 });
+  if (!rl.success) {
+    return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 });
   }
 
   const { data: profile } = await supabase

@@ -1,4 +1,5 @@
 import type { ExternalProof } from '@/types';
+import { safeFetch } from '@/lib/url-validation';
 
 // ============================================================
 // 6. Blank Template Deployment Detection
@@ -23,8 +24,7 @@ export interface ContentCheck {
 
 export async function verifyDeploymentContent(url: string): Promise<ContentCheck> {
   try {
-    const response = await fetch(url, {
-      signal: AbortSignal.timeout(10000),
+    const response = await safeFetch(url, {
       headers: { 'User-Agent': 'GTM Commit/1.0 (proof-verification)' },
     });
     if (!response.ok) return { valid: false, reason: 'url_not_reachable' };
@@ -80,10 +80,8 @@ export interface ReVerificationResult {
 
 export async function reVerifyProof(proofUrl: string): Promise<boolean> {
   try {
-    const response = await fetch(proofUrl, {
+    const response = await safeFetch(proofUrl, {
       method: 'HEAD',
-      signal: AbortSignal.timeout(10000),
-      redirect: 'follow',
     });
     return response.ok;
   } catch {

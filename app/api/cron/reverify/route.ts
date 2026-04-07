@@ -8,8 +8,12 @@ import { calculateGtmCommitScore, scoreToTier } from '@/lib/scoring/calculate';
 // Secured by CRON_SECRET env var
 
 export async function GET(request: NextRequest) {
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+  }
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

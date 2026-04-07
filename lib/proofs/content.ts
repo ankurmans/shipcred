@@ -1,3 +1,5 @@
+import { safeFetch } from '@/lib/url-validation';
+
 const AI_TOOL_KEYWORDS = [
   'claude', 'claude code', 'cursor', 'copilot', 'aider', 'windsurf',
   'lovable', 'bolt', 'v0', 'replit', 'devin', 'clay', 'mcp',
@@ -36,10 +38,8 @@ export async function validateContentProof(url: string): Promise<ContentMetadata
   const platform = detectContentPlatform(url);
 
   try {
-    const res = await fetch(url, {
+    const res = await safeFetch(url, {
       method: 'GET',
-      redirect: 'follow',
-      signal: AbortSignal.timeout(10000),
       headers: { 'User-Agent': 'GTM Commit/1.0 (proof-verification)' },
     });
 

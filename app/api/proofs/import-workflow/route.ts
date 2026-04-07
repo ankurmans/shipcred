@@ -106,7 +106,10 @@ export async function POST(request: NextRequest) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    console.error('Workflow import error:', error.message);
+    return NextResponse.json({ error: 'Failed to import workflow' }, { status: 400 });
+  }
 
   return NextResponse.json({
     proof,

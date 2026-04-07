@@ -1,9 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase/server';
+import { rateLimit, getUserRateLimitKey } from '@/lib/rate-limit';
 
 const GITHUB_REPO = 'ankurmans/gtmcommit'; // owner/repo
 const GITHUB_TOKEN = process.env.GITHUB_FEEDBACK_TOKEN;
 
 export async function POST(request: NextRequest) {
+  // Require authentication to prevent spam
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Rate limit: 3 feedback submissions per hour per user
+  const rl = rateLimit(getUserRateLimitKey(user.id, 'feedback'), { windowMs: 60 * 60 * 1000, max: 3 });
+  if (!rl.success) {
+    return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 });
+  }
+
   try {
     const body = await request.json();
     const { title, description, category, name, email } = body;

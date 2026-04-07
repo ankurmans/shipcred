@@ -1,27 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
+import crypto from 'node:crypto';
+import { rateLimit, getRateLimitKey } from '@/lib/rate-limit';
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function POST(request: NextRequest) {
+  // Rate limit: 60 view registrations per minute per IP
+  const rl = rateLimit(getRateLimitKey(request, 'profile-view'), { windowMs: 60_000, max: 60 });
+  if (!rl.success) {
+    return NextResponse.json({ ok: true }); // Silently drop, don't reveal rate limit
+  }
+
   const body = await request.json();
   const { profile_id } = body;
 
-  if (!profile_id) {
-    return NextResponse.json({ error: 'profile_id required' }, { status: 400 });
+  if (!profile_id || !UUID_REGEX.test(profile_id)) {
+    return NextResponse.json({ error: 'Valid profile_id required' }, { status: 400 });
   }
 
-  // Generate anonymous viewer hash from IP + UA
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown';
+  // Generate viewer hash from IP + UA using SHA-256 (not weak bitwise)
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
   const ua = request.headers.get('user-agent') || 'unknown';
-  const raw = `${ip}:${ua}`;
-
-  // Simple hash — good enough for deduplication, not for security
-  let hash = 0;
-  for (let i = 0; i < raw.length; i++) {
-    const char = raw.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
-    hash |= 0;
-  }
-  const viewerHash = Math.abs(hash).toString(36);
+  const viewerHash = crypto
+    .createHash('sha256')
+    .update(`${ip}:${ua}`)
+    .digest('hex')
+    .slice(0, 16);
 
   const supabase = createAdminClient();
 

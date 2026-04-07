@@ -55,7 +55,8 @@ export async function POST(request: NextRequest) {
     if (error.code === '23505') {
       return NextResponse.json({ error: 'You have already flagged this item' }, { status: 409 });
     }
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.error('Flag creation error:', error.message);
+    return NextResponse.json({ error: 'Failed to submit flag' }, { status: 400 });
   }
 
   // Check if threshold reached — auto-hide item

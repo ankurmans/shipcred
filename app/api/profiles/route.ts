@@ -46,7 +46,8 @@ export async function PATCH(request: NextRequest) {
     .single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    console.error('Profile update error:', error.message);
+    return NextResponse.json({ error: 'Failed to update profile' }, { status: 400 });
   }
 
   return NextResponse.json(profile);

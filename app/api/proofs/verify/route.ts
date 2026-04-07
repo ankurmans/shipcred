@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { verifyProof } from '@/lib/proofs/verify';
 import { verifyDeploymentContent, isOldEnoughToVerify } from '@/lib/proofs/anti-gaming';
+import { rateLimit, getUserRateLimitKey } from '@/lib/rate-limit';
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -10,6 +11,12 @@ export async function POST(request: NextRequest) {
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  // Rate limit: 10 verifications per minute per user
+  const rl = rateLimit(getUserRateLimitKey(user.id, 'proof-verify'), { windowMs: 60_000, max: 10 });
+  if (!rl.success) {
+    return NextResponse.json({ error: 'Too many requests. Try again later.' }, { status: 429 });
   }
 
   const { proof_id } = await request.json();
@@ -81,8 +88,7 @@ export async function POST(request: NextRequest) {
   }).eq('id', proof_id);
 
   // Trigger score recalculation in the background
-  const origin = request.headers.get('origin') || request.headers.get('host') || '';
-  const baseUrl = origin.startsWith('http') ? origin : `https://${origin}`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gtmcommit.com';
   fetch(`${baseUrl}/api/score/calculate`, {
     method: 'POST',
     headers: { cookie: request.headers.get('cookie') || '' },

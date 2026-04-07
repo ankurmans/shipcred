@@ -10,6 +10,8 @@
  * 6. If found → ownership_verified = true, proof upgraded to Tier 1
  */
 
+import { safeFetch } from '@/lib/url-validation';
+
 export function generateVerificationCode(): string {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
   let code = 'sc_';
@@ -27,9 +29,7 @@ export interface MetaVerifyResult {
 
 export async function verifyMetaTag(url: string, expectedCode: string): Promise<MetaVerifyResult> {
   try {
-    const response = await fetch(url, {
-      redirect: 'follow',
-      signal: AbortSignal.timeout(10000),
+    const response = await safeFetch(url, {
       headers: { 'User-Agent': 'GTM Commit/1.0 (ownership-verification)' },
     });
 

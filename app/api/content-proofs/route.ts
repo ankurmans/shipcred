@@ -50,7 +50,10 @@ export async function POST(request: NextRequest) {
     .select()
     .single();
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    console.error('Content proof error:', error.message);
+    return NextResponse.json({ error: 'Operation failed' }, { status: 400 });
+  }
   return NextResponse.json(content);
 }
 
@@ -70,6 +73,9 @@ export async function DELETE(request: NextRequest) {
   const { error } = await supabase
     .from('content_proofs').delete().eq('id', id).eq('profile_id', profile.id);
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+  if (error) {
+    console.error('Content proof error:', error.message);
+    return NextResponse.json({ error: 'Operation failed' }, { status: 400 });
+  }
   return NextResponse.json({ success: true });
 }
