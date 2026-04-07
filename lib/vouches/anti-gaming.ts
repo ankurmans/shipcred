@@ -71,10 +71,10 @@ export function canUserVouch(voucher: {
     return { canVouch: false, reason: 'You need at least 50 GTM Commit points to vouch for others.' };
   }
 
-  // Account must be >7 days old
+  // Account must be >3 days old
   const daysSinceCreation = (Date.now() - new Date(voucher.created_at).getTime()) / (1000 * 60 * 60 * 24);
-  if (daysSinceCreation < 7) {
-    return { canVouch: false, reason: 'Your account must be at least 7 days old to vouch.' };
+  if (daysSinceCreation < 3) {
+    return { canVouch: false, reason: 'Your account must be at least 3 days old to vouch.' };
   }
 
   // Must have at least 1 verified proof source
