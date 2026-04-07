@@ -41,12 +41,10 @@ export function detectAgentBuilder(data: {
   });
   if (hasClaudeMd) signals.push('claude_md_tools');
 
-  // Signal 3: 3+ distinct AI tools detected in commits
-  const aiTools = new Set(
-    data.commits
-      .filter(c => c.ai_tool_detected)
-      .map(c => c.ai_tool_detected!)
-  );
+  // Signal 3: 3+ distinct AI tools (from declarations or commits)
+  const aiTools = new Set<string>();
+  data.toolDeclarations.filter(t => t.is_verified && t.tool_name).forEach(t => aiTools.add(t.tool_name!));
+  data.commits.filter(c => c.ai_tool_detected).forEach(c => aiTools.add(c.ai_tool_detected!));
   if (aiTools.size >= 3) signals.push('multi_tool');
 
   // Signal 4: n8n workflow with AI nodes
