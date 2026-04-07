@@ -1,9 +1,10 @@
 import { createAdminClient } from '@/lib/supabase/admin';
-import { fetchAllRepos, fetchCommits } from './api';
+import { fetchAllRepos, fetchCommits, fetchCommitDetail } from './api';
 import { detectAITool } from './detect-ai';
 import { applyGitHubAntiGaming, isSubstantiveCommit } from './anti-gaming';
 import { calculateGtmCommitScore, scoreToTier } from '@/lib/scoring/calculate';
 import { applyVelocityLimit } from '@/lib/scoring/velocity';
+import { updateStreak } from '@/lib/gamification/streaks';
 
 function sixMonthsAgo(): string {
   const d = new Date();
@@ -65,6 +66,22 @@ export async function syncGitHubData(profileId: string, accessToken: string) {
         const detection = detectAITool(commit);
         if (detection) aiCommitsFound++;
 
+        // For AI commits without stats, fetch individual commit detail
+        let additions = commit.stats?.additions || 0;
+        let deletions = commit.stats?.deletions || 0;
+        let filesChanged = commit.files?.length || 0;
+
+        if (detection && additions === 0 && deletions === 0) {
+          try {
+            const detail = await fetchCommitDetail(accessToken, repo.full_name, commit.sha);
+            additions = detail.stats?.additions || 0;
+            deletions = detail.stats?.deletions || 0;
+            filesChanged = detail.files?.length || 0;
+          } catch {
+            // Rate limit or error — skip stats for this commit
+          }
+        }
+
         // Upsert commit data
         await supabase.from('github_commits').upsert(
           {
@@ -79,9 +96,9 @@ export async function syncGitHubData(profileId: string, accessToken: string) {
             ai_tool_detected: detection?.tool || null,
             ai_detection_method: detection?.method || null,
             ai_detection_confidence: detection?.confidence || 0,
-            additions: commit.stats?.additions || 0,
-            deletions: commit.stats?.deletions || 0,
-            files_changed: commit.files?.length || 0,
+            additions,
+            deletions,
+            files_changed: filesChanged,
           },
           { onConflict: 'commit_sha,profile_id' }
         );
@@ -90,6 +107,9 @@ export async function syncGitHubData(profileId: string, accessToken: string) {
 
     // Auto-verify tool declarations
     await autoVerifyTools(profileId);
+
+    // Update streak
+    await updateStreak(profileId);
 
     // Recalculate score
     await recalculateScore(profileId);
@@ -164,7 +184,7 @@ async function recalculateScore(profileId: string) {
 
   // Fetch all data needed for scoring
   const [commitsRes, portfolioRes, vouchesRes, toolsRes, proofsRes, videosRes, contentRes, certsRes, uploadsRes, profileRes] = await Promise.all([
-    supabase.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name').eq('profile_id', profileId),
+    supabase.from('github_commits').select('ai_tool_detected, committed_at, repo_full_name, additions, deletions, repo_is_private').eq('profile_id', profileId),
     supabase.from('portfolio_items').select('vouch_count').eq('profile_id', profileId),
     supabase.from('vouches').select('id').eq('vouchee_id', profileId),
     supabase.from('tool_declarations').select('is_verified, tool_name').eq('profile_id', profileId),
@@ -173,7 +193,7 @@ async function recalculateScore(profileId: string) {
     supabase.from('content_proofs').select('url_verified, platform, vouch_count').eq('profile_id', profileId),
     supabase.from('certifications').select('verification_status, issuer, vouch_count').eq('profile_id', profileId),
     supabase.from('uploaded_files').select('is_parsed_valid, vouch_count, file_type').eq('profile_id', profileId),
-    supabase.from('profiles').select('gtmcommit_score, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role').eq('id', profileId).single(),
+    supabase.from('profiles').select('gtmcommit_score, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role, current_streak, longest_streak').eq('id', profileId).single(),
   ]);
 
   const currentProfile = profileRes.data;
@@ -188,6 +208,7 @@ async function recalculateScore(profileId: string) {
     contentProofs: contentRes.data || [],
     certifications: certsRes.data || [],
     uploadedFiles: uploadsRes.data || [],
+    streak: { current: currentProfile?.current_streak || 0, longest: currentProfile?.longest_streak || 0 },
     profile: currentProfile ? {
       bio: currentProfile.bio,
       avatar_url: currentProfile.avatar_url,
