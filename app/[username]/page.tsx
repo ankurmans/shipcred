@@ -32,21 +32,26 @@ async function getProfileData(username: string) {
   const { data: profile } = await supabase.from('profiles').select('*').eq('username', username).single();
   if (!profile) return null;
 
-  const [portfolioRes, toolsRes, vouchesRes, commitsRes, videosRes, contentRes, certsRes] = await Promise.all([
+  const [portfolioRes, toolsRes, vouchesRes, totalCommitsRes, aiCommitsRes, toolCommitsRes, commitDatesRes, videosRes, contentRes, certsRes] = await Promise.all([
     supabase.from('portfolio_items').select('*').eq('profile_id', profile.id).order('display_order'),
     supabase.from('tool_declarations').select('*').eq('profile_id', profile.id),
     supabase.from('vouches').select('*, voucher:voucher_id(username, display_name, avatar_url)').eq('vouchee_id', profile.id),
-    supabase.from('github_commits').select('ai_tool_detected, committed_at').eq('profile_id', profile.id),
+    supabase.from('github_commits').select('*', { count: 'exact', head: true }).eq('profile_id', profile.id),
+    supabase.from('github_commits').select('*', { count: 'exact', head: true }).eq('profile_id', profile.id).not('ai_tool_detected', 'is', null),
+    supabase.from('github_commits').select('ai_tool_detected').eq('profile_id', profile.id).not('ai_tool_detected', 'is', null),
+    supabase.from('github_commits').select('committed_at').eq('profile_id', profile.id),
     supabase.from('video_proofs').select('*').eq('profile_id', profile.id).order('created_at', { ascending: false }),
     supabase.from('content_proofs').select('*').eq('profile_id', profile.id).order('created_at', { ascending: false }),
     supabase.from('certifications').select('*').eq('profile_id', profile.id).order('created_at', { ascending: false }),
   ]);
 
-  const commits = commitsRes.data || [];
-  const aiCommits = commits.filter(c => c.ai_tool_detected);
+  const totalCommits = totalCommitsRes.count || 0;
+  const aiCommitCount = aiCommitsRes.count || 0;
+  const toolCommits = toolCommitsRes.data || [];
   const toolsDetected: Record<string, number> = {};
-  for (const c of aiCommits) { if (c.ai_tool_detected) toolsDetected[c.ai_tool_detected] = (toolsDetected[c.ai_tool_detected] || 0) + 1; }
-  const activeWeeks = new Set(commits.map(c => { const d = new Date(c.committed_at); return `${d.getFullYear()}-${Math.ceil(((d.getTime() - new Date(d.getFullYear(), 0, 1).getTime()) / 86400000 + 1) / 7)}`; })).size;
+  for (const c of toolCommits) { if (c.ai_tool_detected) toolsDetected[c.ai_tool_detected] = (toolsDetected[c.ai_tool_detected] || 0) + 1; }
+  const commitDates = commitDatesRes.data || [];
+  const activeWeeks = new Set(commitDates.map(c => { const d = new Date(c.committed_at); return `${d.getFullYear()}-${Math.ceil(((d.getTime() - new Date(d.getFullYear(), 0, 1).getTime()) / 86400000 + 1) / 7)}`; })).size;
 
   return {
     profile,
@@ -56,7 +61,7 @@ async function getProfileData(username: string) {
     videoProofs: videosRes.data || [],
     contentProofs: contentRes.data || [],
     certifications: certsRes.data || [],
-    githubStats: { totalCommits: commits.length, aiCommits: aiCommits.length, toolsDetected, activeWeeks },
+    githubStats: { totalCommits, aiCommits: aiCommitCount, toolsDetected, activeWeeks },
   };
 }
 
