@@ -63,7 +63,7 @@ const SLIDES: ProfileSlide[] = [
     username: 'emily', streak: 6, dark: true,
   },
   {
-    name: 'Alex Kim', role: 'GTM Engineer', company: 'Notion',
+    name: 'Dmitri Volkov', role: 'GTM Engineer', company: 'Notion',
     avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
     score: 486, tier: 'builder', tierProgress: 95, tierLabel: '14 pts to Captain',
     tier1: 330, tier1Max: 700, tier2: 98, tier2Max: 200, tier3: 58, tier3Max: 100,
@@ -72,7 +72,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Lovable', color: '#EC4899' },
       { name: 'Bolt', color: '#F59E0B' },
     ],
-    username: 'alex', streak: 4, dark: false,
+    username: 'dmitri', streak: 4, dark: false,
   },
   {
     name: 'Jordan Lee', role: 'Agentic Operator', company: 'Stripe',
