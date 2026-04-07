@@ -2,7 +2,7 @@
 
 import type { LeaderboardEntry } from '@/types';
 import Link from 'next/link';
-import { LuMedal } from 'react-icons/lu';
+import { LuMedal, LuBot } from 'react-icons/lu';
 import { TierBadge } from '@/components/shared/TierIcon';
 import Avatar from '@/components/shared/Avatar';
 import { analytics } from '@/lib/analytics';
@@ -20,6 +20,9 @@ export default function RankCard({ entry, rank }: { entry: LeaderboardEntry; ran
         <div className="font-semibold truncate">{entry.display_name}</div>
         <div className="text-xs text-fg-muted truncate">@{entry.username}{entry.role && ` · ${entry.role}`}</div>
       </div>
+      {entry.is_agent_builder && (
+        <span className="badge bg-purple-100 text-purple-700"><LuBot size={12} /></span>
+      )}
       <span className="badge bg-brand-50 text-brand"><TierBadge tier={entry.gtmcommit_tier} /></span>
       <div className="text-xl font-display font-bold text-brand min-w-[3rem] text-right">{entry.gtmcommit_score}</div>
     </Link>

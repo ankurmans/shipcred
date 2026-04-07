@@ -17,7 +17,7 @@ import VisitorCTA from '@/components/profile/VisitorCTA';
 import ProfileViewTracker from '@/components/profile/ProfileViewTracker';
 import PlatformLinks from '@/components/profile/PlatformLinks';
 import TrackedExternalLink from '@/components/profile/TrackedExternalLink';
-import { LuFlame, LuGlobe, LuLinkedin, LuExternalLink } from 'react-icons/lu';
+import { LuFlame, LuGlobe, LuLinkedin, LuExternalLink, LuBot } from 'react-icons/lu';
 import { FaXTwitter } from 'react-icons/fa6';
 import Navbar from '@/components/shared/Navbar';
 import Footer from '@/components/landing/Footer';
@@ -117,13 +117,20 @@ export default async function ProfilePage({ params }: PageProps) {
               {profile.bio && (
                 <p className="text-xs text-fg-secondary mt-1 line-clamp-2">{profile.bio}</p>
               )}
-              {profile.current_streak > 0 && (
-                <div className="mt-1.5">
-                  <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
-                    profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
-                  }`}>
-                    <LuFlame size={12} /> {profile.current_streak}w streak
-                  </span>
+              {(profile.is_agent_builder || profile.current_streak > 0) && (
+                <div className="flex flex-wrap gap-1.5 mt-1.5">
+                  {profile.is_agent_builder && (
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-purple-100 text-purple-700">
+                      <LuBot size={12} /> Agent Builder
+                    </span>
+                  )}
+                  {profile.current_streak > 0 && (
+                    <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${
+                      profile.current_streak >= 4 ? 'gradient-brand text-white' : 'bg-surface-muted text-fg-secondary'
+                    }`}>
+                      <LuFlame size={12} /> {profile.current_streak}w streak
+                    </span>
+                  )}
                 </div>
               )}
             </div>

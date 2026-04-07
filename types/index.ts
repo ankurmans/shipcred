@@ -24,6 +24,8 @@ export interface Profile {
   score_breakdown: ScoreBreakdown;
   is_featured: boolean;
   is_verified: boolean;
+  is_agent_builder: boolean;
+  agent_builder_signals: string[];
   profile_completeness: number;
   created_at: string;
   updated_at: string;
@@ -292,6 +294,7 @@ export interface LeaderboardEntry {
   gtmcommit_score: number;
   gtmcommit_tier: GtmCommitTier;
   top_tools: string[];
+  is_agent_builder: boolean;
 }
 
 // ============================================================
@@ -310,6 +313,7 @@ export interface GitHubAPICommit {
     committer?: {
       name?: string;
       email?: string;
+      date?: string;
     };
     tree: {
       sha: string;

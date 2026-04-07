@@ -5,6 +5,7 @@ import { applyGitHubAntiGaming, isSubstantiveCommit } from './anti-gaming';
 import { calculateGtmCommitScore, scoreToTier } from '@/lib/scoring/calculate';
 import { applyVelocityLimit } from '@/lib/scoring/velocity';
 import { updateStreak } from '@/lib/gamification/streaks';
+import { detectAgentBuilder } from '@/lib/gamification/agent-builder';
 
 function sixMonthsAgo(): string {
   const d = new Date();
@@ -188,11 +189,11 @@ async function recalculateScore(profileId: string) {
     supabase.from('portfolio_items').select('vouch_count').eq('profile_id', profileId),
     supabase.from('vouches').select('id').eq('vouchee_id', profileId),
     supabase.from('tool_declarations').select('is_verified, tool_name').eq('profile_id', profileId),
-    supabase.from('external_proofs').select('verification_status, source_type').eq('profile_id', profileId),
+    supabase.from('external_proofs').select('verification_status, source_type, platform_data').eq('profile_id', profileId),
     supabase.from('video_proofs').select('url_verified, duration_seconds, category, vouch_count').eq('profile_id', profileId),
     supabase.from('content_proofs').select('url_verified, platform, vouch_count').eq('profile_id', profileId),
     supabase.from('certifications').select('verification_status, issuer, vouch_count').eq('profile_id', profileId),
-    supabase.from('uploaded_files').select('is_parsed_valid, vouch_count, file_type').eq('profile_id', profileId),
+    supabase.from('uploaded_files').select('is_parsed_valid, vouch_count, file_type, structural_markers_found').eq('profile_id', profileId),
     supabase.from('profiles').select('gtmcommit_score, bio, avatar_url, display_name, website_url, linkedin_url, twitter_handle, role, current_streak, longest_streak').eq('id', profileId).single(),
   ]);
 
@@ -226,10 +227,20 @@ async function recalculateScore(profileId: string) {
   const finalScore = await applyVelocityLimit(profileId, score.total, previousScore);
   const tier = scoreToTier(finalScore);
 
+  // Detect Agent Builder badge
+  const agentResult = detectAgentBuilder({
+    uploadedFiles: uploadsRes.data || [],
+    commits: commitsRes.data || [],
+    externalProofs: proofsRes.data || [],
+    toolDeclarations: toolsRes.data || [],
+  });
+
   await supabase.from('profiles').update({
     gtmcommit_score: finalScore,
     gtmcommit_tier: tier,
     score_breakdown: score,
     is_verified: (commitsRes.data || []).some(c => c.ai_tool_detected !== null),
+    is_agent_builder: agentResult.qualifies,
+    agent_builder_signals: agentResult.signals,
   }).eq('id', profileId);
 }

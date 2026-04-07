@@ -5,6 +5,7 @@ import { calculateGtmCommitScore, scoreToTier } from '@/lib/scoring/calculate';
 import { updateStreak } from '@/lib/gamification/streaks';
 import { detectMilestones, saveMilestones } from '@/lib/milestones';
 import { assignAndEvaluateChallenges } from '@/lib/gamification/challenge-assigner';
+import { detectAgentBuilder } from '@/lib/gamification/agent-builder';
 
 export async function POST() {
   const supabase = await createClient();
@@ -31,11 +32,11 @@ export async function POST() {
     admin.from('portfolio_items').select('vouch_count').eq('profile_id', profile.id),
     admin.from('vouches').select('id').eq('vouchee_id', profile.id),
     admin.from('tool_declarations').select('is_verified, tool_name').eq('profile_id', profile.id),
-    admin.from('external_proofs').select('verification_status, source_type').eq('profile_id', profile.id),
+    admin.from('external_proofs').select('verification_status, source_type, platform_data').eq('profile_id', profile.id),
     admin.from('video_proofs').select('url_verified, duration_seconds, category, vouch_count').eq('profile_id', profile.id),
     admin.from('content_proofs').select('url_verified, platform, vouch_count').eq('profile_id', profile.id),
     admin.from('certifications').select('verification_status, issuer, vouch_count').eq('profile_id', profile.id),
-    admin.from('uploaded_files').select('is_parsed_valid, vouch_count, file_type').eq('profile_id', profile.id),
+    admin.from('uploaded_files').select('is_parsed_valid, vouch_count, file_type, structural_markers_found').eq('profile_id', profile.id),
   ]);
 
   const score = calculateGtmCommitScore({
@@ -72,10 +73,20 @@ export async function POST() {
   const oldScore = oldProfile?.gtmcommit_score || 0;
   const oldTier = oldProfile?.gtmcommit_tier || 'unranked';
 
+  // Detect Agent Builder badge
+  const agentResult = detectAgentBuilder({
+    uploadedFiles: uploadsRes.data || [],
+    commits: commitsRes.data || [],
+    externalProofs: proofsRes.data || [],
+    toolDeclarations: toolsRes.data || [],
+  });
+
   await admin.from('profiles').update({
     gtmcommit_score: score.total,
     gtmcommit_tier: tier,
     score_breakdown: score,
+    is_agent_builder: agentResult.qualifies,
+    agent_builder_signals: agentResult.signals,
   }).eq('id', profile.id);
 
   // Update streak

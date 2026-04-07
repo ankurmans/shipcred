@@ -9,8 +9,8 @@ export const dynamic = 'force-dynamic';
 
 async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   const supabase = createAdminClient();
-  const { data } = await supabase.from('profiles').select('username, display_name, avatar_url, role, company, gtmcommit_score, gtmcommit_tier').gt('gtmcommit_score', 0).order('gtmcommit_score', { ascending: false }).limit(100);
-  return (data || []).map(p => ({ ...p, top_tools: [] }));
+  const { data } = await supabase.from('profiles').select('username, display_name, avatar_url, role, company, gtmcommit_score, gtmcommit_tier, is_agent_builder').gt('gtmcommit_score', 0).order('gtmcommit_score', { ascending: false }).limit(100);
+  return (data || []).map(p => ({ ...p, top_tools: [], is_agent_builder: p.is_agent_builder || false }));
 }
 
 export default async function LeaderboardPage() {
