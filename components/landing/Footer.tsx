@@ -18,6 +18,7 @@ export default function Footer({ showLeaderboard = true }: { showLeaderboard?: b
           <Link href="/stats" onClick={() => analytics.footerLinkClicked('stats')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Stats</Link>
           {showLeaderboard && <Link href="/leaderboard" onClick={() => analytics.footerLinkClicked('leaderboard')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>}
           <Link href="/privacy" onClick={() => analytics.footerLinkClicked('privacy')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Privacy</Link>
+          <Link href="/terms" onClick={() => analytics.footerLinkClicked('terms')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Terms</Link>
           <Link href="/updates" onClick={() => analytics.footerLinkClicked('updates')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Updates</Link>
           <Link href="/feedback" onClick={() => analytics.footerLinkClicked('feedback')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Feedback</Link>
         </div>
