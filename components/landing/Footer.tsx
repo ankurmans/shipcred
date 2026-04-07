@@ -17,8 +17,6 @@ export default function Footer({ showLeaderboard = true }: { showLeaderboard?: b
           <Link href="/scoring" onClick={() => analytics.footerLinkClicked('scoring')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Scoring</Link>
           <Link href="/stats" onClick={() => analytics.footerLinkClicked('stats')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Stats</Link>
           {showLeaderboard && <Link href="/leaderboard" onClick={() => analytics.footerLinkClicked('leaderboard')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Leaderboard</Link>}
-          <Link href="/privacy" onClick={() => analytics.footerLinkClicked('privacy')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Privacy</Link>
-          <Link href="/terms" onClick={() => analytics.footerLinkClicked('terms')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Terms</Link>
           <Link href="/updates" onClick={() => analytics.footerLinkClicked('updates')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Updates</Link>
           <Link href="/feedback" onClick={() => analytics.footerLinkClicked('feedback')} className="text-xs text-white/40 hover:text-white/70 transition-colors">Feedback</Link>
         </div>
@@ -29,8 +27,12 @@ export default function Footer({ showLeaderboard = true }: { showLeaderboard?: b
           </a>
         </div>
       </div>
-      <div className="text-center py-3 sm:py-4 text-[10px] text-white/20">
-        © 2026 GTM Commit. All rights reserved.
+      <div className="text-center py-3 sm:py-4 text-[10px] text-white/20 flex items-center justify-center gap-3">
+        <span>© 2026 GTM Commit. All rights reserved.</span>
+        <span>·</span>
+        <Link href="/privacy" onClick={() => analytics.footerLinkClicked('privacy')} className="hover:text-white/40 transition-colors">Privacy</Link>
+        <span>·</span>
+        <Link href="/terms" onClick={() => analytics.footerLinkClicked('terms')} className="hover:text-white/40 transition-colors">Terms</Link>
       </div>
     </footer>
   );
