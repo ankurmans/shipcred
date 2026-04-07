@@ -83,15 +83,49 @@ export default function PortfolioPage() {
                   <button onClick={() => handleDelete(item.id)} className="text-xs text-red-500 hover:text-red-700">Delete</button>
                 </div>
               </div>
-              {/* Verify ownership via backlink */}
+              {/* Verify ownership */}
               {item.url && item.verification_status === 'self_reported' && (
                 <div className="mt-3 pt-3 border-t border-surface-border">
-                  <p className="text-xs text-fg-muted mb-2">Add a <a href="https://gtmcommit.com" className="text-brand font-medium">gtmcommit.com</a> badge or link to your project to verify ownership.</p>
-                  <div className="flex items-center gap-3">
+                  <p className="text-xs font-medium mb-2">Verify ownership — pick either option:</p>
+
+                  {/* Option A: Badge/Link */}
+                  <div className="mb-2">
+                    <p className="text-xs font-semibold text-brand mb-1">Option A: Add a GTM Commit badge (recommended)</p>
+                    <div className="flex items-center gap-2">
+                      <code className="flex-1 text-xs bg-surface-muted px-3 py-2 rounded-lg font-mono text-fg-secondary overflow-x-auto">
+                        {`<a href="https://gtmcommit.com"><img src="https://gtmcommit.com/api/badge/verify" alt="GTM Commit" /></a>`}
+                      </code>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(`<a href="https://gtmcommit.com"><img src="https://gtmcommit.com/api/badge/verify" alt="GTM Commit" /></a>`)}
+                        className="text-xs text-brand hover:text-brand-dark shrink-0 font-medium"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Option B: Meta tag */}
+                  <div className="mb-2">
+                    <p className="text-xs font-semibold text-fg-secondary mb-1">Option B: Add a meta tag to {'<head>'}</p>
+                    <div className="flex items-center gap-2">
+                      <code className="flex-1 text-xs bg-surface-muted px-3 py-2 rounded-lg font-mono text-fg-secondary overflow-x-auto">
+                        &lt;meta name=&quot;gtmcommit-verify&quot; content=&quot;portfolio&quot;&gt;
+                      </code>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(`<meta name="gtmcommit-verify" content="portfolio">`)}
+                        className="text-xs text-brand hover:text-brand-dark shrink-0 font-medium"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-fg-muted mt-2">Deploy, then click verify. We&apos;ll detect either one.</p>
+                  <div className="flex items-center gap-3 mt-2">
                     <button
                       onClick={() => handleVerify(item.id)}
                       disabled={verifying === item.id}
-                      className="text-xs font-medium text-brand hover:text-brand-dark"
+                      className="btn-brand btn-sm"
                     >
                       {verifying === item.id ? 'Checking...' : 'Verify Ownership'}
                     </button>

@@ -41,10 +41,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ already_verified: true, message: 'Already verified' });
   }
 
-  // Check for gtmcommit backlink on the page
-  const result = await verifyMetaTag(item.url, '__portfolio_check__');
+  // Check for gtmcommit backlink or meta tag on the page
+  const result = await verifyMetaTag(item.url, 'portfolio');
 
-  if (result.found && result.method === 'backlink') {
+  if (result.found) {
     await supabase
       .from('portfolio_items')
       .update({ verification_status: 'verified' })
@@ -60,12 +60,14 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       verified: true,
-      message: 'Verified! GTM Commit link detected on your project.',
+      message: result.method === 'backlink'
+        ? 'Verified! GTM Commit link detected on your project.'
+        : 'Verified! Meta tag found on your project.',
     });
   }
 
   return NextResponse.json({
     verified: false,
-    message: 'GTM Commit link not found on your project. Add a badge or link to gtmcommit.com to verify ownership.',
+    message: 'Not found. Add a GTM Commit badge or meta tag to your project, deploy, then try again.',
   });
 }
