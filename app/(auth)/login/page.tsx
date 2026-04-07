@@ -9,7 +9,8 @@ import { analytics } from '@/lib/analytics';
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const desiredUsername = searchParams.get('username') || '';
+  const desiredUsername = searchParams.get('username') || searchParams.get('claim') || '';
+  const referrer = searchParams.get('ref') || '';
   const [loading, setLoading] = useState<string | null>(null);
 
   const handleOAuthSignIn = async (provider: 'google' | 'linkedin_oidc') => {
@@ -24,7 +25,10 @@ function LoginForm() {
     });
   };
 
-  const githubUrl = `/api/auth/github${desiredUsername ? `?username=${encodeURIComponent(desiredUsername)}` : ''}`;
+  const githubParams = new URLSearchParams();
+  if (desiredUsername) githubParams.set('username', desiredUsername);
+  if (referrer) githubParams.set('ref', referrer);
+  const githubUrl = `/api/auth/github${githubParams.toString() ? `?${githubParams.toString()}` : ''}`;
 
   return (
     <div className="w-full max-w-md bg-white rounded-card shadow-card p-8 text-center">

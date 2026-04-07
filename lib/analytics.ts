@@ -123,6 +123,44 @@ export const analytics = {
   dashboardViewed: (score: number, tier: string) =>
     posthog.capture('dashboard_viewed', { score, tier }),
 
+  // ═══ FUNNEL TRACKING ═══
+  landingPageViewed: (referrer?: string) =>
+    posthog.capture('landing_page_viewed', { referrer: referrer || 'direct' }),
+
+  oauthStarted: (provider: 'github' | 'google' | 'linkedin_oidc') =>
+    posthog.capture('oauth_started', { provider }),
+
+  oauthCompleted: (provider: 'github' | 'google' | 'linkedin_oidc') =>
+    posthog.capture('oauth_completed', { provider }),
+
+  onboardingCompleted: (username: string) =>
+    posthog.capture('onboarding_completed', { username }),
+
+  firstSyncCompleted: (aiCommits: number) =>
+    posthog.capture('first_sync_completed', { ai_commits_found: aiCommits }),
+
+  profileFirstShared: (method: 'copy' | 'twitter' | 'linkedin') =>
+    posthog.capture('profile_first_shared', { method }),
+
+  // ═══ GROWTH & REFERRAL ═══
+  referralLandingViewed: (referrer: string) =>
+    posthog.capture('referral_landing_viewed', { referrer }),
+
+  claimPageViewed: (username: string, available: boolean) =>
+    posthog.capture('claim_page_viewed', { username, available }),
+
+  claimCTAClicked: (username: string) =>
+    posthog.capture('claim_cta_clicked', { username }),
+
+  statsPageViewed: () =>
+    posthog.capture('stats_page_viewed'),
+
+  publicApiCalled: (username: string) =>
+    posthog.capture('public_api_called', { username }),
+
+  badgeEmbedViewed: (username: string) =>
+    posthog.capture('badge_embed_viewed', { username }),
+
   // ═══ EXTERNAL LINKS ═══
   externalLinkClicked: (url: string, context: string) =>
     posthog.capture('external_link_clicked', { url, context }),
