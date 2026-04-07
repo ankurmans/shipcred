@@ -88,10 +88,14 @@ export async function POST() {
   }).eq('id', profile.id);
 
   // Agent builder badge (separate update — column may not exist yet)
-  await admin.from('profiles').update({
-    is_agent_builder: agentResult.qualifies,
-    agent_builder_signals: agentResult.signals,
-  }).eq('id', profile.id).then(() => {}).catch(() => {});
+  try {
+    await admin.from('profiles').update({
+      is_agent_builder: agentResult.qualifies,
+      agent_builder_signals: agentResult.signals,
+    }).eq('id', profile.id);
+  } catch {
+    // Column may not exist yet — ignore
+  }
 
   // Update streak
   await updateStreak(profile.id);

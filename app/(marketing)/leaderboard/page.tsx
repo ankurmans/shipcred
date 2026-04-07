@@ -13,7 +13,7 @@ async function getLeaderboard(): Promise<LeaderboardEntry[]> {
   let { data, error } = await supabase.from('profiles').select('username, display_name, avatar_url, role, company, gtmcommit_score, gtmcommit_tier, is_agent_builder').gt('gtmcommit_score', 0).order('gtmcommit_score', { ascending: false }).limit(100);
   if (error) {
     const res = await supabase.from('profiles').select('username, display_name, avatar_url, role, company, gtmcommit_score, gtmcommit_tier').gt('gtmcommit_score', 0).order('gtmcommit_score', { ascending: false }).limit(100);
-    data = res.data;
+    data = res.data as typeof data;
   }
   return (data || []).map(p => ({ ...p, top_tools: [], is_agent_builder: (p as any).is_agent_builder || false }));
 }
