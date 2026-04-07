@@ -51,7 +51,7 @@ const SLIDES: ProfileSlide[] = [
     username: 'marc', streak: 12, dark: false,
   },
   {
-    name: 'Priya Patel', role: 'RevOps Lead', company: 'Intercom',
+    name: 'Emily Brooks', role: 'RevOps Lead', company: 'Intercom',
     avatar: 'https://randomuser.me/api/portraits/women/68.jpg',
     score: 641, tier: 'captain', tierProgress: 56, tierLabel: '109 pts to Legend',
     tier1: 430, tier1Max: 700, tier2: 145, tier2Max: 200, tier3: 66, tier3Max: 100,
@@ -60,7 +60,7 @@ const SLIDES: ProfileSlide[] = [
       { name: 'Clay', color: '#3B82F6' },
       { name: 'n8n', color: '#EA4335' },
     ],
-    username: 'priya', streak: 6, dark: true,
+    username: 'emily', streak: 6, dark: true,
   },
   {
     name: 'Alex Kim', role: 'GTM Engineer', company: 'Notion',
