@@ -30,9 +30,9 @@ function parseTierBreakdown(raw: ScoreBreakdown | Record<string, unknown> | unde
 }
 
 const TIER_LABELS = [
-  { key: 'tier1', label: 'Auto-Verified', max: 600, color: 'bg-green-500' },
-  { key: 'tier2', label: 'Community Verified', max: 250, color: 'bg-blue-500' },
-  { key: 'tier3', label: 'Self-Reported', max: 150, color: 'bg-amber-500' },
+  { key: 'tier1', label: 'Auto-Verified', max: 700, color: 'bg-green-500' },
+  { key: 'tier2', label: 'Community Verified', max: 200, color: 'bg-blue-500' },
+  { key: 'tier3', label: 'Self-Reported', max: 100, color: 'bg-amber-500' },
 ] as const;
 
 const DETAIL_LABELS: { key: keyof ScoreBreakdown['detail']; label: string; tier: number }[] = [

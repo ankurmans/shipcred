@@ -48,7 +48,7 @@ export default function ScoreBreakdownDrawer({ breakdown }: { breakdown: ScoreBr
   const tierTotals = tiers.map(tier => {
     const tierEntries = entries.filter(([, meta]) => meta.tier === tier);
     const sum = tierEntries.reduce((acc, [key]) => acc + (detail[key] || 0), 0);
-    const max = tier === 1 ? 600 : tier === 2 ? 250 : 150;
+    const max = tier === 1 ? 700 : tier === 2 ? 200 : 100;
     return { sum, max };
   });
 
