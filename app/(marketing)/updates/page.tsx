@@ -30,11 +30,6 @@ const UPDATES = [
       },
       {
         type: 'feat' as const,
-        title: 'Terms of Service',
-        description: 'Full Terms of Service page covering platform usage, data handling, and community guidelines.',
-      },
-      {
-        type: 'feat' as const,
         title: 'Portfolio ownership verification',
         description: 'Verify you own a project by adding a meta tag to your site. Verified items get a checkmark badge.',
       },
